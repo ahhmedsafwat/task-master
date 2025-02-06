@@ -18,9 +18,9 @@ export default function TestPage() {
   const supabase = createClient();
   const [user, setUser] = useState<User | undefined>(undefined);
   const [tasks, setTasks] = useState<Tables<"tasks">[] | undefined>(undefined);
-  // "6db12367-0b7c-4387-954b-a62e556695ef"
-  // "34ce8b9d-34be-448b-8ebc-50b644de6dbc"
-  const user_id = "6db12367-0b7c-4387-954b-a62e556695ef";
+
+  const user_id = "1111-1111-1111-1111-1111-1111-1111-1111";
+
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser();

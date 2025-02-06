@@ -1,6 +1,6 @@
 "use server";
 import { User } from "@supabase/supabase-js";
-import { TablesInsert, TablesUpdate } from "./database.typs";
+import { TablesInsert, TablesUpdate } from "./types/database.typs";
 import { revalidatePath } from "next/cache";
 import { createSupabaseClient } from "@/utils/supabase/server";
 
@@ -63,7 +63,8 @@ export const updateTask = async ({
   due_date,
   start_date,
 }: Omit<updateTaskprops, "creator_id">) => {
-  if (!user) return { data: null, error: new Error("User Not provided") };
+  if (!user || !id)
+    return { data: null, error: new Error("User Not provided") };
 
   const supabase = await createSupabaseClient();
   const { data, error } = await supabase
@@ -231,7 +232,8 @@ export const createProject = async ({
   name: string;
   description: string;
 }) => {
-  if (!user) return { data: null, error: new Error("User not provided") };
+  if (!user || !name || !description)
+    return { data: null, error: new Error("User not provided") };
 
   const supabase = await createSupabaseClient();
   const { data, error } = await supabase

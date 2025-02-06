@@ -17,8 +17,12 @@ export const login1 = async () => {
     if (!signupData.user) throw new Error("User is null");
 
     return signupData;
-  } catch (error) {
-    console.error("Auth test failed:", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Auth test failed:", error.message);
+    } else {
+      console.error("Auth test failed:", String(error));
+    }
   }
 };
 
@@ -38,7 +42,11 @@ export const login2 = async () => {
     if (!signupData.user) throw new Error("User is null");
 
     return signupData;
-  } catch (error) {
-    console.error("Auth test failed:", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Auth test failed:", error.message);
+    } else {
+      console.error("Auth test failed:", String(error));
+    }
   }
 };
