@@ -1,9 +1,10 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { login1, login2 } from "@/lib/actions";
+import { signup, login } from "@/lib/actions";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { Tables } from "@/lib/database.typs";
+
 import {
   assignTask,
   createTask,
@@ -43,21 +44,21 @@ export default function TestPage() {
       <>
         <button
           onClick={async () => {
-            const result = await login1();
+            const result = await login();
             console.log(result);
           }}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          login1
+          login
         </button>
         <button
           onClick={async () => {
-            const result = await login2();
+            const result = await signup();
             console.log(result);
           }}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          login2
+          signup
         </button>
       </>
     );

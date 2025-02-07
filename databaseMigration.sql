@@ -132,23 +132,18 @@ alter table public.notifications enable row level security;
 
 /* ----------------- PROFILES POLICIES --------------------- */
 -- Allow any user to read profile data.
-alter policy "Enable read access for all users" on "public"."profiles" for
+create policy "Enable read access for all users" on "public"."profiles" for
 select using (true);
 
--- Allow users to create profiles only for themselves.
-alter policy "users can create profiles" on "public"."profiles" to public
-with check (
-  ((select auth.uid ()) = id)
-);
 
--- Also allow insert operation with the same check.
-alter policy "users can create profiles" on "public"."profiles" for insert
+-- allow insert operation with the same check.
+create policy "users can create profiles" on "public"."profiles" for insert
 with check (
   ((select auth.uid ()) = id)
 );
 
 -- Allow profile updates only if the user is updating their own profile.
-alter policy "users can update their own profiles" on "public"."profiles"
+create policy "users can update their own profiles" on "public"."profiles"
 for update to authenticated using (
   ((select auth.uid ()) = id)
 )
@@ -163,7 +158,7 @@ create policy "users can delete their profiles" on "public"."profiles" as PERMIS
 
 /* ----------------- TASKS POLICIES --------------------- */
 -- First, drop any existing policy for viewing tasks.
-drop policy "creator and project members can view public tasks" on public.tasks;
+
 
 -- Allow viewing tasks that are public, that a user created, or that belong to projects the user has access to.
 create policy "creator and project members can view public tasks" on public.tasks for
@@ -180,7 +175,7 @@ with check (
 );
 
 -- Drop any previous policy for task updates.
-drop policy if exists "Users can update their own tasks" on public.tasks;
+
 
 -- Allow task updates if the user is the creator or if they are a project member with ADMIN or MEMBER role.
 create policy "Users and project_members can update their own tasks" on public.tasks
@@ -205,8 +200,7 @@ with check (
   )
 );
 
--- Drop any previous deletion policy.
-drop policy if exists "Users can delete their own tasks" on public.tasks;
+
 
 -- Allow task deletion if the current user is the creator or if they're a project admin.
 create policy "Users can delete their own tasks" on public.tasks for DELETE to authenticated using (
@@ -216,11 +210,10 @@ create policy "Users can delete their own tasks" on public.tasks for DELETE to a
 
 /* ----------------- TASK ASSIGNMENTS POLICIES --------------------- */
 -- Allow any authenticated user to view task assignments.
-create policy "Open assignment visiblity" on public.task_assignees for
+create policy "Open assignment visibility" on public.task_assignees for
 select to authenticated using (true);
 
--- Drop any existing assignment insertion policies.
-drop policy if exists "task creators and assigned users can assign others" on public.task_assignees;
+
 
 -- Allow assignment insertion if the current user is the task creator or already assigned.
 create policy "task creators and assigned users can assign others" on public.task_assignees for INSERT to authenticated
@@ -250,7 +243,7 @@ create policy "Projects can be created" on public.projects for insert to authent
 with check (creator_id = auth.uid ());
 
 -- Allow updates to a project by its creator or by project admins.
-create policy "Projects can be update by creator or admins" on public.projects
+create policy "Projects can be updated by creator or admins" on public.projects
 for update using (
   creator_id = (select auth.uid () as uid)
   or exists (
@@ -266,11 +259,9 @@ with check (
   creator_id = projects.creator_id
 );
 
--- Drop any existing visibility policies.
-drop policy if exists "Projects are visiable for members and creators" on public.projects;
 
 -- Allow users to view projects if they are the creator or a member.
-create policy "Projects are visiable for members and creators" on public.projects for
+create policy "Projects are visible for members and creators" on public.projects for
 select to authenticated using (
   creator_id = auth.uid ()
   or exists (
@@ -373,9 +364,6 @@ after DELETE on public.profiles for EACH row
 execute FUNCTION delete_auth_user_on_profile_delete ();
 
 /* ---------- Notifications for Project Invitations ---------- */
--- Remove existing project invitation trigger and function if they exist.
-drop trigger project_invitation_trigger on public.project_members;
-drop function notify_project_invitation;
 
 -- Function to generate a notification when a user is invited to a project.
 create or replace function notify_project_invitation () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER as $$
@@ -403,10 +391,7 @@ after INSERT on public.project_members for EACH row
 execute FUNCTION notify_project_invitation ();
 
 
-/* ---------- Notifications for Task Assignments ---------- */
--- Remove existing task assignment trigger and function if they exist.
-drop trigger task_assignment_trigger on public.task_assignees;
-drop function notify_task_assignment;
+
 
 -- Function to send a notification when a user is assigned to a task.
 create or replace function notify_task_assignment () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER as $$

@@ -1,14 +1,20 @@
 "use server";
 import { createSupabaseClient } from "@/utils/supabase/server";
 
-export const login1 = async () => {
+export const signup = async () => {
   try {
     const supabase = await createSupabaseClient();
-    const { data: signupData, error: signupError } =
-      await supabase.auth.signInWithPassword({
+    const { data: signupData, error: signupError } = await supabase.auth.signUp(
+      {
         email: `example@example.com`,
         password: "example",
-      });
+        options: {
+          data: {
+            username: "name",
+          },
+        },
+      }
+    );
 
     if (signupError) throw signupError;
     console.log("Signup successful:", signupData);
@@ -26,7 +32,7 @@ export const login1 = async () => {
   }
 };
 
-export const login2 = async () => {
+export const login = async () => {
   try {
     const supabase = await createSupabaseClient();
     const { data: signupData, error: signupError } =
