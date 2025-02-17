@@ -4,5 +4,5 @@ export const metadata: Metadata = {
   title: "Home",
 };
 export default async function Home() {
-  return <div>{}</div>;
+  return <div>landing page</div>;
 }
