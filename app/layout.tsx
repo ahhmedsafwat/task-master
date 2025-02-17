@@ -2,8 +2,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { geistmono, geistsans, inter } from "@/lib/fonts";
+import { geistmono, inter } from "@/lib/fonts";
+import Provider from "@/components/context/provider";
+import { Header } from "@/components/layout/header";
 
 export const metadata: Metadata = {
   title: {
@@ -20,19 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${geistsans.variable} ${geistmono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={`${inter.variable} ${geistmono.variable} antialiased`}>
+        <Provider>
+          <Header />
           {children}
           <SpeedInsights />
           <Analytics />
-        </ThemeProvider>
+        </Provider>
       </body>
     </html>
   );

@@ -4,7 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
+@theme inline {
+  --font-inter: var(--inter);
+  --font-geist-mono: var(--geist-mono);
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -67,7 +70,9 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100dvw;
+  height: 100dvh;
+  font-family: var(--inter);
   background-color: var(--background);
   color: var(--foreground);
 }

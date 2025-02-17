@@ -4,5 +4,9 @@ export const metadata: Metadata = {
   title: "Home",
 };
 export default async function Home() {
-  return <div>landing page</div>;
+  return (
+    <div className="size-56 bg-secondary">
+      <div></div>
+    </div>
+  );
 }

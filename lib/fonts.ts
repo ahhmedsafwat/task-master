@@ -1,21 +1,17 @@
-import { Inter, Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const geistsans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--inter",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 const geistmono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--geist-mono",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
-export { inter, geistsans, geistmono };
+export { inter, geistmono };
