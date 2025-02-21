@@ -1,4 +1,4 @@
-Tasky Data Model Overview
+task-master Data Model Overview
 
 Profiles
 

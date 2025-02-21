@@ -1,8 +1,19 @@
 @import 'tailwindcss';
-
 @plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
+
+
+@utility container {
+  & {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 1344px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
 
 @theme inline {
   --font-inter: var(--inter);
@@ -73,8 +84,8 @@ body {
   width: 100dvw;
   height: 100dvh;
   font-family: var(--inter);
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
 }
 
 @layer base {
@@ -89,7 +100,7 @@ body {
     --primary: 0 0% 98%;
     --primary-foreground: 240 1% 19%;
     /* sub titles and labels and icons color */
-    --secondary: 240 4.8% 95.9%;
+    --secondary: 240 100% 100%;
     --secondary-foreground: 0 0% 62%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
