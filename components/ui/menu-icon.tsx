@@ -12,15 +12,15 @@ export const MenuIcon = ({
     <Button
       variant="outline"
       size="icon"
-      className="p-2"
+      className="p-2 "
       onClick={() => {
         toggleMenu((prev) => !prev);
       }}
     >
       <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={`transform transition-transform duration-300 ease-in-out ${
@@ -28,54 +28,53 @@ export const MenuIcon = ({
         }`}
       >
         <g className="transition-all duration-300 ease-in-out">
-          {/* 4 dots */}
           <circle
-            cx="7"
-            cy="7"
-            r="2"
+            cx="8"
+            cy="8"
+            r="3"
             fill="currentColor"
             className={isMenuOpen ? "opacity-0" : "opacity-100"}
           />
           <circle
-            cx="17"
-            cy="7"
-            r="2"
+            cx="24"
+            cy="8"
+            r="3"
             fill="currentColor"
             className={isMenuOpen ? "opacity-0" : "opacity-100"}
           />
           <circle
-            cx="7"
-            cy="17"
-            r="2"
+            cx="8"
+            cy="24"
+            r="3"
             fill="currentColor"
             className={isMenuOpen ? "opacity-0" : "opacity-100"}
           />
           <circle
-            cx="17"
-            cy="17"
-            r="2"
+            cx="24"
+            cy="24"
+            r="3"
             fill="currentColor"
             className={isMenuOpen ? "opacity-0" : "opacity-100"}
           />
-          {/* X shape */}
+
           <line
             x1="7"
             y1="7"
-            x2="17"
-            y2="17"
+            x2="25"
+            y2="25"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="3"
             className={`transition-opacity duration-300 ease-in-out ${
               isMenuOpen ? "opacity-100" : "opacity-0"
             }`}
           />
           <line
-            x1="17"
+            x1="25"
             y1="7"
             x2="7"
-            y2="17"
+            y2="25"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="3"
             className={`transition-opacity duration-300 ease-in-out ${
               isMenuOpen ? "opacity-100" : "opacity-0"
             }`}

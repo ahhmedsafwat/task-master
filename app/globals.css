@@ -78,15 +78,15 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
+
+
+  body {
+    font-family: var(--inter);
+    @apply bg-background text-foreground
+  }
 }
 
-body {
-  width: 100dvw;
-  height: 100dvh;
-  font-family: var(--inter);
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-}
+
 
 @layer base {
   :root {

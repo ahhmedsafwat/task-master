@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MenuIcon } from "../ui/menu-icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Navlinks {
   title: string;
@@ -20,12 +21,34 @@ const navigationItems: Navlinks[] = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log(isMenuOpen);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handelScroll = () => {
+      if (window.scrollY > 0) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+    };
+
+    document.addEventListener("scroll", handelScroll);
+
+    return () => {
+      document.removeEventListener("scroll", handelScroll);
+    };
+  }, []);
 
   return (
     <header className="w-full fixed top-6 lg:top-4">
       <nav className="container !max-w-[1672px] px-6 md:px-9 mx-auto">
-        <div className="bg-background rounded-2xl flex items-center justify-between h-16 px-3 py-1.5 border border-transparent border-primary  transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]">
+        <div
+          className={`bg-background rounded-2xl flex items-center justify-between h-16 px-3 py-1.5 border border-transparent transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none${
+            hasScrolled
+              ? "border-primary bg-secondary shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]"
+              : ""
+          }`}
+        >
           <Link href="/" className="flex items-center space-x-2">
             <Image
               src="/logo.svg"
