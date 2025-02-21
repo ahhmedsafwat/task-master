@@ -12,7 +12,7 @@ export const MenuIcon = ({
     <Button
       variant="outline"
       size="icon"
-      className="p-2 "
+      className="p-2"
       onClick={() => {
         toggleMenu((prev) => !prev);
       }}

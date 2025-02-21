@@ -5,33 +5,7 @@ export const metadata: Metadata = {
 };
 export default async function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
-      <h1>Home</h1>
+    <div className="pt-[120px] container">
       <h1>Home</h1>
       <h1>Home</h1>
       <h1>Home</h1>
