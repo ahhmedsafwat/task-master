@@ -1,0 +1,21 @@
+{
+    "plugins": [
+        "prettier-plugin-tailwindcss"
+    ],
+    "tailwindStylesheet": "./styles/globals.css",
+    "overrides": [
+        {
+            "files": [
+                "*.css"
+            ],
+            "options": {
+                "printWidth": 80,
+                "tabWidth": 2,
+                "useTabs": false,
+                "semi": false,
+                "singleQuote": false,
+                "bracketSpacing": true
+            }
+        }
+    ]
+}

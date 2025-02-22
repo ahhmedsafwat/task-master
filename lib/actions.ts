@@ -13,7 +13,7 @@ export const signup = async () => {
             username: "name",
           },
         },
-      }
+      },
     );
 
     if (signupError) throw signupError;

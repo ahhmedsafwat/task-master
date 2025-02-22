@@ -31,7 +31,7 @@ export default function TestPage() {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [tasks, setTasks] = useState<Tables<"tasks">[] | undefined>(undefined);
   const [projects, setProjects] = useState<Tables<"projects">[] | undefined>(
-    undefined
+    undefined,
   );
   const user_id = "1111-1111-1111-1111-1111-1111-1111-1111";
   const project_id = "1111-1111-1111-1111-1111-1111-1111-1111";
@@ -60,7 +60,7 @@ export default function TestPage() {
             const result = await signup();
             console.log(result);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           signup
         </button>
@@ -69,7 +69,7 @@ export default function TestPage() {
             const result = await login();
             console.log(result);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           login
         </button>
@@ -77,21 +77,21 @@ export default function TestPage() {
     );
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Supabase Functionality Tests</h1>
+    <div className="mx-auto max-w-4xl p-8">
+      <h1 className="mb-6 text-2xl font-bold">Supabase Functionality Tests</h1>
       <button
         onClick={async () => {
           const result = await supabase.auth.signOut();
           console.log(result);
         }}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="rounded bg-blue-500 px-4 py-2 text-white"
       >
         signOut
       </button>
       <div className="mt-4">
         <pre>{JSON.stringify(user.user_metadata, null, 2)}</pre>
       </div>
-      <div className="space-x-3 flex ">
+      <div className="flex space-x-3">
         <button
           onClick={async () => {
             const { data, error } = await createProject({
@@ -103,7 +103,7 @@ export default function TestPage() {
             if (error) throw error.message;
             console.log(data);
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           create project
         </button>
@@ -119,7 +119,7 @@ export default function TestPage() {
             if (error) throw error.message;
             console.log(data);
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           create task project
         </button>
@@ -132,7 +132,7 @@ export default function TestPage() {
             console.log(data);
             setTasks(data);
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           getTasks
         </button>
@@ -146,7 +146,7 @@ export default function TestPage() {
               setProjects(data[0] as Tables<"projects">[]);
             }
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           get Projects
         </button>
@@ -164,7 +164,7 @@ export default function TestPage() {
                 if (error) throw error.message;
                 console.log(data);
               }}
-              className="bg-main text-white px-4 py-2 rounded"
+              className="bg-main rounded px-4 py-2 text-white"
             >
               create project member
             </button>
@@ -179,7 +179,7 @@ export default function TestPage() {
                 if (error) throw error.message;
                 console.log(data);
               }}
-              className="bg-main text-white px-4 py-2 rounded"
+              className="bg-main rounded px-4 py-2 text-white"
             >
               update member
             </button>
@@ -192,7 +192,7 @@ export default function TestPage() {
                 if (error) throw error.message;
                 console.log(data);
               }}
-              className="bg-main text-white px-4 py-2 rounded"
+              className="bg-main rounded px-4 py-2 text-white"
             >
               get members
             </button>
@@ -205,7 +205,7 @@ export default function TestPage() {
                 });
                 if (error) throw error.message;
               }}
-              className="bg-main text-white px-4 py-2 rounded"
+              className="bg-main rounded px-4 py-2 text-white"
             >
               delete member
             </button>
@@ -217,7 +217,7 @@ export default function TestPage() {
                 });
                 if (error) throw error.message;
               }}
-              className="bg-main text-white px-4 py-2 rounded"
+              className="bg-main rounded px-4 py-2 text-white"
             >
               delete self
             </button>
@@ -237,7 +237,7 @@ export default function TestPage() {
                 });
                 if (error) throw error.message;
               }}
-              className="bg-red-500 text-white px-4 py-2 rounded"
+              className="rounded bg-red-500 px-4 py-2 text-white"
             >
               update Projects
             </button>
@@ -249,7 +249,7 @@ export default function TestPage() {
                 });
                 if (error) throw error.message;
               }}
-              className="bg-red-500 text-white px-4 py-2 rounded"
+              className="rounded bg-red-500 px-4 py-2 text-white"
             >
               Delete
             </button>
@@ -269,7 +269,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-purple-700 text-white px-4 py-2 rounded"
+                className="rounded bg-purple-700 px-4 py-2 text-white"
               >
                 Asssign task
               </button>
@@ -282,7 +282,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-purple-700 text-white px-4 py-2 rounded"
+                className="rounded bg-purple-700 px-4 py-2 text-white"
               >
                 get assignees
               </button>
@@ -313,7 +313,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-secondary text-white px-4 py-2 rounded"
+                className="bg-secondary rounded px-4 py-2 text-white"
               >
                 update task
               </button>
@@ -327,7 +327,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-destructive text-white px-4 py-2 rounded"
+                className="bg-destructive rounded px-4 py-2 text-white"
               >
                 Delete task
               </button>
@@ -342,7 +342,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-destructive text-white px-4 py-2 rounded"
+                className="bg-destructive rounded px-4 py-2 text-white"
               >
                 Delete assignee
               </button>

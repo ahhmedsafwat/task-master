@@ -47,7 +47,7 @@ export default function TestPage() {
             const result = await login();
             console.log(result);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           login
         </button>
@@ -56,7 +56,7 @@ export default function TestPage() {
             const result = await signup();
             console.log(result);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           signup
         </button>
@@ -64,14 +64,14 @@ export default function TestPage() {
     );
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Supabase Functionality Tests</h1>
+    <div className="mx-auto max-w-4xl p-8">
+      <h1 className="mb-6 text-2xl font-bold">Supabase Functionality Tests</h1>
       <button
         onClick={async () => {
           const result = await supabase.auth.signOut();
           console.log(result);
         }}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="rounded bg-blue-500 px-4 py-2 text-white"
       >
         signOut
       </button>
@@ -91,7 +91,7 @@ export default function TestPage() {
             if (error) throw error.message;
             console.log(data);
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           createTask
         </button>{" "}
@@ -103,7 +103,7 @@ export default function TestPage() {
             console.log(data);
             setTasks(data);
           }}
-          className="bg-main text-white px-4 py-2 rounded"
+          className="bg-main rounded px-4 py-2 text-white"
         >
           getTasks
         </button>
@@ -123,7 +123,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-purple-700 text-white px-4 py-2 rounded"
+                className="rounded bg-purple-700 px-4 py-2 text-white"
               >
                 Asssign task
               </button>
@@ -136,7 +136,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-purple-700 text-white px-4 py-2 rounded"
+                className="rounded bg-purple-700 px-4 py-2 text-white"
               >
                 get assignees
               </button>
@@ -163,7 +163,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-secondary text-white px-4 py-2 rounded"
+                className="bg-secondary rounded px-4 py-2 text-white"
               >
                 update task
               </button>
@@ -177,7 +177,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-destructive text-white px-4 py-2 rounded"
+                className="bg-destructive rounded px-4 py-2 text-white"
               >
                 Delete task
               </button>
@@ -192,7 +192,7 @@ export default function TestPage() {
                   if (error) throw error.message;
                   console.log(data);
                 }}
-                className="bg-destructive text-white px-4 py-2 rounded"
+                className="bg-destructive rounded px-4 py-2 text-white"
               >
                 Delete assignee
               </button>

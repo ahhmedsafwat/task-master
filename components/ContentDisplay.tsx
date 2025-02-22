@@ -13,7 +13,7 @@ export default function ContentDisplay({ content }: { content: string }) {
       alt="Content"
       width={500}
       height={500}
-      className="max-w-full h-auto"
+      className="h-auto max-w-full"
     />
   ) : (
     <p className="text-gray-700">{content}</p>
