@@ -16,12 +16,10 @@
 
 @utility glass-morph {
   & {
-    --dark-glass-morph: hsl(0 0% 7% / 0.1);
+    --dark-glass-morph: hsl(0 0% 100% / 0.1);
     backdrop-filter: blur(15px);
     background-color: var(--dark-glass-morph);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
   }
-
 
 }
 
@@ -154,7 +152,7 @@
     --destructive: 1 77% 44%;
     --destructive-foreground: 0 0% 96%;
     --border: 223 7% 19%;
-    --input: 240 3.7% 15.9%;
+    --input: 0 0% 58%;
     --ring: 240 4.9% 83.9%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;

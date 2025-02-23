@@ -74,7 +74,7 @@ export function Footer() {
               </Button>
               <Button variant={"outline"} size={"lg"} asChild>
                 <Link
-                  href="https://github.com/ahhmedsafwat"
+                  href="https://github.com/ahhmedsafwat/task-master"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary-foreground transition-colors"
@@ -93,7 +93,7 @@ export function Footer() {
                 </Link>
               </Button>
             </div>
-            <div className="mt-12 w-full">
+            <div className="w-full lg:mt-12">
               <h3 className="font-geist-mono mb-2 font-semibold">
                 Stay up to date
               </h3>
@@ -110,7 +110,11 @@ export function Footer() {
           </div>
         </section>
         <section className="text-muted-foreground font-geist-mono mt-4 border-t pt-8 text-center text-sm md:mt-28">
-          © {new Date().getFullYear()} TaskMaster. All rights reserved.
+          © {new Date().getFullYear()} TaskMaster. All rights reserved. <br />
+          created By{" "}
+          <Link href="https://github.com/ahhmedsafwat" className="underline">
+            Ahmed Safwat
+          </Link>
         </section>
       </div>
     </footer>

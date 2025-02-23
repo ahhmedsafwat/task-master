@@ -46,7 +46,7 @@ export function Header() {
             className={cn(
               `flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none lg:top-4`,
               {
-                "border-primary glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
+                "border-border glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
                   hasScrolled && !isMenuOpen,
               },
             )}
@@ -84,7 +84,7 @@ export function Header() {
                 className={cn(
                   "hover:border-accent-foreground hover:bg-background py-5",
                   {
-                    "not-dark:bg-secondary not-dark:hover:bg-secondary":
+                    "bg-secondary hover:bg-secondary":
                       hasScrolled && !isMenuOpen,
                   },
                 )}
@@ -105,7 +105,7 @@ export function Header() {
                 className={cn(
                   "hover:border-accent-foreground hover:bg-background py-5",
                   {
-                    "not-dark:bg-secondary not-dark:hover:bg-secondary":
+                    "bg-secondary hover:bg-secondary":
                       hasScrolled && !isMenuOpen,
                   },
                 )}
