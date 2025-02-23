@@ -14,6 +14,17 @@
   }
 }
 
+@utility glass-morph {
+  & {
+    --dark-glass-morph: hsl(0 0% 7% / 0.1);
+    backdrop-filter: blur(15px);
+    background-color: var(--dark-glass-morph);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  }
+
+
+}
+
 @theme inline {
   --font-inter: var(--inter);
   --font-geist-mono: var(--geist-mono);
@@ -69,6 +80,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
@@ -149,5 +161,19 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }

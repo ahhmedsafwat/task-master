@@ -4,15 +4,17 @@ import { Button } from "./button";
 export const MenuIcon = ({
   isMenuOpen,
   toggleMenu,
+  className,
 }: {
   isMenuOpen: boolean;
   toggleMenu: Dispatch<SetStateAction<boolean>>;
+  className: string;
 }) => {
   return (
     <Button
       variant="outline"
       size="icon"
-      className="p-2"
+      className={`p-2 ${className}`}
       onClick={() => {
         toggleMenu((prev) => !prev);
       }}

@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MenuIcon } from "../ui/menu-icon";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Logo } from "../ui/logo";
 interface Navlinks {
   title: string;
   href: string;
@@ -40,26 +40,18 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-6 z-50 w-full lg:top-4">
+      <header className="fixed top-6 z-50 w-full">
         <nav className="container relative mx-auto !max-w-[1672px] px-6 lg:px-9">
           <div
             className={cn(
-              `bg-background flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none`,
+              `flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none lg:top-4`,
               {
-                "border-primary not-dark:bg-secondary shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
+                "border-primary glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
                   hasScrolled && !isMenuOpen,
               },
             )}
           >
-            <Link href="/" className="flex items-center space-x-2">
-              <Image
-                src="/logo.svg"
-                alt="TaskMaster Logo"
-                width={32}
-                height={32}
-              />
-              <div className="font-geist-mono font-bold">TaskMaster</div>
-            </Link>
+            <Logo />
             <ul className="hidden items-center gap-6 lg:flex">
               {navigationItems.map((item) => {
                 return (
@@ -89,7 +81,13 @@ export function Header() {
               <Button
                 asChild
                 variant={"outline"}
-                className="hover:border-accent-foreground hover:bg-background py-5"
+                className={cn(
+                  "hover:border-accent-foreground hover:bg-background py-5",
+                  {
+                    "not-dark:bg-secondary not-dark:hover:bg-secondary":
+                      hasScrolled && !isMenuOpen,
+                  },
+                )}
               >
                 <Link href="/login">login</Link>
               </Button>
@@ -101,7 +99,17 @@ export function Header() {
               </Button>
             </div>
             <div className="relative lg:hidden">
-              <MenuIcon isMenuOpen={isMenuOpen} toggleMenu={setIsMenuOpen} />
+              <MenuIcon
+                isMenuOpen={isMenuOpen}
+                toggleMenu={setIsMenuOpen}
+                className={cn(
+                  "hover:border-accent-foreground hover:bg-background py-5",
+                  {
+                    "not-dark:bg-secondary not-dark:hover:bg-secondary":
+                      hasScrolled && !isMenuOpen,
+                  },
+                )}
+              />
             </div>
           </div>
         </nav>
