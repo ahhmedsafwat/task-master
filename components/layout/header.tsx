@@ -12,10 +12,13 @@ interface Navlinks {
 }
 
 const navigationItems: Navlinks[] = [
-  { title: "Features", href: "features" },
+  {
+    title: "Features",
+    href: "features",
+  },
   { title: "Pricing", href: "pricing" },
-  { title: "About", href: "about" },
-  { title: "Contact", href: "contact" },
+  { title: "Story", href: "story" },
+  { title: "Developers", href: "developers" },
 ];
 
 export function Header() {
@@ -81,20 +84,13 @@ export function Header() {
               <Button
                 asChild
                 variant={"outline"}
-                className={cn(
-                  "hover:border-accent-foreground hover:bg-background py-5",
-                  {
-                    "bg-secondary hover:bg-secondary":
-                      hasScrolled && !isMenuOpen,
-                  },
-                )}
+                className={cn("py-5", {
+                  "bg-secondary hover:bg-secondary": hasScrolled && !isMenuOpen,
+                })}
               >
                 <Link href="/login">login</Link>
               </Button>
-              <Button
-                asChild
-                className="bg-foreground text-background hover:bg-foreground/90 py-5"
-              >
+              <Button asChild variant={"inverted"} className="py-5">
                 <Link href="/signup">Get Started</Link>
               </Button>
             </div>
@@ -114,40 +110,41 @@ export function Header() {
           </div>
         </nav>
       </header>
-      {isMenuOpen && (
-        <div className="bg-background fixed left-0 top-0 z-30 h-screen w-screen">
+      <div
+        className={cn(
+          "glass-morph fixed left-full top-0 z-30 flex h-screen w-screen flex-col p-8 transition-all lg:hidden",
+          { "left-0": isMenuOpen },
+        )}
+      >
+        <div className="flex flex-1 flex-col justify-center gap-6">
           {navigationItems.map((item) => {
             return (
-              <div className="relative" key={item.href}>
-                <Link href={item.href}>
-                  {item.title}
-                  {item.children && (
-                    <ul className="absolute left-0 top-full z-30">
-                      {item.children.map((child) => (
-                        <li key={child.href}>
-                          <Link href={child.href}>{child.title}</Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Link>
-              </div>
+              <Link href={item.href} key={item.title} className="text-lg">
+                {item.title}
+                {item.children && (
+                  <ul>
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <Link href={child.href}>{child.title}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Link>
             );
           })}
-          <Link
-            href="/login"
-            className="text-muted-foreground hover:bg-accent hover:text-accent-foreground block px-4 py-2 text-sm"
-          >
-            Login
-          </Link>
-          <Link
-            href="/signup"
-            className="text-primary-foreground bg-primary hover:bg-primary/90 block px-4 py-2 text-sm font-medium"
-          >
-            Get Started
-          </Link>
         </div>
-      )}
+        <div className="w-full">
+          <Button asChild variant={"outline"} className="mb-3 w-full">
+            <Link href="/login">Login</Link>
+          </Button>
+          <Button asChild variant={"inverted"} className="w-full py-5">
+            <Link href="/signup" className="">
+              Get Started
+            </Link>
+          </Button>
+        </div>
+      </div>
     </>
   );
 }

@@ -11,9 +11,9 @@ export const Logo = ({ className }: { className?: string }) => {
         className="group"
       >
         <circle
-          cx="22.5"
-          cy="22.5"
-          r="22.5"
+          cx="22"
+          cy="22"
+          r="22"
           className="fill-foreground transition-colors duration-300"
         />
         <path

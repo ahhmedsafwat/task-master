@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    domains: ["images.pexels.com", "cdn.pixabay.com"],
+    remotePatterns: [{ hostname: "images.unsplash.com" }],
   },
 };
 

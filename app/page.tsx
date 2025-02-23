@@ -5,7 +5,7 @@ export const metadata: Metadata = {
 };
 export default async function Home() {
   return (
-    <div className="container pt-[120px]">
+    <div className="container">
       <h1>Home</h1>
       <h1>Home</h1>
       <h1>Home</h1>
