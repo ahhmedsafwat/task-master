@@ -42,12 +42,12 @@ export function Footer() {
         alt="gradient background"
         src="https://images.unsplash.com/photo-1533892660782-baf2fad12666?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQzfHx8ZW58MHx8fHx8"
         fill
-        className="object-cover"
+        className="pointer-events-none object-cover"
         priority
       />
 
       <div className="glass-morph relative z-10">
-        <div className="container mx-auto !max-w-[1672px] px-6 py-12 text-white">
+        <div className="container mx-auto px-6 py-12 text-white">
           <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div className="flex h-full flex-col justify-between gap-4 max-md:items-center">
               <div className="space-y-4 max-md:text-center">

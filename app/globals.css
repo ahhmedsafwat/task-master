@@ -23,6 +23,16 @@
   }
 }
 
+@utility hover-scale {
+  & {
+    @apply transition-transform duration-[0.8s] ease-[cubic-bezier(0.625_0.05_0_1)]
+  }
+
+  &:hover {
+    transform: scale(0.95);
+  }
+}
+
 
 
 @theme inline {
@@ -143,7 +153,7 @@
     --popover: 180 14% 3%;
     --popover-foreground: 0 0% 96%;
     /* main headers and buttons */
-    --primary: 0 0% 7%;
+    --primary: 0 0% 5%;
     --primary-foreground: 225 8% 90%;
     /* sub titles and labels and icons color */
     --secondary: 240 6% 10%;

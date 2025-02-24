@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { MenuIcon } from "../ui/menu-icon";
+import { MenuIcon } from "@/components/ui/menu-icon";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "../ui/logo";
+import { FlipingText } from "@/components/ui/fliping-text";
 interface Navlinks {
   title: string;
   href: string;
@@ -49,7 +50,7 @@ export function Header() {
             className={cn(
               `flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none lg:top-4`,
               {
-                "border-border glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
+                "glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
                   hasScrolled && !isMenuOpen,
               },
             )}
@@ -80,19 +81,19 @@ export function Header() {
                 );
               })}
             </ul>
-            <div className="hidden items-center gap-2 lg:flex">
-              <Button
-                asChild
-                variant={"outline"}
-                className={cn("py-5", {
-                  "bg-secondary hover:bg-secondary": hasScrolled && !isMenuOpen,
-                })}
-              >
-                <Link href="/login">login</Link>
-              </Button>
-              <Button asChild variant={"inverted"} className="py-5">
-                <Link href="/signup">Get Started</Link>
-              </Button>
+            <div className="hidden items-center gap-5 lg:flex">
+              <Link href="/login">
+                <FlipingText initialText="Login" />
+              </Link>
+              <Link href="/signup">
+                <Button
+                  asChild
+                  variant={"inverted"}
+                  className="transition-transform duration-[0.8s] ease-[cubic-bezier(0.625_0.05_0_1)] hover:scale-95"
+                >
+                  <FlipingText initialText="Get Started" />
+                </Button>
+              </Link>
             </div>
             <div className="relative lg:hidden">
               <MenuIcon
