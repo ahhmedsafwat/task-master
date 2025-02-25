@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description:
     "Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.",
   keywords: ["task management", "productivity", "project tracking", "todo app"],
-  authors: [{ name: "Task Master Team" }],
+  authors: [{ name: "Ahmed Safwat" }],
   creator: "Task Master",
   publisher: "Task Master",
   openGraph: {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "Task Master",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/gradiant-bg1.webp",
         width: 1200,
         height: 630,
         alt: "Task Master Preview",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Task Master - Efficient Task Management",
     description:
       "Streamline your workflow with Task Master - the intuitive task management application.",
-    images: ["/twitter-image.jpg"],
+    images: ["/gradiant-bg1.webp"],
   },
 };
 
