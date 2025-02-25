@@ -80,6 +80,30 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /*
+  ---break---
+*/
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  /*
+  ---break---
+*/
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
 
 /*
@@ -111,7 +135,6 @@
   }
 }
 
-
 @layer base {
   :root {
     --background: 0 0% 98%;
@@ -125,9 +148,9 @@
     --primary-foreground: 240 1% 19%;
     /* sub titles and labels and icons color */
     --secondary: 240 100% 100%;
-    --secondary-foreground: 0 0% 62%;
+    --secondary-foreground: 0 0% 34%;
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 240 3.8% 46%;
     /* hover effects*/
     --accent: 0 0% 95%;
     --accent-foreground: 0 0% 7%;
@@ -151,11 +174,11 @@
 
   .dark {
     --background: 180 14% 3%;
-    --foreground: 0 0% 96%;
+    --foreground: 0 0% 98%;
     --card: 0 0% 7%;
-    --card-foreground: 0 0% 96%;
+    --card-foreground: 0 0% 98%;
     --popover: 180 14% 3%;
-    --popover-foreground: 0 0% 96%;
+    --popover-foreground: 0 0% 98%;
     /* main headers and buttons */
     --primary: 0 0% 5%;
     --primary-foreground: 225 8% 90%;
@@ -166,7 +189,7 @@
     --muted-foreground: 240 5% 64.9%;
     /* hover effects*/
     --accent: 0 0% 12%;
-    --accent-foreground: 0 0% 96%;
+    --accent-foreground: 0 0% 90%;
     /* delete buttons and missed notes */
     --destructive: 1 77% 44%;
     --destructive-foreground: 0 0% 96%;
@@ -178,5 +201,18 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+}
+
+/*
+  ---break---
+*/
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

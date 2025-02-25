@@ -28,7 +28,7 @@ export const Logo = ({ className }: { className?: string }) => {
         />
       </svg>
       <div className="font-nunito text-xl font-black tracking-wide">
-        TaskMaster
+        TASKMASTER
       </div>
     </Link>
   );

@@ -6,6 +6,12 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "../ui/logo";
 import { FlipingText } from "@/components/ui/fliping-text";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Navlinks {
   title: string;
@@ -29,7 +35,6 @@ const navigationItems: Navlinks[] = [
     children: [
       { title: "Github", href: "https://github.com/ahhmedsafwat/task-master" },
       { title: "API Documentation", href: "/developers/api" },
-      { title: "Integrations", href: "/developers/integrations" },
     ],
   },
 ];
@@ -37,6 +42,7 @@ const navigationItems: Navlinks[] = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     const handelScroll = () => {
@@ -48,6 +54,10 @@ export function Header() {
       document.removeEventListener("scroll", handelScroll);
     };
   }, []);
+
+  const toggleAccordion = (title: string) => {
+    setOpenAccordion(openAccordion === title ? null : title);
+  };
 
   return (
     <>
@@ -80,7 +90,7 @@ export function Header() {
                   );
                 }
                 return (
-                  <li key={title} className="group">
+                  <li key={title} className="group relative">
                     <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors">
                       <FlipingText initialText={title} />
                     </span>
@@ -140,43 +150,53 @@ export function Header() {
       </header>
       <div
         className={cn(
-          "bg-primary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 pb-6 pt-32 transition-all duration-500 ease-in-out sm:px-12 lg:hidden",
+          "bg-primary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-32 transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
           { "left-0": isMenuOpen },
         )}
       >
-        <ul className="mb-auto flex flex-col justify-center gap-6">
+        <ul className="mb-auto flex flex-col justify-center">
           {navigationItems.map(({ href, title, children }: Navlinks) => {
             if (href) {
               return (
-                <li key={href} className="relative">
-                  {href && (
-                    <Link
-                      href={href}
-                      className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl"
-                    >
-                      {title}
-                    </Link>
-                  )}
-                </li>
+                <Link
+                  key={href}
+                  href={href}
+                  className="relative cursor-pointer border-b py-3"
+                >
+                  <li className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
+                    {title}
+                  </li>
+                </Link>
               );
             }
             return (
-              <li key={title} className="group">
-                <span className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
-                  {title}
-                </span>
-                <ul className="bg-background absolute left-0 hidden w-48 translate-y-2 rounded-md border p-3 shadow-lg group-hover:block">
-                  {children?.map(({ href, title }) => (
-                    <li key={href}>
-                      <Link
-                        href={href ?? ""}
-                        className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors"
-                      >
-                        {title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+              <li key={title} className="relative cursor-pointer border-b">
+                <Accordion collapsible type="single">
+                  <AccordionItem value="item-1" className="border-none">
+                    <AccordionTrigger className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
+                      {title}
+                    </AccordionTrigger>
+
+                    {children && (
+                      <AccordionContent className="text-xl">
+                        <ul className="ml-4 mt-6 space-y-8">
+                          {children.map((child) => {
+                            return (
+                              <li key={child.href}>
+                                <Link
+                                  href={child.href ?? ""}
+                                  className="text-secondary-foreground hover:text-primary-foreground font-geist-mono transition-colors"
+                                >
+                                  {child.title}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </AccordionContent>
+                    )}
+                  </AccordionItem>
+                </Accordion>
               </li>
             );
           })}
