@@ -42,7 +42,6 @@ const navigationItems: Navlinks[] = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   useEffect(() => {
     const handelScroll = () => {
@@ -54,10 +53,6 @@ export function Header() {
       document.removeEventListener("scroll", handelScroll);
     };
   }, []);
-
-  const toggleAccordion = (title: string) => {
-    setOpenAccordion(openAccordion === title ? null : title);
-  };
 
   return (
     <>
@@ -150,7 +145,7 @@ export function Header() {
       </header>
       <div
         className={cn(
-          "bg-primary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-32 transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
+          "bg-primary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
           { "left-0": isMenuOpen },
         )}
       >
