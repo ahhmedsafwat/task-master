@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/client";
 import { signup, login } from "@/lib/actions";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { Tables } from "@/lib/database.typs";
+import { Tables } from "@/lib/types/database.typs";
 
 import {
   assignTask,

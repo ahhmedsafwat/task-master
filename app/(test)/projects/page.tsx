@@ -24,7 +24,7 @@ import {
   updateTask,
 } from "@/lib/quieries";
 import ContentDisplay from "@/components/ContentDisplay";
-import { TablesInsert } from "@/lib/database.typs";
+import { TablesInsert } from "@/lib/types/database.typs";
 
 export default function TestPage() {
   const supabase = createClient();
