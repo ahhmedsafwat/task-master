@@ -40,7 +40,7 @@ export function Footer() {
     <footer className="rounded-t-4xl relative z-10 overflow-hidden">
       <Image
         alt="gradient background"
-        src="https://images.unsplash.com/photo-1533892660782-baf2fad12666?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQzfHx8ZW58MHx8fHx8"
+        src="/images/footer-bg.webp"
         fill
         className="pointer-events-none object-cover"
         priority

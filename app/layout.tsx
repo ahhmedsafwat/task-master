@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "Task Master",
     images: [
       {
-        url: "/gradiant-bg1.webp",
+        url: "/images/gradiant-bg1.webp",
         width: 1200,
         height: 630,
         alt: "Task Master Preview",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: "Task Master - Efficient Task Management",
     description:
       "Streamline your workflow with Task Master - the intuitive task management application.",
-    images: ["/gradiant-bg1.webp"],
+    images: ["/images/gradiant-bg1.webp"],
   },
 };
 
