@@ -20,7 +20,7 @@
       --dark-glass-morph: hsl(0 0% 7% / 0.1);
       backdrop-filter: blur(15px);
       background-color: var(--dark-glass-morph);
-      -webkit-backdrop-filter: blur(15px);
+
     }
   }
 
@@ -119,6 +119,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,
