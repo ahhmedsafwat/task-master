@@ -1,4 +1,4 @@
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono, Nunito } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,4 +14,11 @@ const geistmono = Geist_Mono({
   weight: ["400", "500", "600", "700"],
 });
 
-export { inter, geistmono };
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--nunito",
+  display: "swap",
+  weight: ["400", "500", "1000"],
+});
+
+export { inter, geistmono, nunito };

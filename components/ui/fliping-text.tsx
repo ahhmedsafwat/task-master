@@ -26,8 +26,8 @@ export const FlipingText = ({
   };
 
   return (
-    <div className={`relative overflow-clip ${className}`} {...hoverProps}>
-      <div className="relative">
+    <div className={`relative ${className}`} {...hoverProps}>
+      <div className="relative overflow-clip">
         {/* Initial text */}
         <div className="relative">
           {initialText.split("").map((letter, index) => (

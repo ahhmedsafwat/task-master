@@ -3,41 +3,42 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@utility container {
-  & {
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    max-width: 1344px;
-    padding-left: 1rem;
-    padding-right: 1rem;
+@layer utilities {
+  .container {
+    & {
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 1344px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  .glass-morph {
+    & {
+      --dark-glass-morph: hsl(0 0% 7% / 0.1);
+      backdrop-filter: blur(15px);
+      background-color: var(--dark-glass-morph);
+      -webkit-backdrop-filter: blur(15px);
+    }
+  }
+
+  .hover-scale {
+    & {
+      transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
+    }
+
+    &:hover {
+      transform: scale(0.95);
+    }
   }
 }
-
-@utility glass-morph {
-  & {
-    --dark-glass-morph: hsl(0 0% 7% / 0.1);
-    backdrop-filter: blur(15px);
-    background-color: var(--dark-glass-morph);
-    -webkit-backdrop-filter: blur(15px);
-  }
-}
-
-@utility hover-scale {
-  & {
-    @apply transition-transform duration-[0.8s] ease-[cubic-bezier(0.625_0.05_0_1)]
-  }
-
-  &:hover {
-    transform: scale(0.95);
-  }
-}
-
-
 
 @theme inline {
   --font-inter: var(--inter);
   --font-geist-mono: var(--geist-mono);
+  --font-nunito: var(--nunito);
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -104,20 +105,23 @@
     @apply bg-background text-foreground;
   }
 
-
+  ::selection {
+    background: #b34522;
+    color: #fff;
+  }
 }
 
 
 @layer base {
   :root {
-    --background: 0 0% 93%;
+    --background: 0 0% 98%;
     --foreground: 180 14% 3%;
     --card: 0 0% 98%;
     --card-foreground: 180 14% 3%;
     --popover: 0 0% 98%;
     --popover-foreground: 180 14% 3%;
     /* main headers and buttons */
-    --primary: 0 0% 98%;
+    --primary: 0 0% 85%;
     --primary-foreground: 240 1% 19%;
     /* sub titles and labels and icons color */
     --secondary: 240 100% 100%;

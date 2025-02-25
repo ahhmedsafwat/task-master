@@ -6,20 +6,32 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "../ui/logo";
 import { FlipingText } from "@/components/ui/fliping-text";
+
 interface Navlinks {
   title: string;
-  href: string;
+  href?: string;
   children?: Navlinks[];
 }
 
 const navigationItems: Navlinks[] = [
   {
     title: "Features",
-    href: "features",
+    children: [
+      { title: "Task Management", href: "/features/task-management" },
+      { title: "Collaboration", href: "/features/collaboration" },
+      { title: "Analytics", href: "/features/analytics" },
+    ],
   },
-  { title: "Pricing", href: "pricing" },
-  { title: "Story", href: "story" },
-  { title: "Developers", href: "developers" },
+  { title: "Pricing", href: "/pricing" },
+  { title: "Story", href: "/story" },
+  {
+    title: "Developers",
+    children: [
+      { title: "Github", href: "https://github.com/ahhmedsafwat/task-master" },
+      { title: "API Documentation", href: "/developers/api" },
+      { title: "Integrations", href: "/developers/integrations" },
+    ],
+  },
 ];
 
 export function Header() {
@@ -28,15 +40,10 @@ export function Header() {
 
   useEffect(() => {
     const handelScroll = () => {
-      if (window.scrollY > 0) {
-        setHasScrolled(true);
-      } else {
-        setHasScrolled(false);
-      }
+      setHasScrolled(window.scrollY > 0);
     };
 
     document.addEventListener("scroll", handelScroll);
-
     return () => {
       document.removeEventListener("scroll", handelScroll);
     };
@@ -57,39 +64,59 @@ export function Header() {
           >
             <Logo />
             <ul className="hidden items-center gap-6 lg:flex">
-              {navigationItems.map((item) => {
+              {navigationItems.map(({ href, title, children }: Navlinks) => {
+                if (href) {
+                  return (
+                    <li key={href} className="relative">
+                      {href && (
+                        <Link
+                          href={href}
+                          className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors"
+                        >
+                          <FlipingText initialText={title} />
+                        </Link>
+                      )}
+                    </li>
+                  );
+                }
                 return (
-                  <li key={item.title} className="relative">
-                    <Link
-                      href={item.href}
-                      className="text-muted-foreground hover:text-primary-foreground transition-colors"
-                    >
-                      {item.title}
-                    </Link>
-                    {item.children && (
-                      <div className="absolute left-0 top-full">
-                        <ul>
-                          {item.children.map((child) => (
-                            <li key={child.href}>
-                              <Link href={child.href}>{child.title}</Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                  <li key={title} className="group">
+                    <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors">
+                      <FlipingText initialText={title} />
+                    </span>
+                    <ul className="bg-background absolute left-0 hidden w-48 translate-y-2 rounded-md border p-3 shadow-lg group-hover:block">
+                      {children?.map(({ href, title }) => (
+                        <li key={href}>
+                          <Link
+                            href={href ?? ""}
+                            className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors"
+                          >
+                            <FlipingText initialText={title} />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 );
               })}
             </ul>
-            <div className="hidden items-center gap-5 lg:flex">
+            <div className="hidden items-center gap-4 lg:flex">
               <Link href="/login">
-                <FlipingText initialText="Login" />
+                <Button
+                  asChild
+                  variant={"outline"}
+                  size="lg"
+                  className="hover-scale"
+                >
+                  <FlipingText initialText="Login" />
+                </Button>
               </Link>
               <Link href="/signup">
                 <Button
                   asChild
                   variant={"inverted"}
-                  className="transition-transform duration-[0.8s] ease-[cubic-bezier(0.625_0.05_0_1)] hover:scale-95"
+                  size={"lg"}
+                  className="hover-scale"
                 >
                   <FlipingText initialText="Get Started" />
                 </Button>
@@ -113,29 +140,48 @@ export function Header() {
       </header>
       <div
         className={cn(
-          "glass-morph fixed left-full top-0 z-30 flex h-screen w-screen flex-col p-8 transition-all lg:hidden",
+          "bg-primary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 pb-6 pt-32 transition-all duration-500 ease-in-out sm:px-12 lg:hidden",
           { "left-0": isMenuOpen },
         )}
       >
-        <div className="flex flex-1 flex-col justify-center gap-6">
-          {navigationItems.map((item) => {
+        <ul className="mb-auto flex flex-col justify-center gap-6">
+          {navigationItems.map(({ href, title, children }: Navlinks) => {
+            if (href) {
+              return (
+                <li key={href} className="relative">
+                  {href && (
+                    <Link
+                      href={href}
+                      className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl"
+                    >
+                      {title}
+                    </Link>
+                  )}
+                </li>
+              );
+            }
             return (
-              <Link href={item.href} key={item.title} className="text-lg">
-                {item.title}
-                {item.children && (
-                  <ul>
-                    {item.children.map((child) => (
-                      <li key={child.href}>
-                        <Link href={child.href}>{child.title}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Link>
+              <li key={title} className="group">
+                <span className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
+                  {title}
+                </span>
+                <ul className="bg-background absolute left-0 hidden w-48 translate-y-2 rounded-md border p-3 shadow-lg group-hover:block">
+                  {children?.map(({ href, title }) => (
+                    <li key={href}>
+                      <Link
+                        href={href ?? ""}
+                        className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors"
+                      >
+                        {title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             );
           })}
-        </div>
-        <div className="w-full">
+        </ul>
+        <div>
           <Button asChild variant={"outline"} className="mb-3 w-full">
             <Link href="/login">Login</Link>
           </Button>

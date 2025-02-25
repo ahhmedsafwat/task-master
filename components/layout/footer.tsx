@@ -84,7 +84,8 @@ export function Footer() {
                   />
                   <Button
                     type="submit"
-                    className="w-full bg-white text-gray-900 hover:bg-gray-200"
+                    size={"sm"}
+                    className="hover-scale w-full bg-white text-gray-900 hover:bg-gray-200"
                   >
                     Subscribe
                   </Button>
