@@ -68,7 +68,7 @@ export function Header() {
         <nav className="container relative mx-auto px-6 lg:px-9">
           <div
             className={cn(
-              `h-18 flex items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none lg:top-4`,
+              `flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-[box-shadow_background-color_border-color] duration-300 motion-reduce:transition-none lg:top-4`,
               {
                 "glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
                   hasScrolled && !isMenuOpen,
@@ -84,7 +84,7 @@ export function Header() {
                       {href && (
                         <Link
                           href={href}
-                          className="text-muted-foreground hover:text-primary-foreground font-geist-mono transition-colors"
+                          className="text-muted-foreground hover:text-primary-foreground font-geist-mono font-medium transition-colors"
                         >
                           <FlipingText initialText={title} />
                         </Link>
@@ -99,7 +99,7 @@ export function Header() {
                     onMouseEnter={() => setActiveDropdown(title)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono flex cursor-pointer items-center gap-1 transition-colors">
+                    <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono flex cursor-pointer items-center gap-1 font-medium transition-colors">
                       {title}
                       <ChevronDownIcon
                         size={16}
@@ -118,7 +118,7 @@ export function Header() {
                             duration: 0.2,
                             ease: [0.625, 0.05, 0, 1],
                           }}
-                          className="bg-secondary absolute left-0 top-10 w-72 rounded-md border p-3 shadow-lg"
+                          className="bg-secondary absolute left-0 top-10 w-72 rounded-md border p-2 shadow-lg"
                         >
                           <IoMdArrowDropup className="text-secondary absolute -top-[11px] left-[50%] size-9 h-8 w-full -translate-x-[50%] bg-transparent" />
                           {children?.map(({ href, title, icon }) => (
@@ -193,7 +193,7 @@ export function Header() {
       </header>
       <div
         className={cn(
-          "bg-secondary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
+          "bg-secondary/30 fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 backdrop-blur-lg transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
           { "left-0": isMenuOpen },
         )}
       >
@@ -204,7 +204,7 @@ export function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className="relative cursor-pointer border-b py-3"
+                  className="border-foreground relative cursor-pointer border-b py-3"
                 >
                   <li className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
                     {title}
@@ -213,7 +213,10 @@ export function Header() {
               );
             }
             return (
-              <li key={title} className="relative cursor-pointer border-b">
+              <li
+                key={title}
+                className="border-foreground relative cursor-pointer border-b"
+              >
                 <Accordion collapsible type="single">
                   <AccordionItem value="item-1" className="border-none">
                     <AccordionTrigger className="font-geist-mono text-primary-foreground text-2xl font-bold sm:text-3xl">
@@ -227,7 +230,7 @@ export function Header() {
                               <Link
                                 key={href}
                                 href={href ?? ""}
-                                className="text-accent-foreground hover:text-primary-foreground hover:bg-muted group flex w-full items-center gap-3 rounded-md p-2 transition-colors"
+                                className="text-accent-foreground hover:text-primary-foreground hover:bg-muted/70 group flex w-full items-center gap-3 rounded-md p-2 transition-colors"
                               >
                                 <span className="group-hover:border-primary-foreground rounded-xl border p-2 transition-colors">
                                   <span className="block transition-transform group-hover:rotate-6 group-hover:scale-110">

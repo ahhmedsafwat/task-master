@@ -20,7 +20,6 @@
       --dark-glass-morph: hsl(0 0% 7% / 0.1);
       backdrop-filter: blur(15px);
       background-color: var(--dark-glass-morph);
-
     }
   }
 
@@ -119,7 +118,6 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -152,7 +150,7 @@
     --primary-foreground: 240 1% 19%;
     /* sub titles and labels and icons color */
     --secondary: 240 100% 100%;
-    --secondary-foreground: 0 0% 34%;
+    --secondary-foreground: 0, 0%, 45%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46%;
     /* hover effects*/
