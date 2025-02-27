@@ -16,10 +16,10 @@ const geistmono = Geist_Mono({
 
 const cabinet = localFont({
   src: [
-    { path: "../public/fonts/CabinetGrotesk-Extrabold.ttf", weight: "800" },
-    { path: "../public/fonts/CabinetGrotesk-bold.ttf", weight: "700" },
-    { path: "../public/fonts/CabinetGrotesk-Medium.ttf", weight: "500" },
-    { path: "../public/fonts/CabinetGrotesk-Regular.ttf", weight: "400" },
+    { path: "/fonts/CabinetGrotesk-Extrabold.ttf", weight: "800" },
+    { path: "/fonts/CabinetGrotesk-bold.ttf", weight: "700" },
+    { path: "/fonts/CabinetGrotesk-Medium.ttf", weight: "500" },
+    { path: "/fonts/CabinetGrotesk-Regular.ttf", weight: "400" },
   ],
   variable: "--cabinet",
 });

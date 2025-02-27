@@ -62,7 +62,7 @@ export default function Hero() {
           }}
         />
         <motion.div
-          className="w-3xl absolute bottom-32 left-20 -z-10 h-96 rounded-full bg-blue-700 opacity-55 blur-3xl"
+          className="w-3xl absolute bottom-32 left-20 -z-10 h-96 rounded-full opacity-55 blur-3xl"
           animate={{
             scale: [1, 1.3, 1],
             background: ["#7008e7", "#f4791f", "#7008e7"],
