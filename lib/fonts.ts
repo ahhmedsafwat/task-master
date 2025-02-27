@@ -1,5 +1,5 @@
-import { Inter, Geist_Mono, Nunito } from "next/font/google";
-
+import { Inter, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--inter",
@@ -14,11 +14,13 @@ const geistmono = Geist_Mono({
   weight: ["400", "500", "600", "700"],
 });
 
-const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--nunito",
-  display: "swap",
-  weight: ["400", "500", "1000"],
+const cabinet = localFont({
+  src: [
+    { path: "../public/fonts/CabinetGrotesk-Extrabold.ttf", weight: "800" },
+    { path: "../public/fonts/CabinetGrotesk-bold.ttf", weight: "700" },
+    { path: "../public/fonts/CabinetGrotesk-Medium.ttf", weight: "500" },
+    { path: "../public/fonts/CabinetGrotesk-Regular.ttf", weight: "400" },
+  ],
+  variable: "--cabinet",
 });
-
-export { inter, geistmono, nunito };
+export { inter, geistmono, cabinet };

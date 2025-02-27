@@ -37,8 +37,7 @@
 @theme inline {
   --font-inter: var(--inter);
   --font-geist-mono: var(--geist-mono);
-  --font-nunito: var(--nunito);
-
+  --font-cabinet: var(--cabinet);
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
 
@@ -118,6 +117,7 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+
   *,
   ::after,
   ::before,

@@ -21,60 +21,61 @@ const enteryVariant: Variants = {
 export default function Hero() {
   return (
     <section className="relative min-h-screen overflow-hidden pt-24">
-      {/* Background Pattern */}
-      <motion.div
-        className="w-3xl absolute left-10 top-0 -z-10 h-96 rounded-full bg-indigo-800 opacity-50 blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "loop",
-        }}
-      />
-      <motion.div
-        className="w-2xl absolute right-10 top-32 -z-10 h-96 rounded-full bg-purple-800 opacity-50 blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "loop",
-        }}
-      />
-      <motion.div
-        className="w-2xl absolute bottom-24 right-24 -z-10 h-96 rounded-full bg-cyan-950 opacity-50 blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "loop",
-        }}
-      />
-      <motion.div
-        className="w-3xl absolute bottom-32 left-20 -z-10 h-96 rounded-full bg-blue-800 opacity-50 blur-3xl"
-        animate={{
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Number.POSITIVE_INFINITY,
-          repeatType: "loop",
-        }}
-      />
-      <div className="container relative mx-auto overflow-clip rounded-2xl px-4 py-20">
+      <div className="container relative mx-auto px-4 py-20">
         <div className="absolute inset-0 -z-20">
-          <div className="from-background via-background/90 to-primary/20 absolute inset-0 bg-gradient-to-br" />
           <div className="absolute h-full w-full bg-[radial-gradient(var(--color-foreground)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
         </div>
-
+        <motion.div
+          className="w-3xl top-18 absolute left-10 -z-10 h-96 rounded-full opacity-40 blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            background: ["#c31432", "#f12711", "#c31432"],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+          }}
+        />
+        <motion.div
+          className="w-2xl absolute right-10 top-32 -z-10 h-96 rounded-full opacity-60 blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            background: ["#7008e7", "#f4791f", "#7008e7"],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+          }}
+        />
+        <motion.div
+          className="w-2xl absolute bottom-24 right-24 -z-10 h-96 rounded-full opacity-45 blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            background: ["#c31432", "#f12711", "#c31432"],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+          }}
+        />
+        <motion.div
+          className="w-3xl absolute bottom-32 left-20 -z-10 h-96 rounded-full bg-blue-700 opacity-55 blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            background: ["#7008e7", "#f4791f", "#7008e7"],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Number.POSITIVE_INFINITY,
+            repeatType: "loop",
+          }}
+        />
         <div className="mb-12 text-center">
           <motion.h1
-            className="mx-auto mb-6 max-w-4xl text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl lg:text-7xl"
+            className="font-cabinet mx-auto mb-6 max-w-4xl text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
             variants={enteryVariant}
             initial="initial"
             animate="animate"
@@ -83,7 +84,7 @@ export default function Hero() {
             Streamline Your Tasks with TaskMaster
           </motion.h1>
           <motion.p
-            className="text-primary-foreground mx-auto mb-8 max-w-2xl font-mono text-sm sm:text-xl"
+            className="text-primary-foreground font-cabinet mx-auto mb-8 max-w-2xl text-sm sm:text-xl md:text-2xl"
             variants={enteryVariant}
             initial="initial"
             animate="animate"
@@ -114,7 +115,7 @@ export default function Hero() {
         </div>
         {/* Video Showcase Placeholder */}
         <div className="mx-auto aspect-video max-w-4xl overflow-hidden rounded-lg shadow-xl">
-          <div className="flex h-full items-center justify-center bg-gray-800">
+          <div className="bg-secondary flex h-full items-center justify-center">
             <p className="text-2xl font-semibold">Your Video Showcase Here</p>
           </div>
         </div>
