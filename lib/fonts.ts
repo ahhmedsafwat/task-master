@@ -17,22 +17,22 @@ const geistmono = Geist_Mono({
 const cabinet = localFont({
   src: [
     {
-      path: "/fonts/CabinetGrotesk-bold.ttf",
+      path: "../public/fonts/cabinetgroteskbold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "/fonts/CabinetGrotesk-Extrabold.ttf",
+      path: "../public/fonts/cabinetgroteskextrabold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "/fonts/CabinetGrotesk-Medium.ttf",
+      path: "../public/fonts/cabinetgroteskmedium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "/fonts/CabinetGrotesk-Regular.ttf",
+      path: "../public/fonts/cabinetgroteskregular.ttf",
       weight: "400",
       style: "normal",
     },
