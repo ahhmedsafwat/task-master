@@ -14,30 +14,30 @@ const geistmono = Geist_Mono({
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
-
 const cabinet = localFont({
   src: [
     {
-      path: "../public/fonts/CabinetGrotesk-bold.ttf",
+      path: "/fonts/CabinetGrotesk-bold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../public/fonts/CabinetGrotesk-Extrabold.ttf",
+      path: "/fonts/CabinetGrotesk-Extrabold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../public/fonts/CabinetGrotesk-Medium.ttf",
+      path: "/fonts/CabinetGrotesk-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../public/fonts/CabinetGrotesk-Regular.ttf",
+      path: "/fonts/CabinetGrotesk-Regular.ttf",
       weight: "400",
       style: "normal",
     },
   ],
   variable: "--cabinet",
 });
+
 export { inter, geistmono, cabinet };
