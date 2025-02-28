@@ -3,58 +3,68 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer utilities {
-  .container {
-    & {
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      max-width: 1344px;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-  }
-
-  .glass-morph {
-    & {
-      --dark-glass-morph: hsl(0 0% 7% / 0.1);
-      backdrop-filter: blur(15px);-webkit-backdrop-filter: blur(10px);
-      background-color: var(--dark-glass-morph);
-    }
-  }
-
-  .hover-scale {
-    & {
-      transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
-    }
-
-    &:hover {
-      transform: scale(0.95);
-    }
-  }
-
-  .gradient-bg {
-    & {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      background-image:
-        linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
-      background-size: 90px 90px;
-
-      mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
-    }
-
-    @media (width <=768px) {
-      & {
-        background-size: 60px 60px;
-      }
-    }
-
+/* Individual utility classes with @utility */
+@utility container {
+  & {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 1344px;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }
 
+@utility hover-scale {
+  & {
+    transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
+  }
+
+  &:hover {
+    transform: scale(0.95);
+  }
+}
+
+@utility glass-morph {
+  & {
+    /* Create stacking context */
+    position: relative;
+    z-index: 1;
+
+    /* Background is required */
+    background-color: hsla(0, 0%, 7%, 0.1);
+
+    /* Apply both standard and prefixed filters */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    /* Additional fixes */
+    transform: translateZ(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+}
+
+@utility gradient-bg {
+  & {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image:
+      linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
+    background-size: 90px 90px;
+    mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  @utility gradient-bg {
+    & {
+      background-size: 60px 60px;
+    }
+  }
+}
 
 
 
