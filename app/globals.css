@@ -32,6 +32,19 @@
       transform: scale(0.95);
     }
   }
+
+  .gradient-bg {
+    & {
+      height: 100%;
+      width: 100%;
+      background-image:
+        linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
+      background-size: 90px 90px;
+      background-position: center center;
+      mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+    }
+  }
 }
 
 @theme inline {

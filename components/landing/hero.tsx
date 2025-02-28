@@ -20,10 +20,10 @@ const enteryVariant: Variants = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen overflow-hidden pt-24">
+    <section className="relative min-h-screen pt-24">
       <div className="container relative mx-auto px-4 py-20">
         <div className="absolute inset-0 -z-20">
-          <div className="absolute h-full w-full bg-[radial-gradient(var(--color-foreground)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+          <div className="gradient-bg" />
         </div>
         <motion.div
           className="w-3xl top-18 absolute left-10 -z-10 h-96 rounded-full opacity-40 blur-3xl"
@@ -38,7 +38,7 @@ export default function Hero() {
           }}
         />
         <motion.div
-          className="w-2xl absolute right-10 top-32 -z-10 h-96 rounded-full opacity-60 blur-3xl"
+          className="w-lg absolute right-10 top-32 -z-10 h-96 rounded-full opacity-60 blur-3xl"
           animate={{
             scale: [1, 1.3, 1],
             background: ["#7008e7", "#f4791f", "#7008e7"],
@@ -49,31 +49,8 @@ export default function Hero() {
             repeatType: "loop",
           }}
         />
-        <motion.div
-          className="w-2xl absolute bottom-24 right-24 -z-10 h-96 rounded-full opacity-45 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            background: ["#c31432", "#f12711", "#c31432"],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-          }}
-        />
-        <motion.div
-          className="w-3xl absolute bottom-32 left-20 -z-10 h-96 rounded-full opacity-55 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            background: ["#7008e7", "#f4791f", "#7008e7"],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-          }}
-        />
-        <div className="mb-12 text-center">
+
+        <div className="mb-3 text-center">
           <motion.h1
             className="font-cabinet mx-auto mb-6 max-w-4xl text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
             variants={enteryVariant}
@@ -113,11 +90,11 @@ export default function Hero() {
             </Link>
           </motion.div>
         </div>
-        {/* Video Showcase Placeholder */}
-        <div className="mx-auto aspect-video max-w-4xl overflow-hidden rounded-lg shadow-xl">
-          <div className="bg-secondary flex h-full items-center justify-center">
-            <p className="text-2xl font-semibold">Your Video Showcase Here</p>
-          </div>
+      </div>{" "}
+      {/* Video Showcase Placeholder */}
+      <div className="mx-auto aspect-video max-w-7xl overflow-hidden rounded-lg px-4 shadow-xl">
+        <div className="bg-secondary flex h-full items-center justify-center">
+          <p className="text-2xl font-semibold">Your Video Showcase Here</p>
         </div>
       </div>
     </section>

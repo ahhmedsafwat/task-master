@@ -35,12 +35,12 @@ const navigationItems: Navlinks[] = [
       {
         title: "Github",
         href: "https://github.com/ahhmedsafwat/task-master",
-        icon: <IoLogoGithub size={32} />,
+        icon: <IoLogoGithub size={24} />,
       },
       {
         title: "API Documentation",
         href: "/developers/api",
-        icon: <IoIosCode size={32} />,
+        icon: <IoIosCode size={24} />,
       },
     ],
   },
@@ -84,7 +84,7 @@ export function Header() {
                       {href && (
                         <Link
                           href={href}
-                          className="text-muted-foreground hover:text-primary-foreground font-geist-mono font-medium transition-colors"
+                          className="text-muted-foreground hover:text-primary-foreground font-geist-mono text-sm font-medium transition-colors"
                         >
                           <FlipingText initialText={title} />
                         </Link>
@@ -99,7 +99,7 @@ export function Header() {
                     onMouseEnter={() => setActiveDropdown(title)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono flex cursor-pointer items-center gap-1 font-medium transition-colors">
+                    <span className="text-muted-foreground hover:text-primary-foreground font-geist-mono flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors">
                       {title}
                       <ChevronDownIcon
                         size={16}
@@ -118,7 +118,7 @@ export function Header() {
                             duration: 0.2,
                             ease: [0.625, 0.05, 0, 1],
                           }}
-                          className="bg-secondary absolute left-0 top-10 w-72 rounded-md border p-2 shadow-lg"
+                          className="bg-secondary absolute left-0 top-8 w-56 rounded-md border p-2 shadow-lg"
                         >
                           <IoMdArrowDropup className="text-secondary absolute -top-[11px] left-[50%] size-9 h-8 w-full -translate-x-[50%] bg-transparent" />
                           {children?.map(({ href, title, icon }) => (
@@ -135,9 +135,9 @@ export function Header() {
                             >
                               <Link
                                 href={href ?? ""}
-                                className="text-accent-foreground hover:text-primary-foreground hover:bg-muted group flex w-full items-center gap-3 rounded-md p-[5px] transition-colors duration-300"
+                                className="text-accent-foreground hover:text-primary-foreground hover:bg-muted group flex w-full items-center gap-2 rounded-md p-[3px] text-xs transition-colors duration-300"
                               >
-                                <span className="group-hover:border-primary-foreground rounded-xl border p-[5px] transition-colors">
+                                <span className="group-hover:border-primary-foreground rounded-md border p-[4px] transition-colors">
                                   <span className="block transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
                                     {icon}
                                   </span>
@@ -155,22 +155,12 @@ export function Header() {
             </ul>
             <div className="hidden items-center gap-4 lg:flex">
               <Link href="/login">
-                <Button
-                  asChild
-                  variant={"outline"}
-                  size="lg"
-                  className="hover-scale"
-                >
+                <Button asChild variant={"outline"} className="hover-scale">
                   <FlipingText initialText="Login" />
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button
-                  asChild
-                  variant={"inverted"}
-                  size={"lg"}
-                  className="hover-scale"
-                >
+                <Button asChild variant={"inverted"} className="hover-scale">
                   <FlipingText initialText="Get Started" />
                 </Button>
               </Link>

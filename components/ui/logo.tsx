@@ -27,7 +27,7 @@ export const Logo = ({ className }: { className?: string }) => {
           strokeWidth="3"
         />
       </svg>
-      <div className="font-cabinet text-base font-extrabold tracking-wide sm:text-xl">
+      <div className="font-cabinet text-base font-extrabold tracking-wide sm:text-lg">
         TASKMASTER
       </div>
     </Link>

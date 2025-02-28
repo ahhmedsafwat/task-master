@@ -40,7 +40,7 @@ export function Footer() {
     <footer className="rounded-t-4xl relative z-10 overflow-hidden">
       <Image
         alt="gradient background"
-        src="/images/footer-bg.webp"
+        src="/images/gradiant-bg3.webp"
         fill
         className="pointer-events-none object-cover"
         priority
@@ -154,7 +154,7 @@ function SocialButton({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="text-muted-foreground border-gray-300 bg-neutral-100 hover:bg-gray-100 hover:text-orange-300"
+        className="text-muted-foreground border-gray-300 bg-neutral-100 hover:bg-gray-100 hover:text-gray-900"
       >
         <Icon size={24} />
       </Link>
