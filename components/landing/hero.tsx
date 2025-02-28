@@ -89,10 +89,10 @@ export default function Hero() {
             </Link>
           </motion.div>
         </div>
-        <div className="mx-auto aspect-video overflow-hidden rounded-lg px-4 shadow-xl">
-          <div className="bg-secondary flex h-full items-center justify-center">
-            <p className="text-2xl font-semibold">Your Video Showcase Here</p>
-          </div>
+      </div>
+      <div className="mx-auto aspect-video overflow-hidden rounded-lg px-4 shadow-xl">
+        <div className="bg-secondary flex h-full items-center justify-center">
+          <p className="text-2xl font-semibold">Your Video Showcase Here</p>
         </div>
       </div>
     </section>
