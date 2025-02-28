@@ -20,7 +20,7 @@ const enteryVariant: Variants = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen pt-24">
+    <section className="relative min-h-screen overflow-hidden pt-24">
       <div className="container relative mx-auto px-4 py-20">
         <div className="absolute inset-0 -z-20">
           <div className="gradient-bg" />
@@ -49,7 +49,6 @@ export default function Hero() {
             repeatType: "loop",
           }}
         />
-
         <div className="mb-3 text-center">
           <motion.h1
             className="font-cabinet mx-auto mb-6 max-w-4xl text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
@@ -90,11 +89,10 @@ export default function Hero() {
             </Link>
           </motion.div>
         </div>
-      </div>{" "}
-      {/* Video Showcase Placeholder */}
-      <div className="mx-auto aspect-video max-w-7xl overflow-hidden rounded-lg px-4 shadow-xl">
-        <div className="bg-secondary flex h-full items-center justify-center">
-          <p className="text-2xl font-semibold">Your Video Showcase Here</p>
+        <div className="mx-auto aspect-video overflow-hidden rounded-lg px-4 shadow-xl">
+          <div className="bg-secondary flex h-full items-center justify-center">
+            <p className="text-2xl font-semibold">Your Video Showcase Here</p>
+          </div>
         </div>
       </div>
     </section>
