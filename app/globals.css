@@ -18,7 +18,7 @@
   .glass-morph {
     & {
       --dark-glass-morph: hsl(0 0% 7% / 0.1);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);-webkit-backdrop-filter: blur(10px);
       background-color: var(--dark-glass-morph);
     }
   }
