@@ -56,15 +56,15 @@
     background-size: 90px 90px;
     mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
   }
-}
 
-@media (max-width: 768px) {
-  @utility gradient-bg {
+  @media (max-width: 768px) {
     & {
       background-size: 60px 60px;
     }
   }
 }
+
+
 
 
 
