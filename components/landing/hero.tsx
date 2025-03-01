@@ -26,7 +26,7 @@ export default function Hero() {
           <div className="gradient-bg" />
         </div>
         {/* CSS-only animated background elements */}
-        <div className="bubble-1 w-lg top-18 absolute left-10 -z-10 h-96 rounded-full blur-3xl" />
+        <div className="bubble-1 w-lg top-18 absolute left-10 -z-10 hidden h-96 rounded-full blur-3xl md:block" />
         <div className="bubble-2 w-3xl absolute right-10 top-32 -z-10 h-96 rounded-full blur-3xl" />
 
         <div className="mb-3 text-center">
