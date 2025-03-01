@@ -3,69 +3,143 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Individual utility classes with @utility */
-@utility container {
-  & {
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    max-width: 1344px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
 
-@utility hover-scale {
-  & {
-    transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
-  }
-
-  &:hover {
-    transform: scale(0.95);
-  }
-}
-
-@utility glass-morph {
-  & {
-    /* Create stacking context */
-    position: relative;
-    z-index: 1;
-
-    /* Background is required */
-    background-color: hsla(0, 0%, 7%, 0.1);
-
-    /* Apply both standard and prefixed filters */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-
-    /* Additional fixes */
-    transform: translateZ(0);
-    -webkit-transform: translate3d(0, 0, 0);
-    will-change: transform;
-  }
-}
-
-@utility gradient-bg {
-  & {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-image:
-      linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
-    background-size: 90px 90px;
-    mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
-  }
-
-  @media (max-width: 768px) {
+@layer utilities {
+  .container {
     & {
-      background-size: 60px 60px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 1344px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+
+
+  .hover-scale {
+    & {
+      transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
+    }
+
+    &:hover {
+      transform: scale(0.95);
+    }
+  }
+
+
+
+}
+
+
+.glass-morph {
+  isolation: isolate;
+
+  /* Background is required */
+  background-color: hsla(0, 0%, 7%, 0.7);
+
+  /* Apply both standard and prefixed filters */
+  backdrop-filter: blur(15px);
+
+
+  /* Additional fixes */
+  transform: translateZ(0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform backdrop-filter background-color;
+
+}
+
+
+@layer components {
+  .gradient-bg {
+    & {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-image:
+        linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
+      background-size: 90px 90px;
+
+      mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+    }
+
+    @media (width <=768px) {
+      & {
+        background-size: 60px 60px;
+      }
+    }
+  }
+
+
+  @keyframes pulse-scale {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.3);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes color-shift-1 {
+    0% {
+      background-color: #c31432;
+    }
+
+    50% {
+      background-color: #f12711;
+    }
+
+    100% {
+      background-color: #c31432;
+    }
+  }
+
+  @keyframes color-shift-2 {
+    0% {
+      background-color: #7008e7;
+    }
+
+    50% {
+      background-color: #f4791f;
+    }
+
+    100% {
+      background-color: #7008e7;
+    }
+  }
+
+  .bubble-1 {
+    animation: pulse-scale 14s ease-in-out infinite, color-shift-1 14s infinite;
+    transform-origin: center;
+    will-change: transform, background-color;
+  }
+
+  .bubble-2 {
+    animation: pulse-scale 14s ease-in-out infinite, color-shift-2 14s infinite;
+    /* Offset to create variation */
+    transform-origin: center;
+    will-change: transform, background-color;
+  }
+
+  /* For mobile devices, reduce animation complexity */
+  @media (max-width: 768px) {
+
+    .bubble-1,
+    .bubble-2 {
+      /* Reduce blur for better performance */
+      filter: blur(20px);
+      /* Simplify animation */
+      animation-duration: 20s;
     }
   }
 }
-
-
-
 
 
 @theme inline {
@@ -237,19 +311,5 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-  }
-}
-
-/*
-  ---break---
-*/
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
   }
 }

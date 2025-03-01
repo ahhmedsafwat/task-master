@@ -9,7 +9,7 @@ const enteryVariant: Variants = {
   initial: {
     opacity: 0,
     y: 20,
-    filter: "blur(20px)",
+    filter: "blur(10px)",
   },
   animate: {
     opacity: 1,
@@ -20,35 +20,15 @@ const enteryVariant: Variants = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen overflow-hidden pt-24">
-      <div className="container relative mx-auto px-4 py-20">
+    <section className="translate-3d relative min-h-screen overflow-hidden py-24">
+      <div className="container relative mx-auto px-4 py-36">
         <div className="absolute inset-0 -z-20">
           <div className="gradient-bg" />
         </div>
-        <motion.div
-          className="w-3xl top-18 absolute left-10 -z-10 h-96 rounded-full opacity-40 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            background: ["#c31432", "#f12711", "#c31432"],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-          }}
-        />
-        <motion.div
-          className="w-lg absolute right-10 top-32 -z-10 h-96 rounded-full opacity-60 blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            background: ["#7008e7", "#f4791f", "#7008e7"],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "loop",
-          }}
-        />
+        {/* CSS-only animated background elements */}
+        <div className="bubble-1 w-lg top-18 absolute left-10 -z-10 h-96 rounded-full blur-3xl" />
+        <div className="bubble-2 w-3xl absolute right-10 top-32 -z-10 h-96 rounded-full blur-3xl" />
+
         <div className="mb-3 text-center">
           <motion.h1
             className="font-cabinet mx-auto mb-6 max-w-4xl text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
@@ -90,7 +70,7 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
-      <div className="mx-auto aspect-video overflow-hidden rounded-lg px-4 shadow-xl">
+      <div className="mx-auto aspect-video max-w-6xl overflow-hidden rounded-lg px-4 shadow-xl">
         <div className="bg-secondary flex h-full items-center justify-center">
           <p className="text-2xl font-semibold">Your Video Showcase Here</p>
         </div>

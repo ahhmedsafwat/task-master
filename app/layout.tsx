@@ -27,12 +27,6 @@ export const metadata: Metadata = {
       "Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.",
     siteName: "Task Master",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Task Master - Efficient Task Management",
-    description:
-      "Streamline your workflow with Task Master - the intuitive task management application.",
-  },
 };
 
 export default function RootLayout({
