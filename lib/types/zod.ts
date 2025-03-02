@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Password regex for strong passwords
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d){8,}$/;
 
 // Login schema with basic validation
 export const loginSchema = z.object({
