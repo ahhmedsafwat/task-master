@@ -1,6 +1,6 @@
 "use server";
 import { User } from "@supabase/supabase-js";
-import { TablesInsert, TablesUpdate } from "./types/database.typs";
+import { TablesInsert, TablesUpdate } from "../types/database.typs";
 import { revalidatePath } from "next/cache";
 import { createSupabaseClient } from "@/utils/supabase/server";
 
@@ -77,6 +77,7 @@ export const updateTask = async ({
       priority,
       due_date,
       start_date,
+      updated_at: new Date().toISOString()
     })
     .eq("id", id)
     .select();

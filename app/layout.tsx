@@ -3,9 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { geistmono, inter, cabinet } from "@/lib/fonts";
 import Provider from "@/components/context/provider";
-import { Header } from "@/components/layout/header";
 import "./globals.css";
-import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -26,6 +24,21 @@ export const metadata: Metadata = {
     description:
       "Streamline your workflow with Task Master - the intuitive task management application that helps you organize, prioritize, and track your projects efficiently.",
     siteName: "Task Master",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Task Master - Efficient Task Management",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Task Master - Efficient Task Management",
+    description:
+      "Streamline your workflow with Task Master - the intuitive task management application.",
+    images: ["/images/og-image.jpg"],
   },
 };
 
@@ -41,9 +54,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Provider>
-          <Header />
           {children}
-          <Footer />
           <SpeedInsights />
           <Analytics />
         </Provider>

@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { Logo } from "../ui/logo";
 import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from "react-icons/ri";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import Image from "next/image";
+import ThemeToggle from "../ui/theme-toggle";
+import { Logo } from "../ui/logo";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const navigationItems = [
   { title: "Features", href: "features" },
@@ -50,13 +51,19 @@ export function Footer() {
         <div className="container mx-auto px-6 py-12 text-white">
           <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div className="flex h-full flex-col justify-between gap-4 max-md:items-center">
-              <div className="space-y-4 max-md:text-center">
+              <div className="mb-3 space-y-4 max-md:text-center">
                 <Logo className="max-md:justify-center" />
                 <p className="font-geist-mono text-sm text-gray-200">
                   Streamline your tasks and boost productivity with TaskMaster.
                   The ultimate task management solution for teams and
                   individuals.
                 </p>
+              </div>
+              <div className="flex gap-2">
+                {socialLinks.map((link) => (
+                  <SocialButton key={link.label} {...link} />
+                ))}
+                <ThemeToggle className="text-muted-foreground border-gray-300 hover:text-gray-900" />
               </div>
             </div>
 
@@ -67,12 +74,7 @@ export function Footer() {
             <FooterLinkSection title="Legal" links={legalLinks} />
 
             <div className="flex flex-col justify-between gap-3 max-md:flex-col-reverse max-md:items-center max-md:justify-center">
-              <div className="flex gap-2">
-                {socialLinks.map((link) => (
-                  <SocialButton key={link.label} {...link} />
-                ))}
-              </div>
-              <div className="w-full lg:mt-12">
+              <div className="w-full">
                 <h3 className="font-geist-mono mb-2 font-semibold">
                   Stay up to date
                 </h3>
@@ -148,7 +150,7 @@ function SocialButton({
   label: string;
 }) {
   return (
-    <Button variant="outline" size="lg" asChild>
+    <Button variant="outline" size="icon" asChild>
       <Link
         href={href}
         target="_blank"

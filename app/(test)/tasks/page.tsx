@@ -1,6 +1,6 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { signup, login } from "@/lib/actions";
+import { signup, login } from "@/lib/actions/actions";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { Tables } from "@/lib/types/database.typs";
@@ -13,7 +13,7 @@ import {
   getTasks,
   removeAssignee,
   updateTask,
-} from "@/lib/quieries";
+} from "@/lib/actions/quieries";
 
 export default function TestPage() {
   const supabase = createClient();

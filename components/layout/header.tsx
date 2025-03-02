@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MenuIcon } from "@/components/ui/menu-icon";
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Logo } from "../ui/logo";
+
 import { FlipingText } from "@/components/ui/fliping-text";
 import { IoLogoGithub, IoMdArrowDropup, IoIosCode } from "react-icons/io";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/accordion";
 import { ChevronDownIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { Logo } from "../ui/logo";
 
 interface Navlinks {
   title: string;
@@ -170,12 +171,7 @@ export function Header() {
               })}
             </ul>
             <div className="hidden items-center gap-4 lg:flex">
-              <Link href="/login">
-                <Button asChild variant={"outline"} className="hover-scale">
-                  <FlipingText initialText="Login" />
-                </Button>
-              </Link>
-              <Link href="/signup">
+              <Link href="/auth">
                 <Button asChild variant={"inverted"} className="hover-scale">
                   <FlipingText initialText="Get Started" />
                 </Button>
@@ -253,11 +249,8 @@ export function Header() {
           })}
         </ul>
         <div>
-          <Button asChild variant={"outline"} className="mb-3 w-full">
-            <Link href="/login">Login</Link>
-          </Button>
           <Button asChild variant={"inverted"} className="w-full py-5">
-            <Link href="/signup" className="">
+            <Link href="/auth" className="">
               Get Started
             </Link>
           </Button>

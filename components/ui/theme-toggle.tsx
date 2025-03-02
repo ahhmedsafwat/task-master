@@ -3,11 +3,11 @@ import { useTheme } from "next-themes";
 import { Button } from "./button";
 import { Moon, Sun } from "lucide-react";
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, theme } = useTheme();
 
   return (
-    <div>
+    <div className={`${className}`}>
       {theme === "dark" ? (
         <Button
           variant={"outline"}

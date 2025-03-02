@@ -37,7 +37,7 @@
   isolation: isolate;
 
   /* Background is required */
-  background-color: hsla(0, 0%, 7%, 0.7);
+  background-color: hsla(0, 0%, 7%, 0.6);
 
   /* Apply both standard and prefixed filters */
   backdrop-filter: blur(15px);

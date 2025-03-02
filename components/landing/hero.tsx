@@ -62,7 +62,7 @@ export default function Hero() {
               </Link>
             </Button>
 
-            <Link href="/signup">
+            <Link href="/auth">
               <Button asChild variant="inverted" className="hover-scale">
                 <FlipingText initialText="Get Started" />
               </Button>
