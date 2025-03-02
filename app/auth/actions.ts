@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createSupabaseClient } from "@/utils/supabase/server";
-import { loginSchema } from "@/lib/types/zod";
+import { loginSchema, signupSchema } from "@/lib/types/zod";
 import { AuthResponse } from "@/lib/types/types";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -22,7 +22,7 @@ export async function login(
       return {
         status: "error",
         errors: validatedFields.error.flatten().fieldErrors,
-        message: "Invalid form data. Please check the fields.",
+        message: null,
       };
     }
 
@@ -44,7 +44,7 @@ export async function login(
     return {
       status: "success",
       message: "Logged in successfully!",
-      redirectTo: "/dashboard",
+      redirectTo: "/dashboard/overview",
     };
   } catch (error) {
     console.error("Login error:", error);
@@ -65,14 +65,14 @@ export async function signUp(
   try {
     // Parse and validate form data
     const rawFormData = Object.fromEntries(formData.entries());
-    const validatedFields = loginSchema.safeParse(rawFormData);
+    const validatedFields = signupSchema.safeParse(rawFormData);
 
     // Return validation errors if any
     if (!validatedFields.success) {
       return {
         status: "error",
         errors: validatedFields.error.flatten().fieldErrors,
-        message: "Invalid form data. Please check the fields.",
+        message: null,
       };
     }
 
@@ -104,11 +104,17 @@ export async function signUp(
     // Check if user needs to confirm email
     const needsEmailConfirmation = data?.user?.identities?.length === 0;
 
+    if (needsEmailConfirmation) {
+      return {
+        status: "success",
+        message: "Please check your email to confirm your account.",
+      };
+    }
+
     return {
       status: "success",
-      message: needsEmailConfirmation
-        ? "Check your email for the confirmation link!"
-        : "Account created successfully! You can now log in.",
+      message: "Account created successfully!",
+      redirectTo: "/dashboard/overview",
     };
   } catch (error) {
     console.error("Signup error:", error);

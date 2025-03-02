@@ -16,8 +16,13 @@ export function SubmitButton({
       disabled={isPending || isSuccessful}
       aria-disabled={isPending || isSuccessful}
       className="mt-5 h-11 w-full justify-center"
+      variant={"inverted"}
     >
-      {isPending || isSuccessful ? <LoaderIcon /> : <>{children}</>}
+      {isPending || isSuccessful ? (
+        <LoaderIcon className="animate-spin" />
+      ) : (
+        <>{children}</>
+      )}
       <output aria-live="polite" className="sr-only">
         {isPending || isSuccessful ? "Loading" : "submit form"}
       </output>
