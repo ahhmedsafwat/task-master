@@ -3,7 +3,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { geistmono, inter, cabinet } from "@/lib/fonts";
 import Provider from "@/lib/context/provider";
-import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -55,7 +54,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Provider>
-          <Toaster position="top-center" richColors closeButton />
           {children}
           <SpeedInsights />
           <Analytics />

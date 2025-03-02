@@ -20,7 +20,6 @@ export const LoginForm = () => {
   });
 
   useEffect(() => {
-    // Handle non-field validation errors with toast
     if (
       loginState?.status === "error" &&
       loginState.message &&
@@ -29,11 +28,9 @@ export const LoginForm = () => {
       toast.error(loginState.message);
     }
 
-    // Handle successful login with redirect
     if (loginState?.status === "success") {
       toast.success(loginState.message);
 
-      // Redirect if redirectTo is specified
       if (loginState.redirectTo) {
         router.push(loginState.redirectTo);
       }
@@ -49,7 +46,6 @@ export const LoginForm = () => {
           name="email"
           type="email"
           placeholder="m@example.com"
-          required
         />
         {loginState?.errors?.email && (
           <p className="text-sm text-red-500">{loginState.errors.email[0]}</p>
@@ -66,7 +62,7 @@ export const LoginForm = () => {
             Forgot password?
           </a>
         </div>
-        <Input id="login-password" name="password" type="password" required />
+        <Input id="login-password" name="password" type="password" />
         {loginState?.errors?.password && (
           <p className="text-sm text-red-500">
             {loginState.errors.password[0]}

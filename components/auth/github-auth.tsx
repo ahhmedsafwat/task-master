@@ -5,8 +5,8 @@ import { GithubIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export const SigningWithGithub = () => {
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback?next=/dashboard/overview`;
+  const APP_URL = process.env.AUTH_CALLBACK_URL || "http://localhost:3000";
+  const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`;
 
   const handleSignIn = async () => {
     try {

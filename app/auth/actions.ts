@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createSupabaseClient } from "@/utils/supabase/server";
 import { loginSchema, signupSchema } from "@/lib/types/zod";
 import { AuthResponse } from "@/lib/types/types";
+import { revalidatePath } from "next/cache";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`;
@@ -128,12 +129,14 @@ export async function signUp(
 /**
  * Logout action - ends user session
  */
-export async function logout() {
+export async function signOut() {
   try {
     const supabase = await createSupabaseClient();
     await supabase.auth.signOut();
 
-    return redirect("/auth");
+    revalidatePath("/dashboard")
+    redirect("/auth");
+
   } catch (error) {
     console.error("Logout error:", error);
     return redirect("/auth?error=Failed to logout properly");
@@ -144,16 +147,16 @@ export async function logout() {
  * Get user session data
  * Can be used to check if user is authenticated
  */
-export async function getSession() {
+export async function getuser() {
   try {
     const supabase = await createSupabaseClient();
-    const { data, error } = await supabase.auth.getSession();
+    const { data, error } = await supabase.auth.getUser();
 
-    if (error || !data.session) {
+    if (error || !data.user) {
       return null;
     }
 
-    return data.session;
+    return data.user;
   } catch (error) {
     console.error("Get session error:", error);
     return null;

@@ -1,3 +1,4 @@
+import SignoutForm from "@/components/auth/signout-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,5 +6,9 @@ export const metadata: Metadata = {
 };
 
 export default function page() {
-  return <div>dashboard</div>;
+  return (
+    <div>
+      <SignoutForm />
+    </div>
+  );
 }

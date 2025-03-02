@@ -20,7 +20,6 @@ export const SignUpForm = ({}) => {
   });
 
   useEffect(() => {
-    // Handle non-field validation errors with toast
     if (
       signUpState?.status === "error" &&
       signUpState.message &&
@@ -29,11 +28,9 @@ export const SignUpForm = ({}) => {
       toast.error(signUpState.message);
     }
 
-    // Handle successful signup with toast and redirect
     if (signUpState?.status === "success") {
       toast.success(signUpState.message);
 
-      // Redirect if redirectTo is specified
       if (signUpState.redirectTo) {
         router.push(signUpState.redirectTo);
       }

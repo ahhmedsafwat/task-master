@@ -34,7 +34,7 @@ export async function updateSession(request: NextRequest) {
   // New: Redirect logged-in users from auth routes to dashboard
   if (user && request.nextUrl.pathname.startsWith("/auth")) {
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = "/dashboard/overview";
     return NextResponse.redirect(url);
   }
 
@@ -42,7 +42,7 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     !request.nextUrl.pathname.startsWith("/auth") &&
-    !request.nextUrl.pathname.startsWith("/")
+    request.nextUrl.pathname !== "/"
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth";
