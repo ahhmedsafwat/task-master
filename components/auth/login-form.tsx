@@ -51,17 +51,8 @@ export const LoginForm = () => {
           <p className="text-sm text-red-500">{loginState.errors.email[0]}</p>
         )}
       </div>
-
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="login-password">Password</Label>
-          <a
-            href="/auth/forgot-password"
-            className="text-xs text-blue-600 hover:underline"
-          >
-            Forgot password?
-          </a>
-        </div>
+        <Label htmlFor="login-password">Password</Label>
         <Input id="login-password" name="password" type="password" />
         {loginState?.errors?.password && (
           <p className="text-sm text-red-500">
@@ -73,9 +64,18 @@ export const LoginForm = () => {
       <SubmitButton
         isPending={loginPending}
         isSuccessful={loginState?.status === "success"}
+        className="mb-2 mt-2"
       >
         Login
       </SubmitButton>
+      <div className="flex w-full items-center justify-end">
+        <a
+          href="/auth/forgot-password"
+          className="text-xs text-blue-600 hover:underline"
+        >
+          Forgot password?
+        </a>
+      </div>
     </form>
   );
 };
