@@ -3,10 +3,11 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { SubmitButton } from "../ui/submit-button";
 import { login } from "@/app/auth/actions";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AuthResponse } from "@/lib/types/types";
+import { Eye, EyeOff } from "lucide-react";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -18,6 +19,9 @@ export const LoginForm = () => {
     message: "",
     errors: {},
   });
+
+  const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (
@@ -37,8 +41,13 @@ export const LoginForm = () => {
     }
   }, [loginState, router]);
 
+  const handleAction = (formData: FormData) => {
+    setEmail(formData.get("email") as string);
+    loginAction(formData);
+  };
+
   return (
-    <form action={loginAction} className="space-y-4">
+    <form action={handleAction} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="login-email">Email</Label>
         <Input
@@ -46,14 +55,35 @@ export const LoginForm = () => {
           name="email"
           type="email"
           placeholder="m@example.com"
+          defaultValue={email}
         />
         {loginState?.errors?.email && (
           <p className="text-sm text-red-500">{loginState.errors.email[0]}</p>
         )}
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="login-password">Password</Label>
-        <Input id="login-password" name="password" type="password" />
+      <div>
+        <div className="relative space-y-2">
+          <Label htmlFor="login-password">Password</Label>
+          <Input
+            id="login-password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="********"
+          />
+          <div className="absolute right-2 top-1/2 cursor-pointer">
+            {showPassword ? (
+              <Eye
+                className="cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            ) : (
+              <EyeOff
+                className="cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            )}
+          </div>
+        </div>
         {loginState?.errors?.password && (
           <p className="text-sm text-red-500">
             {loginState.errors.password[0]}

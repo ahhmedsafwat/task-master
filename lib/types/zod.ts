@@ -1,7 +1,26 @@
 import { z } from "zod";
 
-// Password regex for strong passwords
-const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/
+
+// Email validation schema
+export const emailSchema = z.object({
+  email: z.string({ required_error: "Email is required" }).email({ message: "Please enter a valid email address" }).trim(),
+})
+
+// Password validation schema 
+export const passwordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" })
+      .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
+      .regex(/(?=.*?[A-Z])(?=.*?[a-z])/, { message: "Password must contain at least one uppercase letter and one lowercase" })
+      .regex(/[0-9]/, { message: "Password must contain at least one number" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
 
 // Login schema with basic validation
 export const loginSchema = z.object({
@@ -24,9 +43,8 @@ export const signupSchema = z.object({
   password: z
     .string({ required_error: "Password is required" })
     .min(8, { message: "Password must be at least 8 characters" })
-    .regex(passwordRegex, {
-      message: "Password must contain at least one uppercase letter, one lowercase letter,and one number"
-    })
+    .regex(/(?=.*?[A-Z])(?=.*?[a-z])/, { message: "Password must contain at least one uppercase letter and one lowercase" })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" })
     .trim(),
 });
 

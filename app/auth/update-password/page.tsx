@@ -1,4 +1,4 @@
-import { ForgetPasswordComponent } from "@/components/auth/forgot-password-component";
+import { UpdatePasswordComponet } from "@/components/auth/update-password-component";
 import {
   Card,
   CardHeader,
@@ -11,14 +11,13 @@ export default function Page() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Forgot Your Password?</CardTitle>
+        <CardTitle>Update you Password</CardTitle>
         <CardDescription>
-          Enter your email address you used to register and we will send you a
-          link to reset your password
+          Create a new password for your account
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ForgetPasswordComponent />
+        <UpdatePasswordComponet />
       </CardContent>
     </Card>
   );

@@ -2,7 +2,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 
 export default function Page() {
   return (
-    <div className="w-full max-w-md space-y-8">
+    <>
       <div className="text-center">
         <h1 className="text-3xl font-bold">Welcome back</h1>
         <p className="text-secondary-foreground mt-2 text-sm">
@@ -10,6 +10,6 @@ export default function Page() {
         </p>
       </div>
       <AuthCard />
-    </div>
+    </>
   );
 }

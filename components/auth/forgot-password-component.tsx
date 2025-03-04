@@ -1,41 +1,60 @@
+"use client";
 import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 import { SubmitButton } from "../ui/submit-button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useActionState, useEffect } from "react";
+import { AuthResponse } from "@/lib/types/types";
+import { requestPasswordReset } from "@/app/auth/actions";
+import { toast } from "sonner";
 
 export const ForgetPasswordComponent = () => {
+  const [state, ResetAction, isPending] = useActionState<
+    AuthResponse,
+    FormData
+  >(requestPasswordReset, {
+    message: "",
+    status: "idle",
+  });
+
+  useEffect(() => {
+    if (state.status === "error" && state.message) {
+      toast.error(state.message);
+    }
+    if (state.status === "success") {
+      toast.success(state.message);
+    }
+  }, [state]);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Forgot Your Password?</CardTitle>
-        <CardDescription>
-          Enter your email address you used to register and we will send you a
-          link to reset your password
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <Label>Email Address</Label>
-        <Input placeholder="Enter your email" />
-      </CardContent>
-      <CardContent>
-        <SubmitButton isPending={false} isSuccessful={false}>
+    <>
+      <form action={ResetAction} className="space-y-6">
+        <Label className="mb-2" htmlFor="login-email">
+          Email Address
+        </Label>
+        <Input
+          id="login-email"
+          name="email" // Ensure this matches the schema
+          type="email"
+          placeholder="m@example.com"
+        />
+        {state?.errors?.email && (
+          <span className="text-sm text-red-500">{state.errors.email[0]}</span>
+        )}
+
+        <SubmitButton
+          isPending={isPending}
+          isSuccessful={state.status === "success"}
+        >
           Send Email
         </SubmitButton>
-      </CardContent>
-      <CardFooter className="justify-center gap-1 text-xs">
+      </form>
+      <div className="mt-4 flex items-center gap-1 text-xs">
         <span>Remember your password?</span>
         <Link href="/auth" className="text-blue-500 underline">
           Login
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </>
   );
 };

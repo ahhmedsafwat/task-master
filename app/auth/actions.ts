@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createSupabaseClient } from "@/utils/supabase/server";
-import { loginSchema, signupSchema } from "@/lib/types/zod";
+import { emailSchema, loginSchema, passwordSchema, signupSchema } from "@/lib/types/zod";
 import { AuthResponse } from "@/lib/types/types";
 import { revalidatePath } from "next/cache";
 
@@ -136,12 +136,95 @@ export async function signOut() {
 
     revalidatePath("/dashboard")
     redirect("/auth");
-
   } catch (error) {
     console.error("Logout error:", error);
     return redirect("/auth?error=Failed to logout properly");
   }
 }
+
+
+/**
+ * Request a new Password - sends a request to the supabase server to send the use an email to reset their password
+ */
+export async function requestPasswordReset(pervSatate: AuthResponse | null, formData: FormData): Promise<AuthResponse> {
+  try {
+    const rawFormData = Object.fromEntries(formData.entries())
+
+    const validate = emailSchema.safeParse(rawFormData);
+
+    if (!validate.success) {
+      return {
+        status: "error",
+        errors: validate.error.flatten().fieldErrors,
+        message: null
+      }
+    }
+
+    const supabase = await createSupabaseClient();
+    const { email } = validate.data
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+
+    if (error) {
+      return {
+        status: "error",
+        message: error.message
+      }
+    }
+
+
+    return {
+      status: 'success',
+      message: "Check your email to reset your password"
+    }
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return {
+      status: "error",
+      message: "An unexpected error occurred. Please try again.",
+    }
+  }
+}
+
+export async function updatePassword(prevState: AuthResponse, formData: FormData): Promise<AuthResponse> {
+  try {
+    // Validate passwords
+    const rawFormData = Object.fromEntries(formData.entries())
+
+    const validate = passwordSchema.safeParse(rawFormData);
+
+    if (!validate.success) {
+      return { status: 'error', message: null, errors: validate.error.flatten().fieldErrors }
+    }
+
+    const { password } = validate.data
+    const supabase = await createSupabaseClient()
+
+    const { error } = await supabase.auth.updateUser({ password })
+
+    if (error) {
+      return {
+        status: "error",
+        message: error.message,
+      }
+    }
+
+    return {
+      status: 'success',
+      message: "Password updated successfully!",
+      redirectTo: "/dashboard/overview"
+    }
+
+
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return {
+      message: 'An unexpected error has occured, please try again.',
+      status: 'error',
+
+    }
+  }
+}
+
 
 /**
  * Get user session data

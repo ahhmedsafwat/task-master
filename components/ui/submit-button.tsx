@@ -18,7 +18,7 @@ export function SubmitButton({
       type={isPending ? "button" : "submit"}
       disabled={isPending || isSuccessful}
       aria-disabled={isPending || isSuccessful}
-      className={cn(`h-11 w-full justify-center`, className)}
+      className={cn(`h-11 w-full cursor-pointer justify-center`, className)}
       variant={"inverted"}
     >
       {isPending || isSuccessful ? (
