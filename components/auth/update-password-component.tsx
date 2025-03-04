@@ -6,6 +6,7 @@ import { SubmitButton } from "../ui/submit-button";
 import { useActionState, useEffect } from "react";
 import { AuthResponse } from "@/lib/types/types";
 import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 export const UpdatePasswordComponet = () => {
   const [state, action, isPending] = useActionState<AuthResponse, FormData>(
@@ -19,6 +20,9 @@ export const UpdatePasswordComponet = () => {
     }
     if (state.status === "success") {
       toast.success(state.message);
+      if (state.redirectTo) {
+        redirect(state.redirectTo);
+      }
     }
   });
 

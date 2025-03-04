@@ -30,10 +30,26 @@ export async function login(
     const { email, password } = validatedFields.data;
     const supabase = await createSupabaseClient();
 
+    // First, check if the user exists
+    const { data: userLookup, error: userLookupError } = await supabase
+      .from('profiles')  // Assumes you have a users table
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (userLookupError || !userLookup) {
+      return {
+        status: "error",
+        message: "User does not exist. Please sign up first.",
+      };
+    }
+
+    // Attempt to sign in
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
 
     if (error) {
       return {
@@ -162,7 +178,25 @@ export async function requestPasswordReset(pervSatate: AuthResponse | null, form
 
     const supabase = await createSupabaseClient();
     const { email } = validate.data
+
+    // First, check if the user exists
+    const { data: userLookup, error: userLookupError } = await supabase
+      .from('profiles')  // Assumes you have a users table
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (userLookupError || !userLookup) {
+      return {
+        status: "error",
+        message: "User does not exist. Please sign up first.",
+      };
+    }
+
     const { error } = await supabase.auth.resetPasswordForEmail(email)
+
+
+
 
     if (error) {
       return {
@@ -208,15 +242,11 @@ export async function updatePassword(prevState: AuthResponse, formData: FormData
       }
     }
 
-
-
     return {
       status: 'success',
       message: "Password updated successfully!",
       redirectTo: "/dashboard/overview"
     }
-
-
   } catch (error) {
     console.error("Reset password error:", error);
     return {
