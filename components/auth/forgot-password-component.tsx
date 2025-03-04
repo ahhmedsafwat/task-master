@@ -39,7 +39,7 @@ export const ForgetPasswordComponent = () => {
           placeholder="m@example.com"
         />
         {state?.errors?.email && (
-          <span className="text-sm text-red-500">{state.errors.email[0]}</span>
+          <p className="text-sm text-red-500">{state.errors.email[0]}</p>
         )}
 
         <SubmitButton

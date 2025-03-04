@@ -208,6 +208,8 @@ export async function updatePassword(prevState: AuthResponse, formData: FormData
       }
     }
 
+
+
     return {
       status: 'success',
       message: "Password updated successfully!",
