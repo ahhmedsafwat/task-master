@@ -28,16 +28,19 @@ export const ForgetPasswordComponent = () => {
 
   return (
     <>
-      <form action={ResetAction} className="space-y-6">
-        <Label className="mb-2" htmlFor="login-email">
-          Email Address
-        </Label>
-        <Input
-          id="login-email"
-          name="email" // Ensure this matches the schema
-          type="email"
-          placeholder="m@example.com"
-        />
+      <form action={ResetAction} className="space-y-3">
+        <div>
+          {" "}
+          <Label className="mb-2" htmlFor="login-email">
+            Email Address
+          </Label>
+          <Input
+            id="login-email"
+            name="email" // Ensure this matches the schema
+            type="email"
+            placeholder="m@example.com"
+          />
+        </div>
         {state?.errors?.email && (
           <p className="text-sm text-red-500">{state.errors.email[0]}</p>
         )}
