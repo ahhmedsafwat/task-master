@@ -1,5 +1,5 @@
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { LandingHeader } from "@/components/landing/landing-header";
+import { LandingFooter } from "@/components/landing/landing-footer";
 
 export default function MainLayout({
   children,
@@ -8,9 +8,9 @@ export default function MainLayout({
 }>) {
   return (
     <>
-      <Header />
+      <LandingHeader />
       <main>{children}</main>
-      <Footer />
+      <LandingFooter />
     </>
   );
 }

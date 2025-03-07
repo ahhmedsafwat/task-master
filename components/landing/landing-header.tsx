@@ -47,7 +47,7 @@ const navigationItems: Navlinks[] = [
   },
 ];
 
-export function Header() {
+export function LandingHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

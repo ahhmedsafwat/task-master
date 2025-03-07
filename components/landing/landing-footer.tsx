@@ -36,7 +36,7 @@ const socialLinks = [
   },
 ];
 
-export function Footer() {
+export function LandingFooter() {
   return (
     <footer className="rounded-t-4xl relative z-10 overflow-hidden">
       <Image
