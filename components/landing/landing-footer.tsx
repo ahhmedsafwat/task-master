@@ -52,7 +52,7 @@ export function LandingFooter() {
           <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
             <div className="flex h-full flex-col justify-between gap-4 max-md:items-center">
               <div className="mb-3 space-y-4 max-md:text-center">
-                <Logo className="max-md:justify-center" />
+                <Logo href="/" className="max-md:justify-center" />
                 <p className="font-geist-mono text-sm text-gray-200">
                   Streamline your tasks and boost productivity with TaskMaster.
                   The ultimate task management solution for teams and

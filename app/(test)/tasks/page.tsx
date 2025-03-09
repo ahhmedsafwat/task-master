@@ -19,7 +19,7 @@ export default function TestPage() {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [tasks, setTasks] = useState<Tables<"tasks">[] | undefined>(undefined);
 
-  const user_id = "1111-1111-1111-1111-1111-1111-1111-1111";
+  const user_id = user?.id;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -110,7 +110,7 @@ export default function TestPage() {
                   const { data, error } = await assignTask({
                     task_id: task.id,
                     user,
-                    assignee_id: user_id,
+                    assignee_id: user_id ?? "",
                   });
                   if (error) throw error.message;
                   console.log(data);
@@ -178,7 +178,7 @@ export default function TestPage() {
                   const { data, error } = await removeAssignee({
                     user: user,
                     task_id: task.id,
-                    assignee_id: user_id,
+                    assignee_id: user_id ?? "",
                   });
 
                   if (error) throw error.message;

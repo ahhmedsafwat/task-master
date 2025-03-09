@@ -1,7 +1,13 @@
 import Link from "next/link";
-export const Logo = ({ className }: { className?: string }) => {
+export const Logo = ({
+  className,
+  href,
+}: {
+  className?: string;
+  href: string;
+}) => {
   return (
-    <Link href="/" className={`flex items-center space-x-2 ${className}`}>
+    <Link href={href} className={`flex items-center space-x-2 ${className}`}>
       <svg
         width="45"
         height="45"
