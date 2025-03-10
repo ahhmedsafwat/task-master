@@ -1,9 +1,10 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   Inbox,
-  ChartColumnBigIcon,
+  BarChartBigIcon as ChartColumnBigIcon,
   LucideClipboardCheck,
   PanelLeft,
   Menu,
@@ -11,34 +12,70 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState, useRef } from "react";
-import { Logo } from "../ui/logo";
+import type React from "react";
+import { useEffect, useState, useRef } from "react";
+// import { Badge } from "@/components/ui/badge";
 
-interface NavItems {
+// Define the navigation item structure
+interface NavItem {
   title: string;
   href: string;
   icon: React.ElementType;
+  notifications?: number;
 }
 
-export const DashBoardNavigation = () => {
+export function DashboardNavigation() {
   const pathname = usePathname();
+
+  // State management
   const [isPinned, setIsPinned] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [isNavHovered, setIsNavHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // References
   const navRef = useRef<HTMLDivElement>(null);
 
-  // Check for mobile devices
+  // Navigation items definition
+  const navItems: NavItem[] = [
+    {
+      title: "Overview",
+      href: "/overview",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Private Tasks",
+      href: "/tasks",
+      icon: LucideClipboardCheck,
+    },
+    {
+      title: "Analytics",
+      href: "/analytics",
+      icon: ChartColumnBigIcon,
+    },
+    {
+      title: "Inbox",
+      href: "/notifications",
+      icon: Inbox,
+      notifications: 3,
+    },
+  ];
+
+  // Detect mobile devices
   useEffect(() => {
     const checkIfMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
+      setIsMobile(window.innerWidth < 768);
     };
 
+    // Initial check
     checkIfMobile();
+
+    // Add resize listener
     window.addEventListener("resize", checkIfMobile);
+
+    // Cleanup
     return () => window.removeEventListener("resize", checkIfMobile);
-  }, [isPinned, isHovering, isNavHovered]);
+  }, []);
 
   // Handle proximity hover effect (desktop only)
   useEffect(() => {
@@ -46,6 +83,7 @@ export const DashBoardNavigation = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!isPinned) {
+        // Show navigation when mouse is within 30px of the left edge
         const isInHoverZone = e.clientX <= 30;
         setIsHovering(isInHoverZone);
       }
@@ -67,34 +105,13 @@ export const DashBoardNavigation = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMobile, isPinned]);
+  }, [isMobile]);
 
-  // Navigation items definition
-  const navItems: NavItems[] = [
-    {
-      title: "Overview",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Private Tasks",
-      href: "/tasks",
-      icon: LucideClipboardCheck,
-    },
-    {
-      title: "Analytics",
-      href: "/analytics",
-      icon: ChartColumnBigIcon,
-    },
-    {
-      title: "Notifications",
-      href: "/notifications",
-      icon: Inbox,
-    },
-  ];
+  // Determine if the navbar should be visible
+  const isNavVisible = isPinned || (!isMobile && (isHovering || isNavHovered));
 
-  // Show/hide navbar based on different conditions for mobile and desktop
-  const showNavbar = isPinned && !isMobile && (!isHovering || !isNavHovered);
+  // Toggle the navigation state
+  const toggleNavigation = () => setIsPinned(!isPinned);
 
   return (
     <>
@@ -109,33 +126,34 @@ export const DashBoardNavigation = () => {
         </button>
       )}
 
-      <nav
+      {/* Main navigation container */}
+      <div
         className={cn(
           "z-50 h-screen transition-all duration-300 ease-in-out",
-          showNavbar ? "w-60" : "w-0",
+          isPinned && !isMobile ? "w-60" : "w-0",
           isMobile && "fixed",
         )}
         onMouseEnter={() => !isMobile && !isPinned && setIsNavHovered(true)}
         onMouseLeave={() => !isMobile && !isPinned && setIsNavHovered(false)}
       >
+        {/* Navigation panel */}
         <div
           ref={navRef}
           className={cn(
             "bg-primary text-primary-foreground relative z-50 flex h-screen w-60 flex-col p-4 transition-all duration-300 ease-in-out",
+            // Floating state when not pinned but hovering
             !isPinned && !isMobile && (isHovering || isNavHovered)
               ? "left-0 m-2 h-[calc(100vh-1.75rem)] rounded-md shadow-2xl"
-              : !showNavbar && "-left-60",
+              : !isNavVisible && "-left-60",
+            // Fixed position for mobile
             isMobile && isPinned && "fixed left-0",
           )}
         >
+          {/* Header with logo and pin/unpin button */}
           <div className="flex items-center justify-between">
-            <Logo
-              href={"/overview"}
-              textClassName="text-sm md:text-base"
-              svgSize={isMobile ? 35 : 40}
-            />
+            <div className="text-xl font-bold">Dashboard</div>
 
-            {/* Close/pin button */}
+            {/* Toggle button */}
             <button
               aria-label={
                 isMobile
@@ -144,14 +162,14 @@ export const DashBoardNavigation = () => {
                     ? "Unpin sidebar"
                     : "Pin sidebar"
               }
-              onClick={() => setIsPinned(!isPinned)}
+              onClick={toggleNavigation}
               className="hover:bg-primary-foreground/10 box-content rounded-lg p-2 transition-colors"
             >
               {isMobile ? <X size={24} /> : <PanelLeft size={24} />}
             </button>
           </div>
 
-          {/* Nav items with active state */}
+          {/* Navigation items */}
           <div className="mt-8 flex-1 space-y-2 overflow-y-auto pr-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -160,37 +178,53 @@ export const DashBoardNavigation = () => {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center rounded-md px-3 py-3 transition-colors",
+                    "flex items-center justify-between rounded-md px-3 py-3 transition-colors",
                     isActive
                       ? "bg-primary-foreground/20 text-primary-foreground"
                       : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground",
                   )}
                   onClick={() => isMobile && setIsPinned(false)}
                 >
-                  <item.icon
-                    size={20}
-                    className={cn(
-                      "mr-3",
-                      isActive ? "opacity-100" : "opacity-80",
-                    )}
-                  />
-                  <span className="font-medium">{item.title}</span>
+                  <div className="flex items-center">
+                    <item.icon
+                      size={20}
+                      className={cn(
+                        "mr-3",
+                        isActive ? "opacity-100" : "opacity-80",
+                      )}
+                    />
+                    <span className="font-medium">{item.title}</span>
+                  </div>
+
+                  {/* Notification badge */}
+                  {/* {item.notifications && (
+                    <Badge
+                      variant="destructive"
+                      className="ml-2 h-5 w-5 justify-center rounded-full p-0"
+                    >
+                      {item.notifications}
+                    </Badge>
+                  )} */}
                 </Link>
               );
             })}
           </div>
-        </div>
-      </nav>
 
-      {/* Background overlay */}
-      <div
-        className={cn("invisible opacity-0 transition-all duration-300", {
-          "visible fixed inset-0 z-40 bg-black/30 opacity-100":
-            (isMobile && isPinned) ||
-            (!isMobile && !isPinned && (isHovering || isNavHovered)),
-        })}
-        onClick={() => isMobile && setIsPinned(false)}
-      />
+          {/* Projects section could be added here */}
+
+          {/* User profile section could be added here */}
+        </div>
+      </div>
+
+      {/* Background overlay - appears when nav is floating or mobile menu is open */}
+      {(isMobile && isPinned) ||
+      (!isMobile && !isPinned && (isHovering || isNavHovered)) ? (
+        <div
+          className="fixed inset-0 z-40 bg-black/30"
+          onClick={() => isMobile && setIsPinned(false)}
+          aria-hidden="true"
+        />
+      ) : null}
     </>
   );
-};
+}
