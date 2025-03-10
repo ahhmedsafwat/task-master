@@ -1,20 +1,28 @@
+import { cn } from "@/lib/utils";
 import Link from "next/link";
+
 export const Logo = ({
   className,
+  textClassName,
   href,
+  svgSize = 45,
+  svgClassName = "group",
 }: {
   className?: string;
+  textClassName?: string;
   href: string;
+  svgSize?: number;
+  svgClassName?: string;
 }) => {
   return (
-    <Link href={href} className={`flex items-center space-x-2 ${className}`}>
+    <Link href={href} className={cn(`flex items-center space-x-2`, className)}>
       <svg
-        width="45"
-        height="45"
+        width={svgSize}
+        height={svgSize}
         viewBox="0 0 45 45"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="group"
+        className={cn(svgClassName)}
       >
         <circle
           cx="22"
@@ -33,7 +41,12 @@ export const Logo = ({
           strokeWidth="3"
         />
       </svg>
-      <div className="font-cabinet text-base font-extrabold tracking-wide sm:text-lg">
+      <div
+        className={cn(
+          "font-cabinet text-base font-extrabold tracking-wide sm:text-lg",
+          textClassName,
+        )}
+      >
         TASKMASTER
       </div>
     </Link>

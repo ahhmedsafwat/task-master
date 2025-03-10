@@ -78,7 +78,7 @@ export function LandingHeader() {
           >
             <Logo
               href="/"
-              className={cn("", { "text-white": hasScrolled || isMenuOpen })}
+              className={cn({ "text-white": hasScrolled || isMenuOpen })}
             />
             <ul className="hidden items-center gap-6 lg:flex">
               {navigationItems.map(({ href, title, children }: Navlinks) => {
