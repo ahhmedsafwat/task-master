@@ -3,7 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 @layer utilities {
   .container {
     & {
@@ -16,8 +15,6 @@
     }
   }
 
-
-
   .hover-scale {
     & {
       transition: transform 0.8s cubic-bezier(0.625, 0.05, 0, 1);
@@ -28,28 +25,23 @@
     }
   }
 
+  .glass-morph {
+    & {
+      isolation: isolate;
 
+      /* Background is required */
+      background-color: hsla(0, 0%, 7%, 0.6);
 
+      /* Apply both standard and prefixed filters */
+      backdrop-filter: blur(15px);
+
+      /* Additional fixes */
+      transform: translateZ(0);
+      -webkit-transform: translate3d(0, 0, 0);
+      will-change: transform backdrop-filter background-color;
+    }
+  }
 }
-
-
-.glass-morph {
-  isolation: isolate;
-
-  /* Background is required */
-  background-color: hsla(0, 0%, 7%, 0.6);
-
-  /* Apply both standard and prefixed filters */
-  backdrop-filter: blur(15px);
-
-
-  /* Additional fixes */
-  transform: translateZ(0);
-  -webkit-transform: translate3d(0, 0, 0);
-  will-change: transform backdrop-filter background-color;
-
-}
-
 
 @layer components {
   .gradient-bg {
@@ -58,11 +50,23 @@
       height: 100%;
       width: 100%;
       background-image:
-        linear-gradient(to right, var(--color-secondary-foreground) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--color-secondary-foreground) 1px, transparent 1px);
+        linear-gradient(
+          to right,
+          var(--color-secondary-foreground) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          var(--color-secondary-foreground) 1px,
+          transparent 1px
+        );
       background-size: 90px 90px;
 
-      mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+      mask-image: radial-gradient(
+        ellipse 50% 50% at 50% 50%,
+        #000 70%,
+        transparent 100%
+      );
     }
 
     @media (width <=768px) {
@@ -71,7 +75,6 @@
       }
     }
   }
-
 
   @keyframes pulse-scale {
     0% {
@@ -116,13 +119,17 @@
   }
 
   .bubble-1 {
-    animation: pulse-scale 14s ease-in-out infinite, color-shift-1 14s infinite;
+    animation:
+      pulse-scale 14s ease-in-out infinite,
+      color-shift-1 14s infinite;
     transform-origin: center;
     will-change: transform, background-color;
   }
 
   .bubble-2 {
-    animation: pulse-scale 14s ease-in-out infinite, color-shift-2 14s infinite;
+    animation:
+      pulse-scale 14s ease-in-out infinite,
+      color-shift-2 14s infinite;
     /* Offset to create variation */
     transform-origin: center;
     will-change: transform, background-color;
@@ -130,7 +137,6 @@
 
   /* For mobile devices, reduce animation complexity */
   @media (max-width: 768px) {
-
     .bubble-1,
     .bubble-2 {
       /* Reduce blur for better performance */
@@ -140,7 +146,6 @@
     }
   }
 }
-
 
 @theme inline {
   --font-inter: var(--inter);
@@ -225,7 +230,6 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -255,7 +259,7 @@
     --popover-foreground: 180 14% 3%;
     /* main headers and buttons */
     --primary: 0 0% 85%;
-    --primary-foreground: 240 1% 19%;
+    --primary-foreground: 0 0% 19%;
     /* sub titles and labels and icons color */
     --secondary: 240 100% 100%;
     --secondary-foreground: 0, 0%, 45%;
@@ -290,7 +294,7 @@
     --popover: 180 14% 3%;
     --popover-foreground: 0 0% 98%;
     /* main headers and buttons */
-    --primary: 0 0% 5%;
+    --primary: 0 0% 7%;
     --primary-foreground: 225 8% 90%;
     /* sub titles and labels and icons color */
     --secondary: 240 6% 10%;

@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { Button } from "./button";
 
 export const MenuIcon = ({
@@ -7,7 +6,7 @@ export const MenuIcon = ({
   className,
 }: {
   isMenuOpen: boolean;
-  toggleMenu: Dispatch<SetStateAction<boolean>>;
+  toggleMenu: () => void;
   className: string;
 }) => {
   return (
@@ -15,9 +14,7 @@ export const MenuIcon = ({
       variant="outline"
       size="icon"
       className={`p-2 ${className}`}
-      onClick={() => {
-        toggleMenu((prev) => !prev);
-      }}
+      onClick={toggleMenu}
     >
       <svg
         width="32"

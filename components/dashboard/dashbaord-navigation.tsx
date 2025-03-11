@@ -6,22 +6,29 @@ import {
   Inbox,
   BarChartBigIcon as ChartColumnBigIcon,
   LucideClipboardCheck,
-  PanelLeft,
-  Menu,
-  X,
+  PanelLeftClose,
+  PanelRightClose,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type React from "react";
 import { useEffect, useState, useRef } from "react";
-// import { Badge } from "@/components/ui/badge";
+import { Separator } from "../ui/separator";
+import { Logo } from "../ui/logo";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { MenuIcon } from "../ui/menu-icon";
 
 // Define the navigation item structure
 interface NavItem {
   title: string;
   href: string;
   icon: React.ElementType;
-  notifications?: number;
+}
+
+interface Project {
+  id: string;
+  name: string;
 }
 
 export function DashboardNavigation() {
@@ -57,14 +64,154 @@ export function DashboardNavigation() {
       title: "Inbox",
       href: "/notifications",
       icon: Inbox,
-      notifications: 3,
+    },
+  ];
+
+  const Projects: Project[] = [
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
+    },
+    {
+      id: "1",
+      name: "Project 1",
+    },
+    {
+      id: "2",
+      name: "Project 2",
+    },
+    {
+      id: "3",
+      name: "Project 3",
     },
   ];
 
   // Detect mobile devices
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+
+      // Auto-pin on desktop, auto-unpin on mobile
+      if (mobile && isPinned) {
+        setIsPinned(false);
+      }
     };
 
     // Initial check
@@ -93,7 +240,6 @@ export function DashboardNavigation() {
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [isPinned, isMobile]);
 
-  // Close mobile nav when clicking outside
   useEffect(() => {
     if (!isMobile) return;
 
@@ -110,20 +256,17 @@ export function DashboardNavigation() {
   // Determine if the navbar should be visible
   const isNavVisible = isPinned || (!isMobile && (isHovering || isNavHovered));
 
-  // Toggle the navigation state
   const toggleNavigation = () => setIsPinned(!isPinned);
 
   return (
     <>
       {/* Mobile menu toggle button - only visible when navbar is hidden on mobile */}
       {isMobile && !isPinned && (
-        <button
-          aria-label="Open menu"
-          onClick={() => setIsPinned(true)}
-          className="bg-primary text-primary-foreground fixed left-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full shadow-md"
-        >
-          <Menu size={24} />
-        </button>
+        <MenuIcon
+          isMenuOpen={isPinned}
+          toggleMenu={() => setIsPinned(true)}
+          className="absolute top-2 left-2 z-50"
+        />
       )}
 
       {/* Main navigation container */}
@@ -140,7 +283,7 @@ export function DashboardNavigation() {
         <div
           ref={navRef}
           className={cn(
-            "bg-primary text-primary-foreground relative z-50 flex h-screen w-60 flex-col p-4 transition-all duration-300 ease-in-out",
+            "bg-primary relative z-50 flex h-screen w-60 flex-col px-2 py-4 transition-all duration-300 ease-in-out",
             // Floating state when not pinned but hovering
             !isPinned && !isMobile && (isHovering || isNavHovered)
               ? "left-0 m-2 h-[calc(100vh-1.75rem)] rounded-md shadow-2xl"
@@ -150,11 +293,11 @@ export function DashboardNavigation() {
           )}
         >
           {/* Header with logo and pin/unpin button */}
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold">Dashboard</div>
+          <div className="bg-background flex items-center justify-between rounded-lg border px-3 py-2 shadow-lg">
+            <Logo href={"/overview"} textClassName="sm:text-sm" svgSize={34} />
 
             {/* Toggle button */}
-            <button
+            <Button
               aria-label={
                 isMobile
                   ? "Close menu"
@@ -162,15 +305,23 @@ export function DashboardNavigation() {
                     ? "Unpin sidebar"
                     : "Pin sidebar"
               }
+              asChild
+              variant="ghost"
+              size={"smIcon"}
               onClick={toggleNavigation}
-              className="hover:bg-primary-foreground/10 box-content rounded-lg p-2 transition-colors"
+              className="hover:bg-primary-foreground/10 box-content cursor-pointer rounded-md p-1 transition-colors"
             >
-              {isMobile ? <X size={24} /> : <PanelLeft size={24} />}
-            </button>
+              {isPinned ? (
+                <PanelLeftClose size={20} />
+              ) : (
+                <PanelRightClose size={20} />
+              )}
+            </Button>
           </div>
-
           {/* Navigation items */}
-          <div className="mt-8 flex-1 space-y-2 overflow-y-auto pr-1">
+          <Separator decorative className="mt-6 mb-3" />
+          <div className="space-y-2 overflow-y-auto">
+            <div className="text-muted-foreground text-xs">Genaral</div>
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -178,41 +329,74 @@ export function DashboardNavigation() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center justify-between rounded-md px-3 py-3 transition-colors",
-                    isActive
-                      ? "bg-primary-foreground/20 text-primary-foreground"
-                      : "text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground",
+                    "flex items-center text-secondary-foreground hover:bg-accent hover:text-primary-foreground  justify-between rounded-md px-2 py-1.5 transition-colors",
+                    {
+                      "bg-accent text-primary-foreground": isActive,
+                    },
                   )}
                   onClick={() => isMobile && setIsPinned(false)}
                 >
                   <div className="flex items-center">
                     <item.icon
-                      size={20}
+                      size={16}
                       className={cn(
                         "mr-3",
                         isActive ? "opacity-100" : "opacity-80",
                       )}
                     />
-                    <span className="font-medium">{item.title}</span>
+                    <span className="text-sm">{item.title}</span>
                   </div>
-
-                  {/* Notification badge */}
-                  {/* {item.notifications && (
-                    <Badge
-                      variant="destructive"
-                      className="ml-2 h-5 w-5 justify-center rounded-full p-0"
-                    >
-                      {item.notifications}
-                    </Badge>
-                  )} */}
                 </Link>
               );
             })}
           </div>
-
+          <Separator decorative className="mt-6 mb-3" />
           {/* Projects section could be added here */}
-
+          <div className="space-y-2 overflow-y-auto flex-1">
+            <div className="text-muted-foreground text-xs">Projects</div>
+            {Projects.map((project, index) => {
+              const isActive = project.id === pathname;
+              return (
+                <Link
+                  key={project.id + index}
+                  href={project.id}
+                  className={cn(
+                    "flex items-center hover:bg-accent hover:text-primary-foreground text-secondary-foreground justify-between rounded-md px-2 py-1 transition-colors",
+                    {
+                      "bg-accent text-primary-foreground": isActive,
+                    },
+                  )}
+                  onClick={() => isMobile && setIsPinned(false)}
+                >
+                  <div className="flex items-center">
+                    <span className="text-sm">{project.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          <Separator decorative className="mt-6 mb-3" />
           {/* User profile section could be added here */}
+          <div className="py-2 px-2 flex items-center justify-between border bg-background shadow-lg rounded-lg">
+            <div className="flex justify-start items-center gap-2">
+              <Avatar>
+                <AvatarImage
+                  alt="@ahmedsafwat"
+                  src="https://github.com/ahhmedsafwat.png"
+                />
+                <AvatarFallback>AS</AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="text-primary-foreground font-cabinet font-sm font-medium">
+                  Ahmed Safwat
+                </div>
+                <div className="text-muted-foreground text-xs">
+                  ahmedsafwat@gmail.com
+                </div>
+              </div>
+            </div>
+            <div>a</div>
+          </div>
         </div>
       </div>
 
@@ -228,3 +412,5 @@ export function DashboardNavigation() {
     </>
   );
 }
+
+// const Nav;

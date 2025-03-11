@@ -181,7 +181,7 @@ export function LandingHeader() {
             <div className="relative lg:hidden">
               <MenuIcon
                 isMenuOpen={isMenuOpen}
-                toggleMenu={setIsMenuOpen}
+                toggleMenu={() => setIsMenuOpen((prev) => !prev)}
                 className={cn(
                   "hover:border-accent-foreground/30 bg-background/30 hover:bg-background/10 py-5",
                 )}
