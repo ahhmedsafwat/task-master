@@ -1,30 +1,30 @@
-"use client";
-import Link from "next/link";
-import { LazyMotion, domAnimation, Variants } from "motion/react";
-import * as m from "motion/react-m";
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
-import { FlipingText } from "../ui/fliping-text";
+'use client'
+import Link from 'next/link'
+import { LazyMotion, domAnimation, Variants } from 'motion/react'
+import * as m from 'motion/react-m'
+import { Button } from '@/components/ui/button'
+import { Github } from 'lucide-react'
+import { FlipingText } from '../ui/fliping-text'
 
 const enteryVariant: Variants = {
   initial: {
     opacity: 0,
     y: 20,
-    filter: "blur(10px)",
+    filter: 'blur(10px)',
   },
   animate: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    filter: 'blur(0px)',
   },
-};
+}
 
 export default function Hero() {
   return (
     <section className="translate-3d relative min-h-screen overflow-hidden py-24">
       <LazyMotion features={domAnimation}>
         <div className="container relative mx-auto px-4 py-36">
-          {" "}
+          {' '}
           <div className="absolute inset-0 -z-20">
             <div className="gradient-bg" />
           </div>
@@ -80,5 +80,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }

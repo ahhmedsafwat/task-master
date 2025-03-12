@@ -1,19 +1,19 @@
-"use client";
+'use client'
 
-import { Laptop, Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
+import { Laptop, Moon, Sun } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useTheme } from 'next-themes'
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   return (
-    <div className="inline-flex w-fit items-center rounded-2xl bg-muted gap-1">
+    <div className="bg-muted inline-flex w-fit items-center gap-1 rounded-2xl">
       <Button
         variant="ghost"
         size="icon"
-        className={`size-6 rounded-full cursor-pointer text-foreground hover:bg-secondary ${theme === "system" ? "bg-background shadow-sm" : ""}`}
-        onClick={() => setTheme("system")}
+        className={`text-foreground hover:bg-secondary size-6 cursor-pointer rounded-full ${theme === 'system' ? 'bg-background shadow-sm' : ''}`}
+        onClick={() => setTheme('system')}
       >
         <Laptop className="h-4 w-4" />
         <span className="sr-only">System theme</span>
@@ -21,8 +21,8 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className={`size-6  rounded-full cursor-pointer text-foreground hover:bg-accent ${theme === "light" ? "bg-background shadow-sm" : ""}`}
-        onClick={() => setTheme("light")}
+        className={`text-foreground hover:bg-accent size-6 cursor-pointer rounded-full ${theme === 'light' ? 'bg-background shadow-sm' : ''}`}
+        onClick={() => setTheme('light')}
       >
         <Sun className="h-4 w-4" />
         <span className="sr-only">Light theme</span>
@@ -30,12 +30,12 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className={`size-6  rounded-full cursor-pointer text-foreground hover:bg-accent ${theme === "dark" ? "bg-background shadow-sm" : ""}`}
-        onClick={() => setTheme("dark")}
+        className={`text-foreground hover:bg-accent size-6 cursor-pointer rounded-full ${theme === 'dark' ? 'bg-background shadow-sm' : ''}`}
+        onClick={() => setTheme('dark')}
       >
         <Moon className="h-4 w-4" />
         <span className="sr-only">Dark theme</span>
       </Button>
     </div>
-  );
+  )
 }

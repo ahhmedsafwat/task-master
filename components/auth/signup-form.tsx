@@ -1,50 +1,50 @@
-"use client";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { SubmitButton } from "../ui/submit-button";
-import { signUp } from "@/app/auth/actions";
-import { useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { AuthResponse } from "@/lib/types/types";
-import { Eye, EyeOff } from "lucide-react";
+'use client'
+import { Label } from '@radix-ui/react-label'
+import { Input } from '../ui/input'
+import { SubmitButton } from '../ui/submit-button'
+import { signUp } from '@/app/auth/actions'
+import { useActionState, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { AuthResponse } from '@/lib/types/types'
+import { Eye, EyeOff } from 'lucide-react'
 
 export const SignUpForm = ({}) => {
-  const router = useRouter();
+  const router = useRouter()
   const [signUpState, signUpAction, signUpPending] = useActionState<
     AuthResponse,
     FormData
   >(signUp, {
-    status: "idle",
-    message: "",
+    status: 'idle',
+    message: '',
     errors: {},
-  });
+  })
 
-  const [email, setEmail] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (
-      signUpState?.status === "error" &&
+      signUpState?.status === 'error' &&
       signUpState.message &&
       !signUpState.errors
     ) {
-      toast.error(signUpState.message);
+      toast.error(signUpState.message)
     }
 
-    if (signUpState?.status === "success") {
-      toast.success(signUpState.message);
+    if (signUpState?.status === 'success') {
+      toast.success(signUpState.message)
 
       if (signUpState.redirectTo) {
-        router.push(signUpState.redirectTo);
+        router.push(signUpState.redirectTo)
       }
     }
-  }, [signUpState, router]);
+  }, [signUpState, router])
 
   const handleAction = (formData: FormData) => {
-    setEmail(formData.get("email") as string);
-    signUpAction(formData);
-  };
+    setEmail(formData.get('email') as string)
+    signUpAction(formData)
+  }
 
   return (
     <form action={handleAction} className="space-y-4">
@@ -68,7 +68,7 @@ export const SignUpForm = ({}) => {
           <Input
             id="signup-password"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="********"
           />
           <div className="absolute right-2 top-1/2 cursor-pointer">
@@ -94,10 +94,10 @@ export const SignUpForm = ({}) => {
 
       <SubmitButton
         isPending={signUpPending}
-        isSuccessful={signUpState?.status === "success"}
+        isSuccessful={signUpState?.status === 'success'}
       >
         Sign Up
       </SubmitButton>
     </form>
-  );
-};
+  )
+}

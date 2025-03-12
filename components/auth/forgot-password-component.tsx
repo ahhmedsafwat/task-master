@@ -1,36 +1,36 @@
-"use client";
-import Link from "next/link";
-import { SubmitButton } from "../ui/submit-button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { useActionState, useEffect } from "react";
-import { AuthResponse } from "@/lib/types/types";
-import { requestPasswordReset } from "@/app/auth/actions";
-import { toast } from "sonner";
+'use client'
+import Link from 'next/link'
+import { SubmitButton } from '../ui/submit-button'
+import { Label } from '../ui/label'
+import { Input } from '../ui/input'
+import { useActionState, useEffect } from 'react'
+import { AuthResponse } from '@/lib/types/types'
+import { requestPasswordReset } from '@/app/auth/actions'
+import { toast } from 'sonner'
 
 export const ForgetPasswordComponent = () => {
   const [state, ResetAction, isPending] = useActionState<
     AuthResponse,
     FormData
   >(requestPasswordReset, {
-    message: "",
-    status: "idle",
-  });
+    message: '',
+    status: 'idle',
+  })
 
   useEffect(() => {
-    if (state.status === "error" && state.message) {
-      toast.error(state.message);
+    if (state.status === 'error' && state.message) {
+      toast.error(state.message)
     }
-    if (state.status === "success") {
-      toast.success(state.message);
+    if (state.status === 'success') {
+      toast.success(state.message)
     }
-  }, [state]);
+  }, [state])
 
   return (
     <>
       <form action={ResetAction} className="space-y-3">
         <div>
-          {" "}
+          {' '}
           <Label className="mb-2" htmlFor="login-email">
             Email Address
           </Label>
@@ -47,7 +47,7 @@ export const ForgetPasswordComponent = () => {
 
         <SubmitButton
           isPending={isPending}
-          isSuccessful={state.status === "success"}
+          isSuccessful={state.status === 'success'}
         >
           Send Email
         </SubmitButton>
@@ -59,5 +59,5 @@ export const ForgetPasswordComponent = () => {
         </Link>
       </div>
     </>
-  );
-};
+  )
+}

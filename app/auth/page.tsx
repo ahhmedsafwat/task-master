@@ -1,4 +1,4 @@
-import { AuthCard } from "@/components/auth/auth-card";
+import { AuthCard } from '@/components/auth/auth-card'
 
 export default function Page() {
   return (
@@ -11,5 +11,5 @@ export default function Page() {
       </div>
       <AuthCard />
     </>
-  );
+  )
 }

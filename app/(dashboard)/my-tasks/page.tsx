@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>my-tasks</div>;
+  return <div>my-tasks</div>
 }

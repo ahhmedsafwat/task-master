@@ -1,11 +1,11 @@
-import { TabsContent } from "@radix-ui/react-tabs";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
-import { LoginForm } from "./login-form";
-import { SignUpForm } from "./signup-form";
-import { SigningWithGithub } from "./github-auth";
-import { SigningWithGoogle } from "./google-auth";
-import { Separator } from "../ui/separator";
+import { TabsContent } from '@radix-ui/react-tabs'
+import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
+import { Tabs, TabsList, TabsTrigger } from '../ui/tabs'
+import { LoginForm } from './login-form'
+import { SignUpForm } from './signup-form'
+import { SigningWithGithub } from './github-auth'
+import { SigningWithGoogle } from './google-auth'
+import { Separator } from '../ui/separator'
 
 export const AuthCard = () => {
   return (
@@ -40,5 +40,5 @@ export const AuthCard = () => {
         </CardFooter>
       </Tabs>
     </Card>
-  );
-};
+  )
+}

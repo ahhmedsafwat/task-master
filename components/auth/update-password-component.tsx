@@ -1,30 +1,30 @@
-"use client";
-import { updatePassword } from "@/app/auth/actions";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { SubmitButton } from "../ui/submit-button";
-import { useActionState, useEffect } from "react";
-import { AuthResponse } from "@/lib/types/types";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
+'use client'
+import { updatePassword } from '@/app/auth/actions'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { SubmitButton } from '../ui/submit-button'
+import { useActionState, useEffect } from 'react'
+import { AuthResponse } from '@/lib/types/types'
+import { toast } from 'sonner'
+import { redirect } from 'next/navigation'
 
 export const UpdatePasswordComponet = () => {
   const [state, action, isPending] = useActionState<AuthResponse, FormData>(
     updatePassword,
-    { message: "", status: "idle" },
-  );
+    { message: '', status: 'idle' },
+  )
 
   useEffect(() => {
-    if (state.status === "error" && state.message) {
-      toast.error(state.message);
+    if (state.status === 'error' && state.message) {
+      toast.error(state.message)
     }
-    if (state.status === "success") {
-      toast.success(state.message);
+    if (state.status === 'success') {
+      toast.success(state.message)
       if (state.redirectTo) {
-        redirect(state.redirectTo);
+        redirect(state.redirectTo)
       }
     }
-  });
+  })
 
   return (
     <form action={action} className="space-y-4">
@@ -48,10 +48,10 @@ export const UpdatePasswordComponet = () => {
 
       <SubmitButton
         isPending={isPending}
-        isSuccessful={state.status === "success"}
+        isSuccessful={state.status === 'success'}
       >
         Update password
       </SubmitButton>
     </form>
-  );
-};
+  )
+}

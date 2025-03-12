@@ -1,50 +1,50 @@
-"use client";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { SubmitButton } from "../ui/submit-button";
-import { login } from "@/app/auth/actions";
-import { useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { AuthResponse } from "@/lib/types/types";
-import { Eye, EyeOff } from "lucide-react";
+'use client'
+import { Label } from '@radix-ui/react-label'
+import { Input } from '../ui/input'
+import { SubmitButton } from '../ui/submit-button'
+import { login } from '@/app/auth/actions'
+import { useActionState, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { AuthResponse } from '@/lib/types/types'
+import { Eye, EyeOff } from 'lucide-react'
 
 export const LoginForm = () => {
-  const router = useRouter();
+  const router = useRouter()
   const [loginState, loginAction, loginPending] = useActionState<
     AuthResponse,
     FormData
   >(login, {
-    status: "idle",
-    message: "",
+    status: 'idle',
+    message: '',
     errors: {},
-  });
+  })
 
-  const [email, setEmail] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (
-      loginState?.status === "error" &&
+      loginState?.status === 'error' &&
       loginState.message &&
       !loginState.errors
     ) {
-      toast.error(loginState.message);
+      toast.error(loginState.message)
     }
 
-    if (loginState?.status === "success") {
-      toast.success(loginState.message);
+    if (loginState?.status === 'success') {
+      toast.success(loginState.message)
 
       if (loginState.redirectTo) {
-        router.push(loginState.redirectTo);
+        router.push(loginState.redirectTo)
       }
     }
-  }, [loginState, router]);
+  }, [loginState, router])
 
   const handleAction = (formData: FormData) => {
-    setEmail(formData.get("email") as string);
-    loginAction(formData);
-  };
+    setEmail(formData.get('email') as string)
+    loginAction(formData)
+  }
 
   return (
     <form action={handleAction} className="space-y-4">
@@ -67,7 +67,7 @@ export const LoginForm = () => {
           <Input
             id="login-password"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="********"
           />
           <div className="absolute right-2 top-1/2 cursor-pointer">
@@ -93,7 +93,7 @@ export const LoginForm = () => {
 
       <SubmitButton
         isPending={loginPending}
-        isSuccessful={loginState?.status === "success"}
+        isSuccessful={loginState?.status === 'success'}
         className="mb-2 mt-2"
       >
         Login
@@ -107,5 +107,5 @@ export const LoginForm = () => {
         </a>
       </div>
     </form>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import { signOut } from "@/app/auth/actions";
-import { Button } from "../ui/button";
-import { LogOut } from "lucide-react";
+import { signOut } from '@/app/auth/actions'
+import { Button } from '../ui/button'
+import { LogOut } from 'lucide-react'
 
 export default function SignoutForm() {
   return (
@@ -11,5 +11,5 @@ export default function SignoutForm() {
         <span className="sr-only">sign out</span>
       </Button>
     </form>
-  );
+  )
 }

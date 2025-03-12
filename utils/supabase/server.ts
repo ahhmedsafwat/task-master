@@ -1,11 +1,11 @@
 // utils/supabase.ts
-import { Database } from "@/lib/types/database.typs";
-import { createServerClient } from "@supabase/ssr";
+import { Database } from '@/lib/types/database.typs'
+import { createServerClient } from '@supabase/ssr'
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers'
 
 export const createSupabaseClient = async () => {
-  const cookiesStore = await cookies();
+  const cookiesStore = await cookies()
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,18 +13,18 @@ export const createSupabaseClient = async () => {
     {
       cookies: {
         getAll() {
-          return cookiesStore.getAll();
+          return cookiesStore.getAll()
         },
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => {
-              return cookiesStore.set(name, value, options);
-            });
+              return cookiesStore.set(name, value, options)
+            })
           } catch (error) {
-            throw error;
+            throw error
           }
         },
       },
     },
-  );
-};
+  )
+}

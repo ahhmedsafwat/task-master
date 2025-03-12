@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react'
 
 export const useHoverEffect = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
 
   const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
+    setIsHovered(true)
+  }, [])
 
   const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-  }, []);
+    setIsHovered(false)
+  }, [])
 
   return {
     isHovered,
@@ -19,5 +19,5 @@ export const useHoverEffect = () => {
       onMouseEnter: handleMouseEnter,
       onMouseLeave: handleMouseLeave,
     },
-  };
-};
+  }
+}

@@ -1,11 +1,11 @@
-import { UpdatePasswordComponet } from "@/components/auth/update-password-component";
+import { UpdatePasswordComponet } from '@/components/auth/update-password-component'
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 
 export default function Page() {
   return (
@@ -20,5 +20,5 @@ export default function Page() {
         <UpdatePasswordComponet />
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -5,29 +5,29 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
-import { ThemeToggle } from "../ui/theme-toggle";
-import { signOut } from "@/app/auth/actions";
+} from '../ui/dropdown-menu'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
+import { ThemeToggle } from '../ui/theme-toggle'
+import { signOut } from '@/app/auth/actions'
 
 interface UserNavProps {
-  name: string;
-  email: string;
-  image?: string;
+  name: string
+  email: string
+  image?: string
 }
 
 export const NavUser = ({ email, name, image }: UserNavProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="py-2  relative  pl-2 pr-2 flex items-center justify-between border hover:bg-accent transition-all cursor-pointer bg-background shadow-lg rounded-lg">
-          <div className="flex justify-start items-center gap-1">
+        <div className="hover:bg-accent bg-background relative flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-2 pr-2 shadow-lg transition-all">
+          <div className="flex items-center justify-start gap-1">
             <Avatar>
               <AvatarImage src={image} alt={name} />
               <AvatarFallback>{name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-1 flex-col">
               <span className="text-primary-foreground font-cabinet font-sm font-medium">
                 {name}
               </span>
@@ -38,17 +38,17 @@ export const NavUser = ({ email, name, image }: UserNavProps) => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-56 rounded-lg "
+        className="w-60 rounded-lg"
         align="end"
         sideOffset={4}
       >
         <DropdownMenuLabel>
-          <div className="flex justify-start items-center gap-1">
+          <div className="flex items-center justify-start gap-1">
             <Avatar>
               <AvatarImage src={image} alt={name} />
               <AvatarFallback>{name.charAt(0)}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-1 flex-col">
               <span className="text-primary-foreground font-cabinet font-sm font-medium">
                 {name}
               </span>
@@ -57,18 +57,19 @@ export const NavUser = ({ email, name, image }: UserNavProps) => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer py-3">
           <Settings />
           <span>Settings</span>
-        </DropdownMenuItem>{" "}
-        <DropdownMenuItem>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="py-3">
           <ThemeToggle />
           <span>theme</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={async () => {
-            await signOut();
+            await signOut()
           }}
         >
           <LogOut className="text-destructive focus:text-destructive" />
@@ -76,5 +77,5 @@ export const NavUser = ({ email, name, image }: UserNavProps) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}

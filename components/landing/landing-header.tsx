@@ -1,67 +1,67 @@
-"use client";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MenuIcon } from "@/components/ui/menu-icon";
-import React, { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+'use client'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { MenuIcon } from '@/components/ui/menu-icon'
+import React, { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 
-import { FlipingText } from "@/components/ui/fliping-text";
-import { IoLogoGithub, IoMdArrowDropup, IoIosCode } from "react-icons/io";
+import { FlipingText } from '@/components/ui/fliping-text'
+import { IoLogoGithub, IoMdArrowDropup, IoIosCode } from 'react-icons/io'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ChevronDownIcon } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-import { Logo } from "../ui/logo";
+} from '@/components/ui/accordion'
+import { ChevronDownIcon } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
+import { Logo } from '../ui/logo'
 
 interface Navlinks {
-  title: string;
-  href?: string;
-  children?: (Navlinks & { icon?: React.ReactNode })[];
+  title: string
+  href?: string
+  children?: (Navlinks & { icon?: React.ReactNode })[]
 }
 
 const navigationItems: Navlinks[] = [
   {
-    title: "Features",
-    href: "/features",
+    title: 'Features',
+    href: '/features',
   },
-  { title: "Pricing", href: "/pricing" },
-  { title: "Story", href: "/story" },
+  { title: 'Pricing', href: '/pricing' },
+  { title: 'Story', href: '/story' },
   {
-    title: "Developers",
+    title: 'Developers',
     children: [
       {
-        title: "Github",
-        href: "https://github.com/ahhmedsafwat/task-master",
+        title: 'Github',
+        href: 'https://github.com/ahhmedsafwat/task-master',
         icon: <IoLogoGithub size={24} />,
       },
       {
-        title: "API Documentation",
-        href: "/developers/api",
+        title: 'API Documentation',
+        href: '/developers/api',
         icon: <IoIosCode size={24} />,
       },
     ],
   },
-];
+]
 
 export function LandingHeader() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
 
   useEffect(() => {
     const handelScroll = () => {
-      setHasScrolled(window.scrollY > 0);
-    };
+      setHasScrolled(window.scrollY > 0)
+    }
 
-    document.addEventListener("scroll", handelScroll);
+    document.addEventListener('scroll', handelScroll)
     return () => {
-      document.removeEventListener("scroll", handelScroll);
-    };
-  }, []);
+      document.removeEventListener('scroll', handelScroll)
+    }
+  }, [])
 
   return (
     <>
@@ -71,14 +71,14 @@ export function LandingHeader() {
             className={cn(
               `flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 py-1.5 transition-all duration-300 lg:top-4`,
               {
-                "glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]":
+                'glass-morph shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]':
                   hasScrolled && !isMenuOpen,
               },
             )}
           >
             <Logo
               href="/"
-              className={cn({ "text-white": hasScrolled || isMenuOpen })}
+              className={cn({ 'text-white': hasScrolled || isMenuOpen })}
             />
             <ul className="hidden items-center gap-6 lg:flex">
               {navigationItems.map(({ href, title, children }: Navlinks) => {
@@ -89,9 +89,9 @@ export function LandingHeader() {
                         <Link
                           href={href}
                           className={cn(
-                            "font-geist-mono text-muted-foreground hover:text-primary-foreground text-sm font-medium transition-colors",
+                            'font-geist-mono text-muted-foreground hover:text-primary-foreground text-sm font-medium transition-colors',
                             {
-                              "text-gray-300 hover:text-white":
+                              'text-gray-300 hover:text-white':
                                 hasScrolled || isMenuOpen,
                             },
                           )}
@@ -100,7 +100,7 @@ export function LandingHeader() {
                         </Link>
                       )}
                     </li>
-                  );
+                  )
                 }
                 return (
                   <li
@@ -111,9 +111,9 @@ export function LandingHeader() {
                   >
                     <span
                       className={cn(
-                        "font-geist-mono text-muted-foreground hover:text-primary-foreground flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors",
+                        'font-geist-mono text-muted-foreground hover:text-primary-foreground flex cursor-pointer items-center gap-1 text-sm font-medium transition-colors',
                         {
-                          "text-gray-300 hover:text-white":
+                          'text-gray-300 hover:text-white':
                             hasScrolled || isMenuOpen,
                         },
                       )}
@@ -121,8 +121,8 @@ export function LandingHeader() {
                       {title}
                       <ChevronDownIcon
                         size={16}
-                        className={cn("transition-transform duration-200", {
-                          "rotate-180": activeDropdown === title,
+                        className={cn('transition-transform duration-200', {
+                          'rotate-180': activeDropdown === title,
                         })}
                       />
                     </span>
@@ -152,7 +152,7 @@ export function LandingHeader() {
                               }}
                             >
                               <Link
-                                href={href ?? ""}
+                                href={href ?? ''}
                                 className="text-accent-foreground hover:text-primary-foreground hover:bg-muted group flex w-full items-center gap-2 rounded-md p-[3px] text-xs transition-colors duration-300"
                               >
                                 <span className="group-hover:border-primary-foreground rounded-md border p-[4px] transition-colors">
@@ -168,12 +168,12 @@ export function LandingHeader() {
                       )}
                     </AnimatePresence>
                   </li>
-                );
+                )
               })}
             </ul>
             <div className="hidden items-center gap-4 lg:flex">
               <Link href="/auth">
-                <Button asChild variant={"inverted"} className="hover-scale">
+                <Button asChild variant={'inverted'} className="hover-scale">
                   <FlipingText initialText="Get Started" />
                 </Button>
               </Link>
@@ -183,7 +183,7 @@ export function LandingHeader() {
                 isMenuOpen={isMenuOpen}
                 toggleMenu={() => setIsMenuOpen((prev) => !prev)}
                 className={cn(
-                  "hover:border-accent-foreground/30 bg-background/30 hover:bg-background/10 py-5",
+                  'hover:border-accent-foreground/30 bg-background/30 hover:bg-background/10 py-5',
                 )}
               />
             </div>
@@ -192,8 +192,8 @@ export function LandingHeader() {
       </header>
       <div
         className={cn(
-          "bg-secondary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 transition-all duration-500 ease-in-out sm:px-8 lg:hidden",
-          { "left-0": isMenuOpen },
+          'bg-secondary fixed left-full top-0 z-30 flex h-screen w-screen flex-col px-3 py-2 pb-6 pt-28 transition-all duration-500 ease-in-out sm:px-8 lg:hidden',
+          { 'left-0': isMenuOpen },
         )}
       >
         <ul className="mb-auto flex flex-col justify-center">
@@ -209,7 +209,7 @@ export function LandingHeader() {
                     {title}
                   </li>
                 </Link>
-              );
+              )
             }
             return (
               <li
@@ -228,7 +228,7 @@ export function LandingHeader() {
                             return (
                               <Link
                                 key={href}
-                                href={href ?? ""}
+                                href={href ?? ''}
                                 className="text-accent-foreground hover:text-primary-foreground hover:bg-muted/70 group flex w-full items-center gap-3 rounded-md p-2 transition-colors"
                               >
                                 <span className="group-hover:border-primary-foreground rounded-xl border p-2 transition-colors">
@@ -238,7 +238,7 @@ export function LandingHeader() {
                                 </span>
                                 <span>{title}</span>
                               </Link>
-                            );
+                            )
                           })}
                         </ul>
                       </AccordionContent>
@@ -246,11 +246,11 @@ export function LandingHeader() {
                   </AccordionItem>
                 </Accordion>
               </li>
-            );
+            )
           })}
         </ul>
         <div>
-          <Button asChild variant={"inverted"} className="w-full py-5">
+          <Button asChild variant={'inverted'} className="w-full py-5">
             <Link href="/auth" className="">
               Get Started
             </Link>
@@ -258,5 +258,5 @@ export function LandingHeader() {
         </div>
       </div>
     </>
-  );
+  )
 }

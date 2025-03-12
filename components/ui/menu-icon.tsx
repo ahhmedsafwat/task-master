@@ -1,13 +1,13 @@
-import { Button } from "./button";
+import { Button } from './button'
 
 export const MenuIcon = ({
   isMenuOpen,
   toggleMenu,
   className,
 }: {
-  isMenuOpen: boolean;
-  toggleMenu: () => void;
-  className: string;
+  isMenuOpen: boolean
+  toggleMenu: () => void
+  className: string
 }) => {
   return (
     <Button
@@ -23,7 +23,7 @@ export const MenuIcon = ({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={`transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? "rotate-90" : ""
+          isMenuOpen ? 'rotate-90' : ''
         }`}
       >
         <g className="transition-all duration-300 ease-in-out">
@@ -32,28 +32,28 @@ export const MenuIcon = ({
             cy="8"
             r="3"
             fill="currentColor"
-            className={isMenuOpen ? "opacity-0" : "opacity-100"}
+            className={isMenuOpen ? 'opacity-0' : 'opacity-100'}
           />
           <circle
             cx="24"
             cy="8"
             r="3"
             fill="currentColor"
-            className={isMenuOpen ? "opacity-0" : "opacity-100"}
+            className={isMenuOpen ? 'opacity-0' : 'opacity-100'}
           />
           <circle
             cx="8"
             cy="24"
             r="3"
             fill="currentColor"
-            className={isMenuOpen ? "opacity-0" : "opacity-100"}
+            className={isMenuOpen ? 'opacity-0' : 'opacity-100'}
           />
           <circle
             cx="24"
             cy="24"
             r="3"
             fill="currentColor"
-            className={isMenuOpen ? "opacity-0" : "opacity-100"}
+            className={isMenuOpen ? 'opacity-0' : 'opacity-100'}
           />
 
           <line
@@ -64,7 +64,7 @@ export const MenuIcon = ({
             stroke="currentColor"
             strokeWidth="3"
             className={`transition-opacity duration-300 ease-in-out ${
-              isMenuOpen ? "opacity-100" : "opacity-0"
+              isMenuOpen ? 'opacity-100' : 'opacity-0'
             }`}
           />
           <line
@@ -75,12 +75,12 @@ export const MenuIcon = ({
             stroke="currentColor"
             strokeWidth="3"
             className={`transition-opacity duration-300 ease-in-out ${
-              isMenuOpen ? "opacity-100" : "opacity-0"
+              isMenuOpen ? 'opacity-100' : 'opacity-0'
             }`}
           />
         </g>
       </svg>
       <span className="sr-only">Toggle menu</span>
     </Button>
-  );
-};
+  )
+}

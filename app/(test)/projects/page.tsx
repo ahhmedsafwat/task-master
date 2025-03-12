@@ -1,9 +1,9 @@
-"use client";
-import { createClient } from "@/utils/supabase/client";
+'use client'
+import { createClient } from '@/utils/supabase/client'
 
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
-import { Tables } from "@/lib/types/database.typs";
+import { useEffect, useState } from 'react'
+import { User } from '@supabase/supabase-js'
+import { Tables } from '@/lib/types/database.typs'
 import {
   assignTask,
   createProject,
@@ -22,35 +22,35 @@ import {
   // updateProjectMember,
   updateProjectMemberRole,
   updateTask,
-} from "@/lib/server/quieries";
-import ContentDisplay from "@/components/ContentDisplay";
-import { TablesInsert } from "@/lib/types/database.typs";
+} from '@/lib/server/quieries'
+import ContentDisplay from '@/components/ContentDisplay'
+import { TablesInsert } from '@/lib/types/database.typs'
 
 export default function TestPage() {
-  const supabase = createClient();
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [tasks, setTasks] = useState<Tables<"tasks">[] | undefined>(undefined);
-  const [projects, setProjects] = useState<Tables<"projects">[] | undefined>(
+  const supabase = createClient()
+  const [user, setUser] = useState<User | undefined>(undefined)
+  const [tasks, setTasks] = useState<Tables<'tasks'>[] | undefined>(undefined)
+  const [projects, setProjects] = useState<Tables<'projects'>[] | undefined>(
     undefined,
-  );
-  const user_id = "1111-1111-1111-1111-1111-1111-1111-1111";
-  const project_id = "1111-1111-1111-1111-1111-1111-1111-1111";
+  )
+  const user_id = '1111-1111-1111-1111-1111-1111-1111-1111'
+  const project_id = '1111-1111-1111-1111-1111-1111-1111-1111'
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.getUser()
 
       if (error) {
-        console.error(error);
-        return;
+        console.error(error)
+        return
       }
 
       if (data.user) {
-        setUser(data.user);
+        setUser(data.user)
       }
-    };
+    }
 
-    fetchUser();
-  }, []);
+    fetchUser()
+  }, [])
 
   if (!user)
     return (
@@ -58,24 +58,24 @@ export default function TestPage() {
         <button
           onClick={async () => {
             const { data, error } = await supabase.auth.signInWithOAuth({
-              provider: "google",
-            });
-            console.log(data, error);
+              provider: 'google',
+            })
+            console.log(data, error)
           }}
           className="bg-main rounded px-4 py-2 text-white"
         >
           signInWithGoogle
         </button>
       </>
-    );
+    )
 
   return (
     <div className="mx-auto max-w-4xl p-8">
       <h1 className="mb-6 text-2xl font-bold">Supabase Functionality Tests</h1>
       <button
         onClick={async () => {
-          const result = await supabase.auth.signOut();
-          console.log(result);
+          const result = await supabase.auth.signOut()
+          console.log(result)
         }}
         className="rounded bg-blue-500 px-4 py-2 text-white"
       >
@@ -89,12 +89,12 @@ export default function TestPage() {
           onClick={async () => {
             const { data, error } = await createProject({
               user: user,
-              name: "nigga 1",
-              description: "nigga projects one",
-            });
+              name: 'nigga 1',
+              description: 'nigga projects one',
+            })
 
-            if (error) throw error.message;
-            console.log(data);
+            if (error) throw error.message
+            console.log(data)
           }}
           className="bg-main rounded px-4 py-2 text-white"
         >
@@ -105,12 +105,12 @@ export default function TestPage() {
             const { data, error } = await createTask({
               user: user,
               creator_id: user.id,
-              title: "task project",
+              title: 'task project',
               project_id: project_id,
-            });
+            })
 
-            if (error) throw error.message;
-            console.log(data);
+            if (error) throw error.message
+            console.log(data)
           }}
           className="bg-main rounded px-4 py-2 text-white"
         >
@@ -119,11 +119,11 @@ export default function TestPage() {
 
         <button
           onClick={async () => {
-            const { data, error } = await getTasks({ user: user });
+            const { data, error } = await getTasks({ user: user })
 
-            if (error) throw error.message;
-            console.log(data);
-            setTasks(data);
+            if (error) throw error.message
+            console.log(data)
+            setTasks(data)
           }}
           className="bg-main rounded px-4 py-2 text-white"
         >
@@ -132,11 +132,11 @@ export default function TestPage() {
 
         <button
           onClick={async () => {
-            const { data, error } = await getProjects({ user: user });
-            if (error) throw error.message;
-            console.log(data);
+            const { data, error } = await getProjects({ user: user })
+            if (error) throw error.message
+            console.log(data)
             if (data) {
-              setProjects(data[0] as Tables<"projects">[]);
+              setProjects(data[0] as Tables<'projects'>[])
             }
           }}
           className="bg-main rounded px-4 py-2 text-white"
@@ -145,7 +145,7 @@ export default function TestPage() {
         </button>
       </div>
       <div className="space-y-4 p-8">
-        {projects?.map((project: Tables<"projects">, index: number) => (
+        {projects?.map((project: Tables<'projects'>, index: number) => (
           <div key={index}>
             <button
               onClick={async () => {
@@ -153,9 +153,9 @@ export default function TestPage() {
                   user: user,
                   project_id: project.id,
                   user_id: user_id,
-                });
-                if (error) throw error.message;
-                console.log(data);
+                })
+                if (error) throw error.message
+                console.log(data)
               }}
               className="bg-main rounded px-4 py-2 text-white"
             >
@@ -167,10 +167,10 @@ export default function TestPage() {
                   user: user,
                   project_id: project.id,
                   user_id: user_id,
-                  new_role: "MEMBER",
-                });
-                if (error) throw error.message;
-                console.log(data);
+                  new_role: 'MEMBER',
+                })
+                if (error) throw error.message
+                console.log(data)
               }}
               className="bg-main rounded px-4 py-2 text-white"
             >
@@ -181,9 +181,9 @@ export default function TestPage() {
                 const { data, error } = await getProjectMembers({
                   user: user,
                   project_id: project.id,
-                });
-                if (error) throw error.message;
-                console.log(data);
+                })
+                if (error) throw error.message
+                console.log(data)
               }}
               className="bg-main rounded px-4 py-2 text-white"
             >
@@ -195,8 +195,8 @@ export default function TestPage() {
                   user: user,
                   project_id: project.id,
                   user_id: user_id,
-                });
-                if (error) throw error.message;
+                })
+                if (error) throw error.message
               }}
               className="bg-main rounded px-4 py-2 text-white"
             >
@@ -207,8 +207,8 @@ export default function TestPage() {
                 const { error } = await removeSelfFromProject({
                   user: user,
                   project_id: project.id,
-                });
-                if (error) throw error.message;
+                })
+                if (error) throw error.message
               }}
               className="bg-main rounded px-4 py-2 text-white"
             >
@@ -219,7 +219,7 @@ export default function TestPage() {
             <br />
             <span>creator id: {project.creator_id}</span>
             <h2>project name: {project.name}</h2>
-            {<ContentDisplay content={project.description ?? ""} />}
+            {<ContentDisplay content={project.description ?? ''} />}
 
             <button
               onClick={async () => {
@@ -227,8 +227,8 @@ export default function TestPage() {
                   user: user,
 
                   project_id: project.id,
-                });
-                if (error) throw error.message;
+                })
+                if (error) throw error.message
               }}
               className="rounded bg-red-500 px-4 py-2 text-white"
             >
@@ -239,8 +239,8 @@ export default function TestPage() {
                 const { error } = await deleteProject({
                   user: user,
                   project_id: project.id,
-                });
-                if (error) throw error.message;
+                })
+                if (error) throw error.message
               }}
               className="rounded bg-red-500 px-4 py-2 text-white"
             >
@@ -248,19 +248,19 @@ export default function TestPage() {
             </button>
           </div>
         ))}
-        {tasks?.map((task: TablesInsert<"tasks">, index: number) => (
+        {tasks?.map((task: TablesInsert<'tasks'>, index: number) => (
           <div key={index}>
             <div className="space-x-3">
               <button
                 onClick={async () => {
                   const { data, error } = await assignTask({
-                    task_id: task.id ?? "",
+                    task_id: task.id ?? '',
 
                     user,
                     assignee_id: user_id,
-                  });
-                  if (error) throw error.message;
-                  console.log(data);
+                  })
+                  if (error) throw error.message
+                  console.log(data)
                 }}
                 className="rounded bg-purple-700 px-4 py-2 text-white"
               >
@@ -269,11 +269,11 @@ export default function TestPage() {
               <button
                 onClick={async () => {
                   const { data, error } = await getAssignees({
-                    task_id: task.id ?? "",
+                    task_id: task.id ?? '',
                     user,
-                  });
-                  if (error) throw error.message;
-                  console.log(data);
+                  })
+                  if (error) throw error.message
+                  console.log(data)
                 }}
                 className="rounded bg-purple-700 px-4 py-2 text-white"
               >
@@ -284,8 +284,8 @@ export default function TestPage() {
               <span>{task.id}</span>
               <br />
               <span>
-                {" "}
-                createor :{task.creator_id == user.id ? "Ture" : "not you"}{" "}
+                {' '}
+                createor :{task.creator_id == user.id ? 'Ture' : 'not you'}{' '}
               </span>
               <br />
               <span>project id: {task.project_id}</span>
@@ -298,13 +298,13 @@ export default function TestPage() {
                   const { data, error } = await updateTask({
                     id: task.id,
                     user: user,
-                    title: "Update Tasks test",
-                    description: "UPDATE DESCRIPTION",
+                    title: 'Update Tasks test',
+                    description: 'UPDATE DESCRIPTION',
                     is_private: false,
-                  });
+                  })
 
-                  if (error) throw error.message;
-                  console.log(data);
+                  if (error) throw error.message
+                  console.log(data)
                 }}
                 className="bg-secondary rounded px-4 py-2 text-white"
               >
@@ -314,11 +314,11 @@ export default function TestPage() {
                 onClick={async () => {
                   const { data, error } = await deleteTask({
                     user: user,
-                    task_id: task.id ?? "",
-                  });
+                    task_id: task.id ?? '',
+                  })
 
-                  if (error) throw error.message;
-                  console.log(data);
+                  if (error) throw error.message
+                  console.log(data)
                 }}
                 className="bg-destructive rounded px-4 py-2 text-white"
               >
@@ -328,12 +328,12 @@ export default function TestPage() {
                 onClick={async () => {
                   const { data, error } = await removeAssignee({
                     user: user,
-                    task_id: task.id ?? "",
+                    task_id: task.id ?? '',
                     assignee_id: user_id,
-                  });
+                  })
 
-                  if (error) throw error.message;
-                  console.log(data);
+                  if (error) throw error.message
+                  console.log(data)
                 }}
                 className="bg-destructive rounded px-4 py-2 text-white"
               >
@@ -344,5 +344,5 @@ export default function TestPage() {
         ))}
       </div>
     </div>
-  );
+  )
 }

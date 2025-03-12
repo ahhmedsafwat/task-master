@@ -1,16 +1,16 @@
-import { ForgetPasswordComponent } from "@/components/auth/forgot-password-component";
+import { ForgetPasswordComponent } from '@/components/auth/forgot-password-component'
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@/components/ui/card";
-import { Metadata } from "next";
+} from '@/components/ui/card'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Forgot Password",
-};
+  title: 'Forgot Password',
+}
 
 export default function Page() {
   return (
@@ -26,5 +26,5 @@ export default function Page() {
         <ForgetPasswordComponent />
       </CardContent>
     </Card>
-  );
+  )
 }

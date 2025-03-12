@@ -1,18 +1,18 @@
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 export const Logo = ({
   className,
   textClassName,
   href,
   svgSize = 45,
-  svgClassName = "group",
+  svgClassName = 'group',
 }: {
-  className?: string;
-  textClassName?: string;
-  href: string;
-  svgSize?: number;
-  svgClassName?: string;
+  className?: string
+  textClassName?: string
+  href: string
+  svgSize?: number
+  svgClassName?: string
 }) => {
   return (
     <Link href={href} className={cn(`flex items-center space-x-2`, className)}>
@@ -43,12 +43,12 @@ export const Logo = ({
       </svg>
       <div
         className={cn(
-          "font-cabinet text-base font-extrabold tracking-wide sm:text-lg",
+          'font-cabinet text-base font-extrabold tracking-wide sm:text-lg',
           textClassName,
         )}
       >
         TASKMASTER
       </div>
     </Link>
-  );
-};
+  )
+}

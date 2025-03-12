@@ -1,6 +1,6 @@
-import { LoaderIcon } from "lucide-react";
-import { Button } from "./button";
-import { cn } from "@/lib/utils";
+import { LoaderIcon } from 'lucide-react'
+import { Button } from './button'
+import { cn } from '@/lib/utils'
 
 export function SubmitButton({
   isPending,
@@ -8,18 +8,18 @@ export function SubmitButton({
   children,
   className,
 }: {
-  isPending: boolean;
-  isSuccessful: boolean;
-  children?: React.ReactNode;
-  className?: string;
+  isPending: boolean
+  isSuccessful: boolean
+  children?: React.ReactNode
+  className?: string
 }) {
   return (
     <Button
-      type={isPending ? "button" : "submit"}
+      type={isPending ? 'button' : 'submit'}
       disabled={isPending || isSuccessful}
       aria-disabled={isPending || isSuccessful}
       className={cn(`h-11 w-full cursor-pointer justify-center`, className)}
-      variant={"inverted"}
+      variant={'inverted'}
     >
       {isPending || isSuccessful ? (
         <LoaderIcon className="animate-spin" />
@@ -27,8 +27,8 @@ export function SubmitButton({
         <>{children}</>
       )}
       <output aria-live="polite" className="sr-only">
-        {isPending || isSuccessful ? "Loading" : "submit form"}
+        {isPending || isSuccessful ? 'Loading' : 'submit form'}
       </output>
     </Button>
-  );
+  )
 }

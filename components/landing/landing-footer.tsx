@@ -1,40 +1,40 @@
-import Link from "next/link";
-import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from "react-icons/ri";
-import Image from "next/image";
-import { ThemeToggle } from "../ui/theme-toggle";
-import { Logo } from "../ui/logo";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import Link from 'next/link'
+import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from 'react-icons/ri'
+import Image from 'next/image'
+import { ThemeToggle } from '../ui/theme-toggle'
+import { Logo } from '../ui/logo'
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 
 const navigationItems = [
-  { title: "Features", href: "features" },
-  { title: "Pricing", href: "pricing" },
-  { title: "Story", href: "story" },
-  { title: "Developer", href: "developer" },
-];
+  { title: 'Features', href: 'features' },
+  { title: 'Pricing', href: 'pricing' },
+  { title: 'Story', href: 'story' },
+  { title: 'Developer', href: 'developer' },
+]
 
 const legalLinks = [
-  { title: "Privacy Policy", href: "/privacy" },
-  { title: "Terms of Service", href: "/terms" },
-];
+  { title: 'Privacy Policy', href: '/privacy' },
+  { title: 'Terms of Service', href: '/terms' },
+]
 
 const socialLinks = [
   {
     icon: RiTwitterXLine,
-    href: "https://x.com/ahhmed_ssafwatt",
-    label: "Twitter",
+    href: 'https://x.com/ahhmed_ssafwatt',
+    label: 'Twitter',
   },
   {
     icon: RiGithubFill,
-    href: "https://github.com/ahhmedsafwat/task-master",
-    label: "GitHub",
+    href: 'https://github.com/ahhmedsafwat/task-master',
+    label: 'GitHub',
   },
   {
     icon: RiInstagramLine,
-    href: "https://www.instagram.com/ahmeed_safwatt/",
-    label: "Instagram",
+    href: 'https://www.instagram.com/ahmeed_safwatt/',
+    label: 'Instagram',
   },
-];
+]
 
 export function LandingFooter() {
   return (
@@ -59,7 +59,7 @@ export function LandingFooter() {
                   individuals.
                 </p>
               </div>
-              <div className="flex gap-4 flex-col ">
+              <div className="flex flex-col gap-4">
                 <div className="space-x-2">
                   {socialLinks.map((link) => (
                     <SocialButton key={link.label} {...link} />
@@ -88,7 +88,7 @@ export function LandingFooter() {
                   />
                   <Button
                     type="submit"
-                    size={"sm"}
+                    size={'sm'}
                     className="hover-scale w-full bg-white text-gray-900 hover:bg-gray-200"
                   >
                     Subscribe
@@ -98,9 +98,9 @@ export function LandingFooter() {
             </div>
           </section>
           <section className="font-geist-mono mt-4 border-t border-gray-200 pt-8 text-center text-sm text-gray-200 md:mt-28">
-            © {new Date().getFullYear()} TaskMaster. All rights reserved.{" "}
+            © {new Date().getFullYear()} TaskMaster. All rights reserved.{' '}
             <br />
-            Created by{" "}
+            Created by{' '}
             <Link
               href="https://github.com/ahhmedsafwat"
               className="underline hover:text-white"
@@ -111,7 +111,7 @@ export function LandingFooter() {
         </div>
       </div>
     </footer>
-  );
+  )
 }
 
 // Reusable component for footer link sections
@@ -119,8 +119,8 @@ function FooterLinkSection({
   title,
   links,
 }: {
-  title: string;
-  links: { title: string; href: string }[];
+  title: string
+  links: { title: string; href: string }[]
 }) {
   return (
     <div>
@@ -138,7 +138,7 @@ function FooterLinkSection({
         ))}
       </ul>
     </div>
-  );
+  )
 }
 
 // Reusable component for social media buttons
@@ -147,9 +147,9 @@ function SocialButton({
   href,
   label,
 }: {
-  icon: React.ElementType;
-  href: string;
-  label: string;
+  icon: React.ElementType
+  href: string
+  label: string
 }) {
   return (
     <Button variant="outline" size="icon" asChild>
@@ -158,10 +158,10 @@ function SocialButton({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="text-gray-600 border-gray-300 bg-neutral-100 hover:bg-gray-100 hover:text-gray-900"
+        className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       >
         <Icon size={24} />
       </Link>
     </Button>
-  );
+  )
 }

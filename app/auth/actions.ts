@@ -1,13 +1,18 @@
-"use server";
+'use server'
 
-import { redirect } from "next/navigation";
-import { createSupabaseClient } from "@/utils/supabase/server";
-import { emailSchema, loginSchema, passwordSchema, signupSchema } from "@/lib/types/zod";
-import { AuthResponse } from "@/lib/types/types";
-import { revalidatePath } from "next/cache";
+import { redirect } from 'next/navigation'
+import { createSupabaseClient } from '@/utils/supabase/server'
+import {
+  emailSchema,
+  loginSchema,
+  passwordSchema,
+  signupSchema,
+} from '@/lib/types/zod'
+import { AuthResponse } from '@/lib/types/types'
+import { revalidatePath } from 'next/cache'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`
 /**
  * Login action - handles user authentication
  */
@@ -16,59 +21,58 @@ export async function login(
   formData: FormData,
 ): Promise<AuthResponse> {
   try {
-    const rawFormData = Object.fromEntries(formData.entries());
-    const validatedFields = loginSchema.safeParse(rawFormData);
+    const rawFormData = Object.fromEntries(formData.entries())
+    const validatedFields = loginSchema.safeParse(rawFormData)
 
     if (!validatedFields.success) {
       return {
-        status: "error",
+        status: 'error',
         errors: validatedFields.error.flatten().fieldErrors,
         message: null,
-      };
+      }
     }
 
-    const { email, password } = validatedFields.data;
-    const supabase = await createSupabaseClient();
+    const { email, password } = validatedFields.data
+    const supabase = await createSupabaseClient()
 
     // First, check if the user exists
     const { data: userLookup, error: userLookupError } = await supabase
-      .from('profiles')  // Assumes you have a users table
+      .from('profiles') // Assumes you have a users table
       .select('email')
       .eq('email', email)
-      .single();
+      .single()
 
     if (userLookupError || !userLookup) {
       return {
-        status: "error",
-        message: "User does not exist. Please sign up first.",
-      };
+        status: 'error',
+        message: 'User does not exist. Please sign up first.',
+      }
     }
 
     // Attempt to sign in
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    });
-
+    })
 
     if (error) {
       return {
-        status: "error",
+        status: 'error',
         message: error.message,
-      };
+      }
     }
 
     return {
-      status: "success",
-      message: "Logged in successfully!",
-      redirectTo: "/overview",
-    };
+      status: 'success',
+      message: 'Logged in successfully!',
+      redirectTo: '/overview',
+    }
   } catch (error) {
-    console.error("Login error:", error);
+    console.error('Login error:', error)
     return {
-      status: "error",
-      message: "An unexpected error occurred. Please try again.",
-    };
+      status: 'error',
+      message: 'An unexpected error occurred. Please try again.',
+    }
   }
 }
 
@@ -81,23 +85,23 @@ export async function signUp(
 ): Promise<AuthResponse> {
   try {
     // Parse and validate form data
-    const rawFormData = Object.fromEntries(formData.entries());
-    const validatedFields = signupSchema.safeParse(rawFormData);
+    const rawFormData = Object.fromEntries(formData.entries())
+    const validatedFields = signupSchema.safeParse(rawFormData)
 
     // Return validation errors if any
     if (!validatedFields.success) {
       return {
-        status: "error",
+        status: 'error',
         errors: validatedFields.error.flatten().fieldErrors,
         message: null,
-      };
+      }
     }
 
-    const { email, password } = validatedFields.data;
-    const supabase = await createSupabaseClient();
+    const { email, password } = validatedFields.data
+    const supabase = await createSupabaseClient()
 
     // Generate username from email
-    const username = email.split("@")[0];
+    const username = email.split('@')[0]
 
     // Create new account
     const { error, data } = await supabase.auth.signUp({
@@ -109,36 +113,36 @@ export async function signUp(
           username,
         },
       },
-    });
+    })
 
     if (error) {
       return {
-        status: "error",
+        status: 'error',
         message: error.message,
-      };
+      }
     }
 
     // Check if user needs to confirm email
-    const needsEmailConfirmation = data?.user?.identities?.length === 0;
+    const needsEmailConfirmation = data?.user?.identities?.length === 0
 
     if (needsEmailConfirmation) {
       return {
-        status: "success",
-        message: "Please check your email to confirm your account.",
-      };
+        status: 'success',
+        message: 'Please check your email to confirm your account.',
+      }
     }
 
     return {
-      status: "success",
-      message: "Account created successfully!",
-      redirectTo: "/overview",
-    };
+      status: 'success',
+      message: 'Account created successfully!',
+      redirectTo: '/overview',
+    }
   } catch (error) {
-    console.error("Signup error:", error);
+    console.error('Signup error:', error)
     return {
-      status: "error",
-      message: "An unexpected error occurred. Please try again.",
-    };
+      status: 'error',
+      message: 'An unexpected error occurred. Please try again.',
+    }
   }
 }
 
@@ -147,87 +151,92 @@ export async function signUp(
  */
 export async function signOut() {
   try {
-    const supabase = await createSupabaseClient();
-    await supabase.auth.signOut();
+    const supabase = await createSupabaseClient()
+    await supabase.auth.signOut()
 
-    revalidatePath("/dashboard")
-    redirect("/auth");
+    revalidatePath('/dashboard')
+    redirect('/auth')
   } catch (error) {
-    console.error("Logout error:", error);
-    return redirect("/auth?error=Failed to logout properly");
+    console.error('Logout error:', error)
+    return redirect('/auth?error=Failed to logout properly')
   }
 }
-
 
 /**
  * Request a new Password - sends a request to the supabase server to send the use an email to reset their password
  */
-export async function requestPasswordReset(pervSatate: AuthResponse | null, formData: FormData): Promise<AuthResponse> {
+export async function requestPasswordReset(
+  pervSatate: AuthResponse | null,
+  formData: FormData,
+): Promise<AuthResponse> {
   try {
     const rawFormData = Object.fromEntries(formData.entries())
 
-    const validate = emailSchema.safeParse(rawFormData);
+    const validate = emailSchema.safeParse(rawFormData)
 
     if (!validate.success) {
       return {
-        status: "error",
+        status: 'error',
         errors: validate.error.flatten().fieldErrors,
-        message: null
+        message: null,
       }
     }
 
-    const supabase = await createSupabaseClient();
+    const supabase = await createSupabaseClient()
     const { email } = validate.data
 
     // First, check if the user exists
     const { data: userLookup, error: userLookupError } = await supabase
-      .from('profiles')  // Assumes you have a users table
+      .from('profiles') // Assumes you have a users table
       .select('email')
       .eq('email', email)
-      .single();
+      .single()
 
     if (userLookupError || !userLookup) {
       return {
-        status: "error",
-        message: "User does not exist. Please sign up first.",
-      };
+        status: 'error',
+        message: 'User does not exist. Please sign up first.',
+      }
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email)
 
-
-
-
     if (error) {
       return {
-        status: "error",
-        message: error.message
+        status: 'error',
+        message: error.message,
       }
     }
 
-
     return {
       status: 'success',
-      message: "Check your email to reset your password"
+      message: 'Check your email to reset your password',
     }
   } catch (error) {
-    console.error("Reset password error:", error);
+    console.error('Reset password error:', error)
     return {
-      status: "error",
-      message: "An unexpected error occurred. Please try again.",
+      status: 'error',
+      message: 'An unexpected error occurred. Please try again.',
     }
   }
 }
 
-export async function updatePassword(prevState: AuthResponse, formData: FormData): Promise<AuthResponse> {
+export async function updatePassword(
+  prevState: AuthResponse,
+  formData: FormData,
+): Promise<AuthResponse> {
   try {
     // Validate passwords
     const rawFormData = Object.fromEntries(formData.entries())
 
-    const validate = passwordSchema.safeParse(rawFormData);
+    const validate = passwordSchema.safeParse(rawFormData)
 
     if (!validate.success) {
-      return { status: 'error', message: null, errors: validate.error.flatten().fieldErrors }
+      return {
+        status: 'error',
+        message: null,
+        errors: validate.error.flatten().fieldErrors,
+      }
     }
 
     const { password } = validate.data
@@ -237,26 +246,24 @@ export async function updatePassword(prevState: AuthResponse, formData: FormData
 
     if (error) {
       return {
-        status: "error",
+        status: 'error',
         message: error.message,
       }
     }
 
     return {
       status: 'success',
-      message: "Password updated successfully!",
-      redirectTo: "/overview"
+      message: 'Password updated successfully!',
+      redirectTo: '/overview',
     }
   } catch (error) {
-    console.error("Reset password error:", error);
+    console.error('Reset password error:', error)
     return {
       message: 'An unexpected error has occured, please try again.',
       status: 'error',
-
     }
   }
 }
-
 
 /**
  * Get user session data
@@ -264,16 +271,16 @@ export async function updatePassword(prevState: AuthResponse, formData: FormData
  */
 export async function getuser() {
   try {
-    const supabase = await createSupabaseClient();
-    const { data, error } = await supabase.auth.getUser();
+    const supabase = await createSupabaseClient()
+    const { data, error } = await supabase.auth.getUser()
 
     if (error || !data.user) {
-      return null;
+      return null
     }
 
-    return data.user;
+    return data.user
   } catch (error) {
-    console.error("Get session error:", error);
-    return null;
+    console.error('Get session error:', error)
+    return null
   }
 }

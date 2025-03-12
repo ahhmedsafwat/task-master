@@ -1,33 +1,33 @@
-"use client";
-import { createClient } from "@/utils/supabase/client";
-import { Button } from "../ui/button";
-import { toast } from "sonner";
+'use client'
+import { createClient } from '@/utils/supabase/client'
+import { Button } from '../ui/button'
+import { toast } from 'sonner'
 
 export const SigningWithGoogle = () => {
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`;
+  const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`
 
   const handleSignIn = async () => {
     try {
-      const supabase = createClient();
+      const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
+        provider: 'google',
         options: {
           redirectTo: AUTH_CALLBACK_URL,
           queryParams: {
-            access_type: "offline",
-            prompt: "consent",
+            access_type: 'offline',
+            prompt: 'consent',
           },
         },
-      });
+      })
 
       if (error) {
-        toast.error(error.message);
+        toast.error(error.message)
       }
     } catch {
-      toast.error("Failed to sign in with Google");
+      toast.error('Failed to sign in with Google')
     }
-  };
+  }
 
   return (
     <Button
@@ -56,5 +56,5 @@ export const SigningWithGoogle = () => {
       </svg>
       <span>Continue with Google</span>
     </Button>
-  );
-};
+  )
+}
