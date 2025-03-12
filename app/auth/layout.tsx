@@ -1,3 +1,4 @@
+import { Logo } from "@/components/ui/logo";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,8 +12,11 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">{children}</div>
+    <section className=" min-h-screen p-8">
+      <Logo href="/" />
+      <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">{children}</div>
+      </div>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from "react-icons/ri";
 import Image from "next/image";
-import ThemeToggle from "../ui/theme-toggle";
+import { ThemeToggle } from "../ui/theme-toggle";
 import { Logo } from "../ui/logo";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -59,11 +59,13 @@ export function LandingFooter() {
                   individuals.
                 </p>
               </div>
-              <div className="flex gap-2">
-                {socialLinks.map((link) => (
-                  <SocialButton key={link.label} {...link} />
-                ))}
-                <ThemeToggle className="text-muted-foreground border-gray-300 hover:text-gray-900" />
+              <div className="flex gap-4 flex-col ">
+                <div className="space-x-2">
+                  {socialLinks.map((link) => (
+                    <SocialButton key={link.label} {...link} />
+                  ))}
+                </div>
+                <ThemeToggle />
               </div>
             </div>
 
@@ -156,7 +158,7 @@ function SocialButton({
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
-        className="text-muted-foreground border-gray-300 bg-neutral-100 hover:bg-gray-100 hover:text-gray-900"
+        className="text-gray-600 border-gray-300 bg-neutral-100 hover:bg-gray-100 hover:text-gray-900"
       >
         <Icon size={24} />
       </Link>

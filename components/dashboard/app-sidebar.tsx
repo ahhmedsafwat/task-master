@@ -16,8 +16,8 @@ import { useEffect, useState, useRef } from "react";
 import { Separator } from "../ui/separator";
 import { Logo } from "../ui/logo";
 import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { MenuIcon } from "../ui/menu-icon";
+import { NavUser } from "./nav-user";
 
 // Define the navigation item structure
 interface NavItem {
@@ -31,7 +31,7 @@ interface Project {
   name: string;
 }
 
-export function DashboardNavigation() {
+export function AppSidebar() {
   const pathname = usePathname();
 
   // State management
@@ -51,7 +51,7 @@ export function DashboardNavigation() {
       icon: LayoutDashboard,
     },
     {
-      title: "Private Tasks",
+      title: "Tasks",
       href: "/tasks",
       icon: LucideClipboardCheck,
     },
@@ -202,6 +202,12 @@ export function DashboardNavigation() {
     },
   ];
 
+  const user = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    image: "/placeholder.svg?height=32&width=32",
+  };
+
   // Detect mobile devices
   useEffect(() => {
     const checkIfMobile = () => {
@@ -240,19 +246,6 @@ export function DashboardNavigation() {
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [isPinned, isMobile]);
 
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setIsPinned(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMobile]);
-
   // Determine if the navbar should be visible
   const isNavVisible = isPinned || (!isMobile && (isHovering || isNavHovered));
 
@@ -270,7 +263,7 @@ export function DashboardNavigation() {
       )}
 
       {/* Main navigation container */}
-      <div
+      <nav
         className={cn(
           "z-50 h-screen transition-all duration-300 ease-in-out",
           isPinned && !isMobile ? "w-60" : "w-0",
@@ -283,17 +276,19 @@ export function DashboardNavigation() {
         <div
           ref={navRef}
           className={cn(
-            "bg-primary relative z-50 flex h-screen w-60 flex-col px-2 py-4 transition-all duration-300 ease-in-out",
+            "bg-secondary dark:bg-primary relative z-50 flex h-screen w-60 flex-col pl-2 py-4 transition-all duration-300 ease-in-out",
             // Floating state when not pinned but hovering
             !isPinned && !isMobile && (isHovering || isNavHovered)
-              ? "left-0 m-2 h-[calc(100vh-1.75rem)] rounded-md shadow-2xl"
+              ? "left-0 m-2 h-[calc(100vh-1.75rem)] rounded-md shadow-2xl pr-2"
               : !isNavVisible && "-left-60",
-            // Fixed position for mobile
-            isMobile && isPinned && "fixed left-0",
+            // Fixed position for mobile - ensure it contains the dropdown
+            isMobile &&
+              isPinned &&
+              "fixed left-0 pr-2 overflow-y-auto overflow-x-visible",
           )}
         >
           {/* Header with logo and pin/unpin button */}
-          <div className="bg-background flex items-center justify-between rounded-lg border px-3 py-2 shadow-lg">
+          <div className="bg-background flex items-center justify-between rounded-lg border px-2 py-2 shadow">
             <Logo href={"/overview"} textClassName="sm:text-sm" svgSize={34} />
 
             {/* Toggle button */}
@@ -319,7 +314,7 @@ export function DashboardNavigation() {
             </Button>
           </div>
           {/* Navigation items */}
-          <Separator decorative className="mt-6 mb-3" />
+          <Separator decorative className="my-3" />
           <div className="space-y-2 overflow-y-auto">
             <div className="text-muted-foreground text-xs">Genaral</div>
             {navItems.map((item) => {
@@ -340,7 +335,7 @@ export function DashboardNavigation() {
                     <item.icon
                       size={16}
                       className={cn(
-                        "mr-3",
+                        "mr-2",
                         isActive ? "opacity-100" : "opacity-80",
                       )}
                     />
@@ -350,7 +345,7 @@ export function DashboardNavigation() {
               );
             })}
           </div>
-          <Separator decorative className="mt-6 mb-3" />
+          <Separator decorative className="my-3" />
           {/* Projects section could be added here */}
           <div className="space-y-2 overflow-y-auto flex-1">
             <div className="text-muted-foreground text-xs">Projects</div>
@@ -375,30 +370,11 @@ export function DashboardNavigation() {
               );
             })}
           </div>
-          <Separator decorative className="mt-6 mb-3" />
+          <Separator decorative className="my-3" />
           {/* User profile section could be added here */}
-          <div className="py-2 px-2 flex items-center justify-between border bg-background shadow-lg rounded-lg">
-            <div className="flex justify-start items-center gap-2">
-              <Avatar>
-                <AvatarImage
-                  alt="@ahmedsafwat"
-                  src="https://github.com/ahhmedsafwat.png"
-                />
-                <AvatarFallback>AS</AvatarFallback>
-              </Avatar>
-              <div>
-                <div className="text-primary-foreground font-cabinet font-sm font-medium">
-                  Ahmed Safwat
-                </div>
-                <div className="text-muted-foreground text-xs">
-                  ahmedsafwat@gmail.com
-                </div>
-              </div>
-            </div>
-            <div>a</div>
-          </div>
+          <NavUser {...user} />
         </div>
-      </div>
+      </nav>
 
       {/* Background overlay - appears when nav is floating or mobile menu is open */}
       {(isMobile && isPinned) ||
@@ -412,5 +388,3 @@ export function DashboardNavigation() {
     </>
   );
 }
-
-// const Nav;

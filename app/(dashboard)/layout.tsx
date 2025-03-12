@@ -1,4 +1,4 @@
-import { DashboardNavigation } from "@/components/dashboard/dashbaord-navigation";
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section className="bg-primary flex min-h-screen">
-      <DashboardNavigation />
-      <div className="bg-background m-2 flex-1 rounded-md border">
+      <AppSidebar />
+      <div className="bg-background m-1.5 flex-1 rounded-md border">
         {children}
       </div>
     </section>
