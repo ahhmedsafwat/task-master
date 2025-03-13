@@ -266,7 +266,7 @@ export async function updatePassword(
 }
 
 /**
- * Get user session data
+ * Get user data
  * Can be used to check if user is authenticated
  */
 export async function getuser() {

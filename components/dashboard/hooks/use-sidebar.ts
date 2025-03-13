@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, use } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface UseSidebarOptions {
   initialPinned?: boolean

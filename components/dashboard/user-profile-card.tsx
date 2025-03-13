@@ -10,7 +10,7 @@ interface UserProfileCardProps {
 export function UserProfileCard({
   name,
   email,
-  image,
+  image = 'https://placehold.co/32',
   className,
 }: UserProfileCardProps) {
   return (

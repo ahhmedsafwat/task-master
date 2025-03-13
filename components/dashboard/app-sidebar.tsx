@@ -1,5 +1,4 @@
 'use client'
-
 import { cn } from '@/lib/utils'
 import { useRef } from 'react'
 import { Separator } from '../ui/separator'
@@ -9,7 +8,7 @@ import { useSidebar } from './hooks/use-sidebar'
 import { SidebarHeader } from './sidebar-header'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
-import { navItems, sampleProjects, user } from './sidebar-data'
+import { navItems, sampleProjects } from './sidebar-data'
 
 export function AppSidebar() {
   // Use our custom sidebar hook
@@ -77,8 +76,7 @@ export function AppSidebar() {
 
           <Separator decorative className="my-3" />
 
-          {/* User profile section */}
-          <NavUser {...user} />
+          <NavUser />
         </div>
       </nav>
 

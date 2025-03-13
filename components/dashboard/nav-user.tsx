@@ -1,3 +1,5 @@
+'use client'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,21 +10,43 @@ import {
 } from '../ui/dropdown-menu'
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '../ui/theme-toggle'
-import { signOut } from '@/app/auth/actions'
+import { getuser, signOut } from '@/app/auth/actions'
 import { UserProfileCard } from './user-profile-card'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
 
-interface UserNavProps {
-  name: string
-  email: string
-  image?: string
-}
+export const NavUser = () => {
+  const [userData, setUserData] = useState<{
+    username?: string
+    email?: string
+    image?: string
+  } | null>(null)
+  const supabase = createClient()
 
-export const NavUser = ({ email, name, image }: UserNavProps) => {
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const user = await getuser()
+      if (user) {
+        setUserData({
+          username: user.user_metadata?.username || user.email?.split('@')[0],
+          email: user.email || '',
+          image: user.user_metadata?.avatar_url,
+        })
+      }
+    }
+
+    fetchUserProfile()
+  }, [supabase])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="hover:bg-accent bg-background relative flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-2 pr-2 shadow-lg transition-all">
-          <UserProfileCard name={name} email={email} image={image} />
+          <UserProfileCard
+            name={userData?.username || ''}
+            email={userData?.email || ''}
+            image={userData?.image}
+          />
           <ChevronsUpDown size={18} />
         </div>
       </DropdownMenuTrigger>
@@ -32,7 +56,11 @@ export const NavUser = ({ email, name, image }: UserNavProps) => {
         sideOffset={4}
       >
         <DropdownMenuLabel>
-          <UserProfileCard name={name} email={email} image={image} />
+          <UserProfileCard
+            name={userData?.username || ''}
+            email={userData?.email || ''}
+            image={userData?.image}
+          />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer py-3">

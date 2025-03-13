@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import type { ElementType } from 'react'
+import { ElementType } from 'react'
 
 interface NavigationItemProps {
   href: string

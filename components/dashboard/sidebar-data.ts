@@ -5,7 +5,6 @@ import {
   LucideClipboardCheck,
 } from 'lucide-react'
 import type { ElementType } from 'react'
-import React from 'react'
 
 // Define the navigation item structure
 export interface NavItem {
@@ -17,7 +16,7 @@ export interface NavItem {
 export interface Project {
   id: string
   name: string
-  icon?: React.ReactNode | ElementType
+  icon?: ElementType
 }
 
 // Navigation items definition
@@ -57,5 +56,4 @@ export const sampleProjects: Project[] = [
 export const user = {
   name: 'John Doe',
   email: 'john.doe@example.com',
-  image: '/placeholder.svg?height=32&width=32',
 }
