@@ -5,6 +5,7 @@ import { ThemeToggle } from '../ui/theme-toggle'
 import { Logo } from '../ui/logo'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { FooterLinkSection } from './footer-links'
 
 const navigationItems = [
   { title: 'Features', href: 'features' },
@@ -46,7 +47,6 @@ export function LandingFooter() {
         className="pointer-events-none object-cover"
         priority
       />
-
       <div className="glass-morph relative z-10">
         <div className="container mx-auto px-6 py-12 text-white">
           <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
@@ -61,8 +61,23 @@ export function LandingFooter() {
               </div>
               <div className="flex flex-col gap-4">
                 <div className="space-x-2">
-                  {socialLinks.map((link) => (
-                    <SocialButton key={link.label} {...link} />
+                  {socialLinks.map(({ href, icon: Icon, label }) => (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      asChild
+                      key={label + href}
+                    >
+                      <Link
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                      >
+                        <Icon size={24} />
+                      </Link>
+                    </Button>
                   ))}
                 </div>
                 <ThemeToggle />
@@ -111,57 +126,5 @@ export function LandingFooter() {
         </div>
       </div>
     </footer>
-  )
-}
-
-// Reusable component for footer link sections
-function FooterLinkSection({
-  title,
-  links,
-}: {
-  title: string
-  links: { title: string; href: string }[]
-}) {
-  return (
-    <div>
-      <h3 className="mb-4 font-semibold text-white">{title}</h3>
-      <ul className="space-y-2">
-        {links.map((item) => (
-          <li key={item.title}>
-            <Link
-              href={item.href}
-              className="text-sm text-gray-200 transition-colors hover:text-white"
-            >
-              {item.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-// Reusable component for social media buttons
-function SocialButton({
-  icon: Icon,
-  href,
-  label,
-}: {
-  icon: React.ElementType
-  href: string
-  label: string
-}) {
-  return (
-    <Button variant="outline" size="icon" asChild>
-      <Link
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={label}
-        className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-      >
-        <Icon size={24} />
-      </Link>
-    </Button>
   )
 }

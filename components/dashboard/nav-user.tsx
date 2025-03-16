@@ -10,7 +10,7 @@ import {
 } from '../ui/dropdown-menu'
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '../ui/theme-toggle'
-import { getuser, signOut } from '@/app/auth/actions'
+import { getuser, signOut } from '@/lib/server/actions'
 import { UserProfileCard } from './user-profile-card'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'

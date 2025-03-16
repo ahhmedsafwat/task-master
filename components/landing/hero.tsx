@@ -37,7 +37,7 @@ export default function Hero() {
               variants={enteryVariant}
               initial="initial"
               animate="animate"
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
             >
               Streamline Your Tasks with TaskMaster
             </m.h1>
@@ -46,7 +46,7 @@ export default function Hero() {
               variants={enteryVariant}
               initial="initial"
               animate="animate"
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
             >
               An open-source alternative for Notion and Linear (Not Really)
             </m.p>
@@ -55,7 +55,7 @@ export default function Hero() {
               variants={enteryVariant}
               initial="initial"
               animate="animate"
-              transition={{ duration: 0.5, delay: 0.6 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
             >
               <Button asChild variant="outline" className="hover-scale">
                 <Link href="https://github.com/ahhmedsafwat/task-master">

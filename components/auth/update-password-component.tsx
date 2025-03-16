@@ -1,5 +1,5 @@
 'use client'
-import { updatePassword } from '@/app/auth/actions'
+import { updatePassword } from '@/lib/server/actions'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { SubmitButton } from '../ui/submit-button'
