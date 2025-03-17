@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith('/auth/update-password')
   ) {
     const url = request.nextUrl.clone()
-    url.pathname = '/overview'
+    url.pathname = '/dashboard/overview'
     return NextResponse.redirect(url)
   }
 

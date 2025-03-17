@@ -65,7 +65,7 @@ export async function login(
     return {
       status: 'success',
       message: 'Logged in successfully!',
-      redirectTo: '/overview',
+      redirectTo: '/dashboard/overview',
     }
   } catch (error) {
     console.error('Login error:', error)
@@ -135,7 +135,7 @@ export async function signUp(
     return {
       status: 'success',
       message: 'Account created successfully!',
-      redirectTo: '/overview',
+      redirectTo: '/dashboard/overview',
     }
   } catch (error) {
     console.error('Signup error:', error)
@@ -254,7 +254,7 @@ export async function updatePassword(
     return {
       status: 'success',
       message: 'Password updated successfully!',
-      redirectTo: '/overview',
+      redirectTo: '/dashboard/overview',
     }
   } catch (error) {
     console.error('Reset password error:', error)

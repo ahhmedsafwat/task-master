@@ -23,22 +23,22 @@ export interface Project {
 export const navItems: NavItem[] = [
   {
     title: 'Overview',
-    href: '/overview',
+    href: '/dashboard/overview',
     icon: LayoutDashboard,
   },
   {
     title: 'Tasks',
-    href: '/tasks',
+    href: '/dashboard/my-tasks',
     icon: LucideClipboardCheck,
   },
   {
     title: 'Analytics',
-    href: '/analytics',
+    href: '/dashboard/analytics',
     icon: ChartColumnBigIcon,
   },
   {
     title: 'Inbox',
-    href: '/notifications',
+    href: '/dashboard/notifications',
     icon: Inbox,
   },
 ]
