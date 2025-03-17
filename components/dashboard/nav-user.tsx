@@ -13,7 +13,6 @@ import { ThemeToggle } from '../ui/theme-toggle'
 import { getuser, signOut } from '@/lib/server/actions'
 import { UserProfileCard } from './user-profile-card'
 import { useEffect, useState } from 'react'
-import { createClient } from '@/utils/supabase/client'
 
 export const NavUser = () => {
   const [userData, setUserData] = useState<{
@@ -21,7 +20,6 @@ export const NavUser = () => {
     email?: string
     image?: string
   } | null>(null)
-  const supabase = createClient()
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -36,7 +34,7 @@ export const NavUser = () => {
     }
 
     fetchUserProfile()
-  }, [supabase])
+  }, [])
 
   return (
     <DropdownMenu>
