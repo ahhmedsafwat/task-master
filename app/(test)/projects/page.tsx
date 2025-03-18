@@ -132,11 +132,11 @@ export default function TestPage() {
 
         <button
           onClick={async () => {
-            const { data, error } = await getProjects({ user: user })
+            const { data, error } = await getProjects()
             if (error) throw error.message
             console.log(data)
             if (data) {
-              setProjects(data[0] as Tables<'projects'>[])
+              setProjects(data as Tables<'projects'>[])
             }
           }}
           className="bg-main rounded px-4 py-2 text-white"
