@@ -14,7 +14,6 @@ import {
   deleteTask,
   getAssignees,
   getProjectMembers,
-  getProjects,
   getTasks,
   removeAssignee,
   removeSelfFromProject,
@@ -23,6 +22,7 @@ import {
   updateProjectMemberRole,
   updateTask,
 } from '@/lib/server/quieries'
+import { getProjects } from '@/lib/server/projects-actions'
 import ContentDisplay from '@/components/ContentDisplay'
 import { TablesInsert } from '@/lib/types/database.typs'
 

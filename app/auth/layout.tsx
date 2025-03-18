@@ -14,7 +14,7 @@ export default function AuthLayout({
   return (
     <section className="min-h-screen p-8">
       <Logo href="/" />
-      <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div className="flex h-full w-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">{children}</div>
       </div>
     </section>

@@ -14,7 +14,7 @@ export function SidebarHeader({
   isMobile,
 }: SidebarHeaderProps) {
   return (
-    <div className="bg-background flex items-center justify-between rounded-lg border px-2 py-2 shadow">
+    <div className="flex items-center justify-between rounded-lg px-1">
       <Logo
         href={'/dashboard/overview'}
         textClassName="sm:text-sm"
@@ -30,7 +30,7 @@ export function SidebarHeader({
         variant="ghost"
         size={'smIcon'}
         onClick={togglePin}
-        className="hover:bg-primary-foreground/10 box-content cursor-pointer rounded-md p-1 transition-colors"
+        className="hover:bg-accent box-content cursor-pointer rounded-md p-1 transition-colors duration-300"
       >
         {isPinned ? (
           <PanelLeftClose size={20} />

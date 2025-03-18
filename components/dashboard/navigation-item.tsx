@@ -25,7 +25,8 @@ export function NavigationItem({
       className={cn(
         'text-secondary-foreground hover:bg-accent hover:text-primary-foreground flex items-center justify-between rounded-md px-2 py-1.5 transition-colors',
         {
-          'bg-accent text-primary-foreground': isActive,
+          'bg-background text-primary-foreground font-semibold shadow':
+            isActive,
         },
       )}
       onClick={onClick}
