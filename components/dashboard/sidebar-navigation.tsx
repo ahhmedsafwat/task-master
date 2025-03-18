@@ -1,16 +1,47 @@
 import { NavigationItem } from './navigation-item'
 import { usePathname } from 'next/navigation'
-import type { NavItem } from './sidebar-data'
+import {
+  LayoutDashboard,
+  Inbox,
+  BarChartBigIcon as ChartColumnBigIcon,
+  LucideClipboardCheck,
+} from 'lucide-react'
+import type { ElementType } from 'react'
 
+export interface NavItem {
+  title: string
+  href: string
+  icon: ElementType
+}
+
+// Navigation items definition
+export const navItems: NavItem[] = [
+  {
+    title: 'Overview',
+    href: '/dashboard/overview',
+    icon: LayoutDashboard,
+  },
+  {
+    title: 'Tasks',
+    href: '/dashboard/my-tasks',
+    icon: LucideClipboardCheck,
+  },
+  {
+    title: 'Analytics',
+    href: '/dashboard/analytics',
+    icon: ChartColumnBigIcon,
+  },
+  {
+    title: 'Inbox',
+    href: '/dashboard/notifications',
+    icon: Inbox,
+  },
+]
 interface SidebarNavigationProps {
-  navItems: NavItem[]
   onItemClick?: () => void
 }
 
-export function SidebarNavigation({
-  navItems,
-  onItemClick,
-}: SidebarNavigationProps) {
+export function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
   const pathname = usePathname()
 
   return (

@@ -8,7 +8,6 @@ import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarHeader } from './sidebar-header'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
-import { navItems, sampleProjects } from './sidebar-data'
 
 export function AppSidebar() {
   // Use our custom sidebar hook
@@ -38,6 +37,7 @@ export function AppSidebar() {
 
       {/* Main navigation container */}
       <nav
+        aria-label="Main navigation"
         className={cn(
           'z-50 h-screen transition-all duration-300 ease-in-out',
           isPinned && !isMobile ? 'w-60' : 'w-0',
@@ -69,10 +69,10 @@ export function AppSidebar() {
           />
           <Separator decorative className="my-3" />
           {/* Navigation items */}
-          <SidebarNavigation navItems={navItems} onItemClick={closeNav} />
+          <SidebarNavigation onItemClick={closeNav} />
           <Separator decorative className="my-3" />
           {/* Projects section */}
-          <SidebarProjects projects={sampleProjects} onItemClick={closeNav} />
+          <SidebarProjects onItemClick={closeNav} />
 
           <Separator decorative className="my-3" />
 

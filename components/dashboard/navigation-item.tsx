@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import { ElementType } from 'react'
+import { ElementType, ReactNode } from 'react'
 
 interface NavigationItemProps {
   href: string
   icon?: ElementType
+  customIcon?: ReactNode
   title: string
   isActive?: boolean
   onClick?: () => void
@@ -13,6 +14,7 @@ interface NavigationItemProps {
 export function NavigationItem({
   href,
   icon: Icon,
+  customIcon,
   title,
   isActive = false,
   onClick,
@@ -29,12 +31,13 @@ export function NavigationItem({
       onClick={onClick}
     >
       <div className="flex items-center">
-        {Icon && (
-          <Icon
-            size={16}
-            className={cn('mr-2', isActive ? 'opacity-100' : 'opacity-80')}
-          />
-        )}
+        {customIcon ||
+          (Icon && (
+            <Icon
+              size={16}
+              className={cn('mr-2', isActive ? 'opacity-100' : 'opacity-80')}
+            />
+          ))}
         <span className="text-sm">{title}</span>
       </div>
     </Link>

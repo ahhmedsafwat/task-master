@@ -266,9 +266,7 @@ export const createProject = async ({
   return { data, error: null }
 }
 
-export const getProjects = async ({ user }: { user: User }) => {
-  if (!user) return { data: null, error: new Error('User not provided') }
-
+export const getProjects = async () => {
   const supabase = await createSupabaseClient()
   const projects = await supabase.from('projects').select()
 
@@ -276,19 +274,7 @@ export const getProjects = async ({ user }: { user: User }) => {
     return { data: null, error: projects.error }
   }
 
-  const project_members = await supabase
-    .from('project_members')
-    .select()
-    .eq('project_id', projects.data[0].id)
-
-  if (project_members.error) {
-    return { data: null, error: project_members.error }
-  }
-
-  if (!projects.data || !project_members.data) {
-    return { data: null, error: new Error('No projects found') }
-  }
-  return { data: [projects.data, project_members.data], error: null }
+  return { data: projects.data, error: null }
 }
 
 export const createProjectMember = async ({
