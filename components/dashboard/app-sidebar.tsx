@@ -1,6 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import { Separator } from '../ui/separator'
 import { MenuIcon } from '../ui/menu-icon'
 import { NavUser } from './nav-user'
@@ -8,8 +8,16 @@ import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarHeader } from './sidebar-header'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
+import { Project } from '@/lib/types/types'
+import { User } from '@supabase/supabase-js'
 
-export function AppSidebar() {
+export function AppSidebar({
+  userData,
+  projects,
+}: {
+  userData: User
+  projects: Project[]
+}) {
   // Use our custom sidebar hook
   const {
     isPinned,
@@ -72,11 +80,13 @@ export function AppSidebar() {
           <SidebarNavigation onItemClick={closeNav} />
           <Separator decorative className="my-3" />
           {/* Projects section */}
-          <SidebarProjects onItemClick={closeNav} />
+          <SidebarProjects onItemClick={closeNav} projects={projects} />
 
           <Separator decorative className="my-3" />
 
-          <NavUser />
+          <Suspense fallback={<div>Loading...</div>}>
+            <NavUser userData={userData} />
+          </Suspense>
         </div>
       </nav>
 

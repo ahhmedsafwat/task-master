@@ -1,5 +1,3 @@
-'use client'
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,45 +8,21 @@ import {
 } from '../ui/dropdown-menu'
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '../ui/theme-toggle'
-import { getuser, signOut } from '@/lib/server/auth-actions'
+import { signOut } from '@/lib/server/auth-actions'
 import { UserProfileCard } from './user-profile-card'
-import { useEffect, useState } from 'react'
 
-export const NavUser = () => {
-  const [userData, setUserData] = useState<{
-    username?: string
-    email?: string
-    image?: string
-  } | null>(null)
+import { User } from '@supabase/supabase-js'
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setIsLoading(true)
-    const fetchUserProfile = async () => {
-      const user = await getuser()
-      if (user) {
-        setUserData({
-          username: user.user_metadata?.username || user.email?.split('@')[0],
-          email: user.email || '',
-          image: user.user_metadata?.avatar_url,
-        })
-      }
-      setIsLoading(false)
-    }
-
-    fetchUserProfile()
-  }, [])
-
+export const NavUser = (props: { userData: User }) => {
+  const { email, user_metadata } = props.userData
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="hover:bg-accent bg-background relative flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-2 pr-2 shadow-lg transition-all">
           <UserProfileCard
-            isLoading={isLoading}
-            name={userData?.username || ''}
-            email={userData?.email || ''}
-            image={userData?.image}
+            name={user_metadata.username || email?.split('@')[0]}
+            email={email || ''}
+            image={user_metadata.avatar_url}
           />
           <ChevronsUpDown size={18} />
         </div>
@@ -60,10 +34,9 @@ export const NavUser = () => {
       >
         <DropdownMenuLabel>
           <UserProfileCard
-            isLoading={isLoading}
-            name={userData?.username || ''}
-            email={userData?.email || ''}
-            image={userData?.image}
+            name={user_metadata.username || email?.split('@')[0]}
+            email={email || ''}
+            image={user_metadata.avatar_url}
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -80,7 +53,6 @@ export const NavUser = () => {
           className="cursor-pointer"
           onClick={async () => {
             await signOut()
-            setUserData(null)
           }}
         >
           <LogOut className="text-destructive focus:text-destructive" />

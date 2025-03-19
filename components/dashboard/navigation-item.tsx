@@ -1,10 +1,13 @@
+import { IconComponent } from '@/lib/types/types'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import { ElementType, ReactNode } from 'react'
+import { ReactNode } from 'react'
+
+// Create a more specific type for icons that can accept props like size and className
 
 interface NavigationItemProps {
   href: string
-  icon?: ElementType
+  icon?: IconComponent
   customIcon?: ReactNode
   title: string
   isActive?: boolean

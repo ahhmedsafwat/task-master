@@ -1,5 +1,3 @@
-'use client'
-
 import { Laptop, Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTheme } from 'next-themes'

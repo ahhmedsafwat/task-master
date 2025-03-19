@@ -14,7 +14,7 @@ export default function Errors({
   }, [error])
 
   return (
-    <div>
+    <div className="grid h-screen w-screen place-content-center">
       <h2>Something went wrong!</h2>
       <button type="button" onClick={() => reset()}>
         Try again

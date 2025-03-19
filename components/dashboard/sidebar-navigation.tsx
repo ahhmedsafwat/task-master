@@ -5,13 +5,13 @@ import {
   Inbox,
   BarChartBigIcon as ChartColumnBigIcon,
   LucideClipboardCheck,
+  LucideIcon,
 } from 'lucide-react'
-import type { ElementType } from 'react'
 
 export interface NavItem {
   title: string
   href: string
-  icon: ElementType
+  icon: LucideIcon
 }
 
 // Navigation items definition

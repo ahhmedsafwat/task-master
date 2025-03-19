@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from 'react-icons/ri'
 import Image from 'next/image'
-import { ThemeToggle } from '../ui/theme-toggle'
 import { Logo } from '../ui/logo'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
@@ -59,28 +58,25 @@ export function LandingFooter() {
                   individuals.
                 </p>
               </div>
-              <div className="flex flex-col gap-4">
-                <div className="space-x-2">
-                  {socialLinks.map(({ href, icon: Icon, label }) => (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
-                      key={label + href}
+              <div className="flex gap-3">
+                {socialLinks.map(({ href, icon: Icon, label }) => (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    asChild
+                    key={label + href}
+                  >
+                    <Link
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                     >
-                      <Link
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={label}
-                        className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                      >
-                        <Icon size={24} />
-                      </Link>
-                    </Button>
-                  ))}
-                </div>
-                <ThemeToggle />
+                      <Icon size={24} />
+                    </Link>
+                  </Button>
+                ))}
               </div>
             </div>
 

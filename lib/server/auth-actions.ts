@@ -264,23 +264,3 @@ export async function updatePassword(
     }
   }
 }
-
-/**
- * Get user data
- * Can be used to check if user is authenticated
- */
-export async function getuser() {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase.auth.getUser()
-
-    if (error || !data.user) {
-      return null
-    }
-
-    return data.user
-  } catch (error) {
-    console.error('Get session error:', error)
-    return null
-  }
-}
