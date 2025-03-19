@@ -1,4 +1,4 @@
-'use server'
+// import 'server-only'
 import { createSupabaseClient } from '@/utils/supabase/server'
 
 export const getProjects = async () => {

@@ -19,7 +19,7 @@ export function AppSidebar() {
     handleNavMouseEnter,
     handleNavMouseLeave,
     closeNav,
-  } = useSidebar()
+  } = useSidebar({ initialPinned: false })
 
   // References
   const navRef = useRef<HTMLDivElement>(null)

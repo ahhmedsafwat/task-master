@@ -2,7 +2,7 @@
 import { Label } from '@radix-ui/react-label'
 import { Input } from '../ui/input'
 import { SubmitButton } from '../ui/submit-button'
-import { login } from '@/lib/server/actions'
+import { login } from '@/lib/server/auth-actions'
 import { useActionState, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'

@@ -22,6 +22,10 @@ export function useSidebar({ initialPinned = true }: UseSidebarOptions = {}) {
       if (mobile && isPinned) {
         setIsPinned(false)
       }
+
+      if (!mobile && !isPinned) {
+        setIsPinned(true)
+      }
     }
 
     // Initial check
