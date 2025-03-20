@@ -27,19 +27,20 @@ export default function Hero() {
         <div className="absolute inset-0 -z-20">
           <ThreeBackground></ThreeBackground>
         </div>
-        <div className="container relative mx-auto px-4 py-36">
-          <div className="mb-3 text-center">
+        <div className="container relative mx-auto px-4 py-28">
+          <div className="text-center">
             <m.h1
-              className="font-cabinet mx-auto mb-8 max-w-4xl text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl"
+              className="font-cabinet mx-auto mb-4 text-4xl font-black tracking-tighter sm:text-5xl md:text-6xl"
               variants={enteryVariant}
               initial="initial"
               animate="animate"
               transition={{ duration: 0.4 }}
             >
-              Streamline Your Tasks with TaskMaster
+              Schedule. Organize.{' '}
+              <span className="text-rose-700">Accomplish.</span>
             </m.h1>
             <m.p
-              className="text-primary-foreground mx-auto mb-10 max-w-2xl font-mono text-sm sm:text-xl md:text-2xl"
+              className="text-primary-foreground mx-auto mb-10 max-w-xl font-mono text-sm sm:text-base md:text-xl"
               variants={enteryVariant}
               initial="initial"
               animate="animate"
@@ -70,7 +71,7 @@ export default function Hero() {
           </div>
         </div>
       </LazyMotion>
-      <div className="mx-auto aspect-video max-w-6xl overflow-hidden rounded-lg px-4 shadow-xl">
+      <div className="mx-auto aspect-video max-w-6xl overflow-hidden rounded-lg shadow-xl">
         <div className="bg-secondary flex h-full items-center justify-center">
           <p className="text-2xl font-semibold">Your Video Showcase Here</p>
         </div>
