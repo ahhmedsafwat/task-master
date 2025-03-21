@@ -35,7 +35,7 @@ create table public.profiles (
   id uuid references auth.users on delete cascade not null primary key, -- Unique profile identifier (matches auth.users id)
   email text unique not null, -- User email address; must be unique
   username text unique, -- Optional username; must be unique if provided
-  full_name text, -- Optional full name
+  avatar_url text, -- URL to the user's profile picture
   created_at timestamp with time zone default current_timestamp not null, -- Automatically records when the profile is created
   updated_at timestamp with time zone default current_timestamp not null -- Automatically records when the profile is last updated
 )
@@ -46,6 +46,7 @@ create table public.tasks (
   id uuid default gen_random_uuid () primary key, -- Unique task ID generated automatically
   title text not null, -- Title of the task (required)
   description text, -- Optional description of the task
+  markdown_content text, -- Optional markdown content for the task
   is_private boolean default false, -- Whether the task is private (default is public)
   creator_id uuid references public.profiles (id) not null, -- References the profile that created the task
   project_id uuid references public.projects (id) on delete cascade, -- Optional association with a project; deletion cascades
@@ -77,6 +78,7 @@ create table public.projects (
   id UUID primary key default gen_random_uuid (), -- Unique project ID generated automatically
   name TEXT not null, -- Name of the project (required)
   description TEXT, -- Optional project description
+  project_covers  TEXT, -- URL to the project cover 
   creator_id UUID references public.profiles (id) on delete CASCADE not null, -- References the profile that created the project
   created_at TIMESTAMPTZ default NOW() not null, -- Time of project creation
   updated_at TIMESTAMPTZ default NOW() not null -- Time of last update
@@ -156,6 +158,7 @@ create policy "users can delete their profiles" on "public"."profiles" as PERMIS
   ((select auth.uid () as uid) = id)
 );
 
+
 /* ----------------- TASKS POLICIES --------------------- */
 -- First, drop any existing policy for viewing tasks.
 
@@ -165,7 +168,7 @@ create policy "creator and project members can view public tasks" on public.task
 select to authenticated using (
   (is_private = false)
   or creator_id = auth.uid ()
-  or has_project_access (project_id)
+  or is_project_member (project_id)
 );
 
 -- Only allow task creation when the creator_id equals the current user's id.
@@ -281,7 +284,7 @@ create policy "Only creators can delete projects" on public.projects for DELETE 
 -- Allow members with project access to view project memberships.
 create policy "Project members can view other members" on public.project_members for
 select to authenticated using (
-  has_project_access (project_id)
+  is_project_member (project_id)
 );
 
 -- Allow project creators and admins to add members.
@@ -328,6 +331,267 @@ create policy "Delete own notifications" on public.notifications for DELETE usin
 create policy "System creates notifications" on public.notifications for INSERT
 with check (false);
 
+-- =============================================================
+-- COPY AND PASTE IN THE SUPABASE SQL EDITOR TO CREATE STORAGE BUCKETS
+-- =============================================================
+
+-- 1. Create a bucket named avatars for profile images 
+-- 2. Create a bucket named project_covers for project covers 
+-- 3. Create a bucket named task_attachments for task files and images.
+insert into
+  storage.buckets (
+    id,
+    name,
+    public,
+    file_size_limit,
+    allowed_mime_types
+  )
+values
+  (
+    'avatars',
+    'avatars',
+    true,
+    5242880,
+    array['image/jpeg', 'image/png', 'image/jpg]
+  ),
+  (
+    'project-covers',
+    'project-covers',
+    true,
+    5242880,
+    array['image/jpeg', 'image/png', 'image/jpg']
+  ),
+  (
+    'task-attachments',
+    'task-attachments',
+    false,
+    10485760,
+    array[
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'application/pdf',
+      'text/plain',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ]
+  );
+
+-- All authenticated users can view any avatar, matching your profiles RLS where anyone can read profile data. Use the policy
+CREATE POLICY "Allow read all avatars" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'avatars');
+-- Users can only upload their own avatars (filename must start with user's UUID)
+create policy "Users can upload their own avatars" on storage.objects for INSERT to authenticated
+with
+  check (
+    bucket_id = 'avatars'
+    and (storage.foldername (name)) [1] = auth.uid ()::text
+  );
+
+-- Users can only update/replace their own avatars
+create policy "Users can update their own avatars" on storage.objects
+for update
+  to authenticated using (
+    bucket_id = 'avatars'
+    and (storage.foldername (name)) [1] = auth.uid ()::text
+  );
+
+-- Users can only delete their own avatars
+create policy "Users can delete their own avatars" on storage.objects for DELETE to authenticated using (
+  bucket_id = 'avatars'
+  and (storage.foldername (name)) [1] = auth.uid ()::text
+);
+
+-- Project member can view project cover
+create policy "Project member can view project cover" on storage.objects for
+select
+  to authenticated using (bucket_id = 'project-cover');
+
+-- Project creator and admin can update and insert project covers
+create policy "Only project admins/creators can insert covers" on storage.objects for insert to authenticated
+with
+  check (
+    bucket_id = 'project_covers'
+    and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
+    or (
+      select
+        creator_id
+      from
+        public.projects
+      where
+        id = (storage.foldername (name)) [1]::uuid
+    ) = auth.uid ()
+  );
+
+create policy "Only project admins/creators can upload covers" on storage.objects
+for update
+  to authenticated
+with
+  check (
+    bucket_id = 'project_covers'
+    and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
+    or (
+      select
+        creator_id
+      from
+        public.projects
+      where
+        id = (storage.foldername (name)) [1]::uuid
+    ) = auth.uid ()
+  );
+
+-- Project creator and admin can delete project covers
+create policy "Project creator and admin can delete project covers" on storage.objects for DELETE to authenticated using (
+  bucket_id = 'project-cover'
+  and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
+  or (
+    select
+      creator_id
+    from
+      public.projects
+    where
+      id = (storage.foldername (name)) [1]::uuid
+  ) = auth.uid ()
+);
+
+
+
+-- Policy for read access: Admins, members, and task creators can view attachments
+create policy "Task attachments read access" on storage.objects 
+for select using (
+  bucket_id = 'task-attachments' AND
+  exists (
+    select 1 from public.tasks
+    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
+    and (
+      -- Task is part of a project, and user is an admin, member, or task creator
+      (
+        project_id is not null AND
+        (
+          public.is_project_member(project_id) OR -- Admins and members
+          creator_id = auth.uid() -- Task creator
+        )
+      )
+      OR
+      -- Task is private, and user is the task creator
+      (
+        project_id is null AND
+        is_private = true AND
+        creator_id = auth.uid() -- Only the task creator
+      )
+    )
+  )
+);
+
+-- Policy for insert/upload: Admins, members, and task creators can upload attachments
+create policy "Task attachments upload access" on storage.objects
+for insert with check (
+  bucket_id = 'task-attachments' AND
+  exists (
+    select 1 from public.tasks
+    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
+    and (
+      -- Task is part of a project, and user is an admin, member, or task creator
+      (
+        project_id is not null AND
+        (
+          public.is_project_member(project_id) OR -- Admins and members
+          creator_id = auth.uid() -- Task creator
+        )
+      )
+      OR
+      -- Task is private, and user is the task creator
+      (
+        project_id is null AND
+        is_private = true AND
+        creator_id = auth.uid() -- Only the task creator
+      )
+    )
+  )
+);
+
+-- Policy for update: Admins, members, and task creators can update attachments
+create policy "Task attachments update access" on storage.objects
+for update using (
+  bucket_id = 'task-attachments' AND
+  exists (
+    select 1 from public.tasks
+    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
+    and (
+      -- Task is part of a project, and user is an admin, member, or task creator
+      (
+        project_id is not null AND
+        (
+          public.is_project_member(project_id) OR -- Admins and members
+          creator_id = auth.uid() -- Task creator
+        )
+      )
+      OR
+      -- Task is private, and user is the task creator
+      (
+        project_id is null AND
+        is_private = true AND
+        creator_id = auth.uid() -- Only the task creator
+      )
+    )
+  )
+) with check (
+  bucket_id = 'task-attachments' AND
+  exists (
+    select 1 from public.tasks
+    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
+    and (
+      -- Task is part of a project, and user is an admin, member, or task creator
+      (
+        project_id is not null AND
+        (
+          public.is_project_member(project_id) OR -- Admins and members
+          creator_id = auth.uid() -- Task creator
+        )
+      )
+      OR
+      -- Task is private, and user is the task creator
+      (
+        project_id is null AND
+        is_private = true AND
+        creator_id = auth.uid() -- Only the task creator
+      )
+    )
+  )
+);
+
+-- Policy for delete: Admins, members, and task creators can delete attachments
+create policy "Task attachments delete access" on storage.objects
+for delete using (
+  bucket_id = 'task-attachments' AND
+  exists (
+    select 1 from public.tasks
+    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
+    and (
+      -- Task is part of a project, and user is an admin, member, or task creator
+      (
+        project_id is not null AND
+        (
+          public.is_project_member(project_id) OR -- Admins and members
+          creator_id = auth.uid() -- Task creator
+        )
+      )
+      OR
+      -- Task is private, and user is the task creator
+      (
+        project_id is null AND
+        is_private = true AND
+        creator_id = auth.uid() -- Only the task creator
+      )
+    )
+  )
+);
+
+
+
+
+
+
 -- *************************************************************
 -- TRIGGER FUNCTIONS & TRIGGERS
 -- *************************************************************
@@ -337,8 +601,8 @@ with check (false);
 create or replace function handle_new_user () returns trigger
 set search_path = '' as $$
 begin
-  insert into public.profiles(id, email, username)
-  values(new.id, new.email, new.raw_user_meta_data->>'username');
+  insert into public.profiles(id, email, username, avatar_url)
+  values(new.id, new.email, new.raw_user_meta_data->>'username', new.raw_user_meta_data->>'avatar_url');
   return new;
 end;
 $$ language plpgsql security definer;
@@ -366,7 +630,9 @@ execute FUNCTION delete_auth_user_on_profile_delete ();
 /* ---------- Notifications for Project Invitations ---------- */
 
 -- Function to generate a notification when a user is invited to a project.
-create or replace function notify_project_invitation () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER as $$
+create or replace function notify_project_invitation () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER 
+set search_path = ''
+as $$
 BEGIN
   INSERT INTO public.notifications (
     recipient_id,
@@ -394,7 +660,9 @@ execute FUNCTION notify_project_invitation ();
 
 
 -- Function to send a notification when a user is assigned to a task.
-create or replace function notify_task_assignment () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER as $$
+create or replace function notify_task_assignment () RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER
+set search_path = ''
+ as $$
 BEGIN
   INSERT INTO public.notifications (
     recipient_id,
@@ -424,6 +692,7 @@ CREATE OR REPLACE FUNCTION check_due_soon_tasks(reminder_hours INTEGER)
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
+set search_path = ''
 AS $$
 BEGIN
   INSERT INTO public.notifications (
@@ -448,6 +717,7 @@ CREATE OR REPLACE FUNCTION check_overdue_tasks()
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
+set search_path = ''
 AS $$
 BEGIN
   INSERT INTO public.notifications (
@@ -500,7 +770,9 @@ select cron.schedule (
 -- *************************************************************
 
 -- Function to update the "updated_at" column to the current timestamp upon an update.
-create or replace function public.update_timestamp () returns trigger as $$
+create or replace function public.update_timestamp () returns trigger 
+set search_path = ''
+as $$
 begin
   new.updated_at = current_timestamp;
   return new;
@@ -528,7 +800,8 @@ execute procedure update_timestamp ();
 
 -- Helper function to check if the current user (via auth.uid()) is the creator of a task.
 create or replace function is_task_creator (_task_id UUID) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER
-set search_path = public as $$
+set search_path = ''
+ as $$
 BEGIN
   RETURN EXISTS (
     SELECT 1 FROM tasks
@@ -539,18 +812,19 @@ END;
 $$;
 
 -- Helper function to verify if the current user has access to a project (is a member).
-create or replace function has_project_access (_project_id UUID) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER as $$
+create or replace function is_project_member (_project_id UUID) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER set search_path = '' as $$
 BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.project_members
     WHERE project_id = _project_id
+      AND role in ('ADMIN', 'MEMBER')
       AND user_id = auth.uid()
   );
 END;
 $$;
 
 -- Helper function to check if the current user is an admin in a specified project.
-create or replace function is_project_admin (_project_id uuid) returns boolean language plpgsql security definer as $$
+create or replace function is_project_admin (_project_id uuid) returns boolean language plpgsql security definer set search_path = '' as $$
 begin
   return exists (
     select 1

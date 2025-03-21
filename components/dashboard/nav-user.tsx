@@ -15,6 +15,7 @@ import { User } from '@supabase/supabase-js'
 
 export const NavUser = (props: { userData: User }) => {
   const { email, user_metadata } = props.userData
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
