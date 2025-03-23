@@ -1,5 +1,5 @@
 // utils/supabase.ts
-import { Database } from '@/lib/types/database.typs'
+import { Database } from '@/lib/types/database.types'
 import { createServerClient } from '@supabase/ssr'
 
 import { cookies } from 'next/headers'

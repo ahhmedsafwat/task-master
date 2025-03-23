@@ -1,6 +1,6 @@
 import { AppSidebar } from '@/components/dashboard/app-sidebar'
-import { getuser } from '@/lib/server/server-fetching'
-import { getProjects } from '@/lib/server/server-fetching'
+
+import { getProfile, getProjects } from '@/lib/server/server-fetching'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -13,13 +13,13 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getuser()
+  const user = await getProfile()
   const { data: projects } = await getProjects()
-  if (!user || !projects) return null
+  if (!user.data || !projects) return null
 
   return (
     <section className="bg-secondary dark:bg-primary flex min-h-screen">
-      <AppSidebar userData={user} projects={projects} />
+      <AppSidebar userData={user.data} projects={projects} />
       <div className="bg-background m-1.5 flex-1 rounded-md border">
         {children}
       </div>

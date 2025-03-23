@@ -1,5 +1,5 @@
 import { ElementType } from 'react'
-import { Tables } from './database.typs'
+import { Tables } from './database.types'
 
 export interface AuthResponse {
   status: 'error' | 'success' | 'idle'
@@ -19,7 +19,7 @@ export interface Project extends Tables<'projects'> {
 }
 
 export interface userProfile {
-  name: string
   email: string
-  image?: string
+  avatar_url?: string
+  username: string | null
 }

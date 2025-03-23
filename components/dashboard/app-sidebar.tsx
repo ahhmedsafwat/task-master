@@ -8,14 +8,13 @@ import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarHeader } from './sidebar-header'
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
-import { Project } from '@/lib/types/types'
-import { User } from '@supabase/supabase-js'
+import { Project, userProfile } from '@/lib/types/types'
 
 export function AppSidebar({
   userData,
   projects,
 }: {
-  userData: User
+  userData: userProfile
   projects: Project[]
 }) {
   // Use our custom sidebar hook

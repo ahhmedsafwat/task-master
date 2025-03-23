@@ -10,20 +10,19 @@ import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '../ui/theme-toggle'
 import { signOut } from '@/lib/server/auth-actions'
 import { UserProfileCard } from './user-profile-card'
+import { userProfile } from '@/lib/types/types'
 
-import { User } from '@supabase/supabase-js'
-
-export const NavUser = (props: { userData: User }) => {
-  const { email, user_metadata } = props.userData
+export const NavUser = (props: { userData: userProfile }) => {
+  const { email, username, avatar_url } = props.userData
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="hover:bg-accent bg-background relative flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-2 pr-2 shadow-lg transition-all">
           <UserProfileCard
-            name={user_metadata.username || email?.split('@')[0]}
+            name={username || email?.split('@')[0]}
             email={email || ''}
-            image={user_metadata.avatar_url}
+            image={avatar_url}
           />
           <ChevronsUpDown size={18} />
         </div>
@@ -35,9 +34,9 @@ export const NavUser = (props: { userData: User }) => {
       >
         <DropdownMenuLabel>
           <UserProfileCard
-            name={user_metadata.username || email?.split('@')[0]}
+            name={username || email?.split('@')[0]}
             email={email || ''}
-            image={user_metadata.avatar_url}
+            image={avatar_url}
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
