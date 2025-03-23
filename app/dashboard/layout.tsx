@@ -1,6 +1,6 @@
 import { AppSidebar } from '@/components/dashboard/app-sidebar'
 
-import { getProfile, getProjects } from '@/lib/server/server-fetching'
+import { getProfile, getProjects } from '@/lib/server/quieries'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
