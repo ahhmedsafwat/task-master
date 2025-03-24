@@ -18,7 +18,7 @@ export function SidebarHeader({
       <Logo
         href={'/dashboard/overview'}
         textClassName="sm:text-sm"
-        svgSize={34}
+        svgSize={28}
       />
 
       {/* Toggle button */}
@@ -33,9 +33,9 @@ export function SidebarHeader({
         className="hover:bg-accent box-content cursor-pointer rounded-md p-1 transition-colors duration-300"
       >
         {isPinned ? (
-          <PanelLeftClose size={20} />
+          <PanelLeftClose size={18} />
         ) : (
-          <PanelRightClose size={20} />
+          <PanelRightClose size={18} />
         )}
       </Button>
     </div>

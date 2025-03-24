@@ -26,23 +26,24 @@ export function SidebarProjects({
       </div>
       <div className="space-y-1.5">
         {projects.map((project: Project) => {
-          const isActive = pathname === `/projects/${project.id}`
+          const isActive = pathname === `/dashboard/projects/${project.name}`
           return (
             <NavigationItem
-              href={`/projects/${project.id}`}
+              href={`/dashboard/projects/${project.name}`}
               title={project.name}
               isActive={isActive}
               key={project.id + project.name}
               icon={project.icon}
               customIcon={
-                project.image ? (
-                  <div className="mr-2 flex h-5 w-5 items-center justify-center">
+                project.project_covers ? (
+                  <div className="mr-2">
                     <Image
-                      src={project.image}
+                      src={project.project_covers}
                       alt={project.name}
-                      width={20}
-                      height={20}
+                      height={24}
+                      width={24}
                       className="rounded-sm object-cover"
+                      unoptimized
                     />
                   </div>
                 ) : undefined

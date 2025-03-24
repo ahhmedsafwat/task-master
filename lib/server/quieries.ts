@@ -1,29 +1,5 @@
 import 'server-only'
 import { createSupabaseClient } from '@/utils/supabase/server'
-import { userProfile } from '../types/types'
-/**
- * Get Project data |
- * fetches all projects from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
- */
-export const getProjects = async () => {
-  try {
-    const supabase = await createSupabaseClient()
-    const { data, error } = await supabase.from('projects').select()
-
-    if (error) {
-      console.error('Supabase query error:', error)
-      return { data: null, error }
-    }
-
-    return { data, error: null }
-  } catch (error) {
-    console.error('Unexpected error in getProjects:', error)
-    return {
-      data: null,
-      error: { message: 'Failed to fetch projects', details: error },
-    }
-  }
-}
 
 /**
  * Get Profile data
@@ -45,7 +21,6 @@ export const getProfile = async () => {
       .select()
       .eq('id', userData.session?.user.id as string)
       .single()
-      .overrideTypes<userProfile>()
 
     if (error) {
       console.error('Profile fetch error:', error)
@@ -60,8 +35,8 @@ export const getProfile = async () => {
 }
 
 /**
- * Get user data
- * Can be used to check if user is authenticated
+ * main get user function
+ * used to get every thing about the user
  */
 export async function getuser() {
   try {
@@ -76,5 +51,29 @@ export async function getuser() {
   } catch (error) {
     console.error('Get session error:', error)
     return null
+  }
+}
+
+/**
+ * Get Project data |
+ * fetches all projects from the database if you don't have rls enabled you would have to pass a user_id as a comparison value
+ */
+export const getProjects = async () => {
+  try {
+    const supabase = await createSupabaseClient()
+    const { data, error } = await supabase.from('projects').select()
+
+    if (error) {
+      console.error('Supabase query error:', error)
+      return { data: null, error }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error('Unexpected error in getProjects:', error)
+    return {
+      data: null,
+      error: { message: 'Failed to fetch projects', details: error },
+    }
   }
 }

@@ -20,6 +20,7 @@
 # production
 /build
 .unlighthouse
+.vscode
 
 # misc
 .DS_Store

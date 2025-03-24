@@ -15,11 +15,10 @@ export type IconComponent = ElementType<{
 
 export interface Project extends Tables<'projects'> {
   icon?: IconComponent
-  image?: string
 }
 
 export interface userProfile {
   email: string
-  avatar_url?: string
+  avatar_url: string | null
   username: string | null
 }

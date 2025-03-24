@@ -8,7 +8,12 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    remotePatterns: [{ hostname: 'images.unsplash.com' }],
+    remotePatterns: [
+      {
+        hostname: 'gmlyqpnzcebtzxvgtwmc.supabase.co',
+        pathname: '/storage/v1/object/**',
+      },
+    ],
   },
 }
 

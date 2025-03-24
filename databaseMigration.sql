@@ -34,7 +34,7 @@ create type notification_status as enum('UNREAD', 'READ');
 create table public.profiles (
   id uuid references auth.users on delete cascade not null primary key, -- Unique profile identifier (matches auth.users id)
   email text unique not null, -- User email address; must be unique
-  username text unique, -- Optional username; must be unique if provided
+  username text, -- Optional username; must be unique if provided
   avatar_url text, -- URL to the user's profile picture
   created_at timestamp with time zone default current_timestamp not null, -- Automatically records when the profile is created
   updated_at timestamp with time zone default current_timestamp not null -- Automatically records when the profile is last updated
