@@ -1,5 +1,5 @@
-import { Button } from '../ui/button'
-import { Logo } from '../ui/logo'
+import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
 import { PanelLeftClose, PanelRightClose } from 'lucide-react'
 
 interface SidebarHeaderProps {

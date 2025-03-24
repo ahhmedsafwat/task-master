@@ -18,9 +18,9 @@ export default async function Layout({
   if (!user.data || !projects) return null
 
   return (
-    <section className="bg-secondary dark:bg-primary flex min-h-screen">
+    <section className="bg-secondary dark:bg-primary flex max-h-screen overflow-hidden">
       <AppSidebar userData={user.data} projects={projects} />
-      <div className="bg-background m-1.5 flex-1 rounded-md border">
+      <div className="bg-background m-1.5 h-screen flex-1 overflow-y-scroll rounded-md border">
         {children}
       </div>
     </section>

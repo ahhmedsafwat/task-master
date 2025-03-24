@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/accordion'
 import { ChevronDownIcon } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Logo } from '../ui/logo'
+import { Logo } from '@/components/ui/logo'
 
 interface Navlinks {
   title: string

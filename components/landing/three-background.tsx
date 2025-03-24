@@ -234,7 +234,7 @@ interface ThreeBackgroundProps {
 }
 
 // Main component
-export const ThreeBackground = ({
+const ThreeBackground = ({
   primaryColor = '#c70036',
   secondaryColor = '#4d0218',
   particleCount = 100,
@@ -252,3 +252,4 @@ export const ThreeBackground = ({
     </div>
   )
 }
+export default ThreeBackground

@@ -5,9 +5,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu'
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
-import { ThemeToggle } from '../ui/theme-toggle'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { signOut } from '@/lib/server/auth-actions'
 import { UserProfileCard } from './user-profile-card'
 import { userProfile } from '@/lib/types/types'

@@ -1,8 +1,8 @@
 'use client'
 import { cn } from '@/lib/utils'
 import { Suspense, useRef } from 'react'
-import { Separator } from '../ui/separator'
-import { MenuIcon } from '../ui/menu-icon'
+import { Separator } from '@/components/ui/separator'
+import { MenuIcon } from '@/components/ui/menu-icon'
 import { NavUser } from './nav-user'
 import { useSidebar } from '@/hooks/use-sidebar'
 import { SidebarHeader } from './sidebar-header'
@@ -26,7 +26,7 @@ export function AppSidebar({
     handleNavMouseEnter,
     handleNavMouseLeave,
     closeNav,
-  } = useSidebar({ initialPinned: false })
+  } = useSidebar()
 
   // References
   const navRef = useRef<HTMLDivElement>(null)

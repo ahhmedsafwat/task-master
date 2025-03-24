@@ -1,6 +1,6 @@
 'use client'
 import { createClient } from '@/utils/supabase/client'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import { GithubIcon } from 'lucide-react'
 import { toast } from 'sonner'
 

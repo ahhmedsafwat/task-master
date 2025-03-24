@@ -4,8 +4,12 @@ import { LazyMotion, domAnimation, type Variants } from 'motion/react'
 import * as m from 'motion/react-m'
 import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
-import { FlipingText } from '../ui/fliping-text'
-import { ThreeBackground } from './three-background'
+import { FlipingText } from '@/components/ui/fliping-text'
+import dynamic from 'next/dynamic'
+// Import ThreeBackground with dynamic import to prevent SSR issues
+const ThreeBackground = dynamic(() => import('./three-background'), {
+  ssr: false,
+})
 
 const enteryVariant: Variants = {
   initial: {

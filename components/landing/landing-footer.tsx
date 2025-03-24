@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { RiTwitterXLine, RiGithubFill, RiInstagramLine } from 'react-icons/ri'
 import Image from 'next/image'
-import { Logo } from '../ui/logo'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
+import { Logo } from '@/components/ui/logo'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { FooterLinkSection } from './footer-links'
 
 const navigationItems = [
