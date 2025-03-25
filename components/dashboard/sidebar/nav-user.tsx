@@ -9,7 +9,7 @@ import {
 import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { signOut } from '@/lib/server/auth-actions'
-import { UserProfileCard } from './user-profile-card'
+import { UserProfileCard } from '../user-profile-card'
 import { userProfile } from '@/lib/types/types'
 
 export const NavUser = (props: { userData: userProfile }) => {

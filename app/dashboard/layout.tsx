@@ -1,4 +1,4 @@
-import { AppSidebar } from '@/components/dashboard/app-sidebar'
+import { AppSidebar } from '@/components/dashboard/sidebar/app-sidebar'
 
 import { getProfile, getProjects } from '@/lib/server/quieries'
 import { Metadata } from 'next'

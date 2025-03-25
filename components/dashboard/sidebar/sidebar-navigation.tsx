@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
   Inbox,
-  BarChartBigIcon as ChartColumnBigIcon,
+  // BarChartBigIcon as ChartColumnBigIcon,
   LucideClipboardCheck,
   LucideIcon,
 } from 'lucide-react'
@@ -26,11 +26,7 @@ export const navItems: NavItem[] = [
     href: '/dashboard/my-tasks',
     icon: LucideClipboardCheck,
   },
-  {
-    title: 'Analytics',
-    href: '/dashboard/analytics',
-    icon: ChartColumnBigIcon,
-  },
+
   {
     title: 'Inbox',
     href: '/dashboard/notifications',
