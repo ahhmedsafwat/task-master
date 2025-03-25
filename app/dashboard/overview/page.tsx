@@ -5,7 +5,6 @@ import { TeamActivity } from '@/components/dashboard/overview/team-activity'
 import { UpcomingDeadlines } from '@/components/dashboard/overview/upcoming-deadlines'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 import { useState } from 'react'
-import { getDynamicColumnClasses } from '@/lib/utils'
 
 export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
@@ -84,15 +83,15 @@ export default function DashboardPage() {
   // Array of stats cards - you can modify this as needed
   const statsCards = [
     {
-      title: 'Active Projects',
+      title: '8',
       value: stats.activeProjects,
-      description: `${stats.overdueProjects} overdue`,
+      description: `Active Projects`,
       icon: BarChart3,
     },
     {
-      title: 'Completed This Month',
+      title: '50',
       value: stats.completedThisMonth,
-      description: 'vs last month',
+      description: 'completed this month',
       icon: CheckCircle2,
       trend: {
         value: stats.completedThisMonth - stats.lastMonthCompleted,
@@ -100,20 +99,20 @@ export default function DashboardPage() {
       },
     },
     {
-      title: 'assigned tasks',
-      value: `${stats.completionRate}`,
+      title: `${stats.completionRate}`,
+      description: `assigned tasks`,
       icon: AlertCircle,
     },
     {
-      title: 'Tasks Completed',
+      title: `${stats.projectsContributed}`,
       value: stats.tasksCompleted,
-      description: `across ${stats.projectsContributed} projects`,
+      description: `Tasks Completed`,
       icon: CheckCircle2,
     },
 
     {
-      title: 'Another Stat',
-      value: 'Some Value',
+      title: '8',
+      description: 'Overdue Tasks',
       icon: CarIcon,
     },
   ]
@@ -126,9 +125,7 @@ export default function DashboardPage() {
           <StatsCard
             key={card.title + index}
             title={card.title}
-            value={card.value}
             description={card.description}
-            icon={card.icon}
             trend={card.trend}
           />
         ))}
