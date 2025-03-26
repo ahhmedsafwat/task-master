@@ -74,7 +74,7 @@ export const DashboardHeader = ({ userData }: { userData: userProfile }) => {
               <span>theme</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem asChild className="cursor-pointer">
               <SignOut />
             </DropdownMenuItem>
           </DropdownMenuContent>
