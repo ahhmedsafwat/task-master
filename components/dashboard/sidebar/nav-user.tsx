@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { signOut } from '@/lib/server/auth-actions'
 import { UserProfileCard } from '../user-profile-card'
@@ -24,7 +24,6 @@ export const NavUser = (props: { userData: userProfile }) => {
             email={email || ''}
             image={avatar_url}
           />
-          <ChevronsUpDown size={18} />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent

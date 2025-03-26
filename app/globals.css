@@ -132,6 +132,7 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
+    scrollbar-width: none;
   }
 
   body {

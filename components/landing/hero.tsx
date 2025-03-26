@@ -26,7 +26,7 @@ const enteryVariant: Variants = {
 
 export default function Hero() {
   return (
-    <section className="translate-3d relative min-h-screen py-24">
+    <section className="relative min-h-screen py-24">
       <LazyMotion features={domAnimation}>
         <div className="absolute inset-0 -z-20">
           <ThreeBackground></ThreeBackground>

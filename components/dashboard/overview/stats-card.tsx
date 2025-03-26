@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -12,8 +13,10 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 
-import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 interface StatsCardProps {
   title: string
@@ -24,7 +27,7 @@ interface StatsCardProps {
   }
 }
 
-export function StatsCard({ title, description }: StatsCardProps) {
+export const StatsCard = ({ title, description, trend }: StatsCardProps) => {
   const chartData = [
     { month: 'January', desktop: 186, mobile: 80 },
     { month: 'February', desktop: 305, mobile: 200 },
@@ -37,7 +40,7 @@ export function StatsCard({ title, description }: StatsCardProps) {
   const chartConfig = {
     desktop: {
       label: 'Desktop',
-      color: 'hsl(var(--chart-5))',
+      color: `${trend?.isPositive ? 'hsl(var(--success))' : 'hsl(var(--destructive))'}`,
     },
   } satisfies ChartConfig
   return (
@@ -46,15 +49,36 @@ export function StatsCard({ title, description }: StatsCardProps) {
         <CardDescription className="font-geist-mono text-xs font-medium">
           {description}
         </CardDescription>
-        <CardTitle className="text-xl font-medium">{title}</CardTitle>
+        <CardTitle className="flex flex-row items-center gap-2 text-xl font-medium">
+          {title}
+          {trend && (
+            <div className="text-sm">
+              <span
+                className={cn(
+                  'justify-center, flex items-center',
+                  trend.isPositive ? 'text-success' : 'text-destructive',
+                )}
+              >
+                <span> {trend.value}</span>
+                <span>
+                  {trend.isPositive ? (
+                    <ArrowUp size={14} />
+                  ) : (
+                    <ArrowDown size={14} />
+                  )}
+                </span>
+              </span>
+            </div>
+          )}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Separator className="mb-2" />
-        <ChartContainer config={chartConfig} className="h-24 w-full">
-          <LineChart
+        <ChartContainer config={chartConfig} className="max-h-24 w-full">
+          <AreaChart
+            accessibilityLayer
             data={chartData}
             margin={{
-              top: 20,
               left: 12,
               right: 12,
             }}
@@ -71,19 +95,14 @@ export function StatsCard({ title, description }: StatsCardProps) {
               cursor={true}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <Line
+            <Area
               dataKey="desktop"
               type="natural"
+              fill="var(--color-desktop)"
+              fillOpacity={0.4}
               stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={{
-                fill: 'var(--color-desktop)',
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            ></Line>
-          </LineChart>
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
