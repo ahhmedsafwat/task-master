@@ -1,35 +1,28 @@
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { userProfile } from '@/lib/types/types'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { UserProfileCard } from '../user-profile-card'
-import { Settings } from 'lucide-react'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
-
-import { SignOut } from '@/components/auth/signout'
+import BreadCrumbs from '@/components/ui/breadcrumb'
+import { NavUser } from './nav-user'
 
 export const DashboardHeader = ({ userData }: { userData: userProfile }) => {
   return (
-    <div className={cn('left-0 top-2 z-40 flex w-full px-6 md:px-8')}>
-      {/* Right side with search and user profile */}
-      <div className="ml-auto flex items-center gap-3">
+    <div
+      className={cn(
+        'bg-background sticky top-0 z-30 flex w-full items-center justify-between border-b px-3 py-2 shadow-sm md:px-8',
+      )}
+    >
+      <BreadCrumbs className="ml-11 md:ml-0" />
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Search bar */}
         <div className="relative">
+          {/* this isn't going to be the final search bar i'm plannign on making it  */}
           <Input
             type="search"
             placeholder="Search..."
-            className="w-[200px] pl-9 focus-visible:border-none focus-visible:outline-none md:w-[240px]"
+            className="w-0 pl-9 focus-visible:border-none focus-visible:outline-none max-md:invisible md:w-[240px]"
           />
           <svg
-            className="text-muted-foreground absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+            className="text-muted-foreground max-md:bg-accent absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 max-md:box-content max-md:rounded-full max-md:p-1.5"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -45,40 +38,7 @@ export const DashboardHeader = ({ userData }: { userData: userProfile }) => {
         </div>
 
         {/* User profile dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Avatar>
-              <AvatarImage src={userData.avatar_url || ''} />
-              <AvatarFallback>{userData.username}</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-56 rounded-lg"
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel>
-              <UserProfileCard
-                name={userData.username || userData.email?.split('@')[0]}
-                email={userData.email}
-                image={userData.avatar_url}
-              />
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer py-3">
-              <Settings />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="py-3">
-              <ThemeToggle />
-              <span>theme</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="cursor-pointer">
-              <SignOut />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <NavUser userData={userData} />
       </div>
     </div>
   )

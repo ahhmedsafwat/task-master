@@ -3,11 +3,15 @@ import { cn } from '@/lib/utils'
 import { useRef } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useSidebar } from '@/hooks/use-sidebar'
-import { SidebarHeader } from './sidebar-header'
+
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
 import { Project } from '@/lib/types/types'
 import { MenuIcon } from '@/components/ui/menu-icon'
+
+import { PanelLeftClose, PanelRightClose } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { SidebarHeader } from './sidebar-header'
 
 export function AppSidebar({ projects }: { projects: Project[] }) {
   // Use our custom sidebar hook
@@ -27,7 +31,7 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
   return (
     <>
       {/* Left side with menu icon (only on mobile) */}
-      <div className="absolute left-4 top-4">
+      <div className="absolute left-5 top-5 z-50">
         {isMobile && (
           <MenuIcon
             isMenuOpen={isPinned}
@@ -36,6 +40,26 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
           />
         )}
       </div>
+
+      {/* Pin/Unpin Button for Desktop */}
+      {!isMobile && (
+        <div className="fixed bottom-5 left-5 z-50">
+          <Button
+            aria-label={isPinned ? 'Unpin sidebar' : 'Pin sidebar'}
+            variant="ghost"
+            size={'smIcon'}
+            onClick={togglePin}
+            className="hover:bg-accent box-content cursor-pointer rounded-md p-1 transition-colors duration-300"
+          >
+            {isPinned ? (
+              <PanelLeftClose size={18} />
+            ) : (
+              <PanelRightClose size={18} />
+            )}
+          </Button>
+        </div>
+      )}
+
       <nav
         aria-label="Main navigation"
         className={cn(
@@ -61,12 +85,13 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
               'fixed left-0 overflow-y-auto overflow-x-visible pr-2',
           )}
         >
-          {/* Header with logo and pin/unpin button */}
+          {/* Logo at the top */}
           <SidebarHeader
+            isMobile={isMobile}
             isPinned={isPinned}
             togglePin={togglePin}
-            isMobile={isMobile}
           />
+
           <Separator decorative className="my-3" />
           {/* Navigation items */}
           <SidebarNavigation onItemClick={closeNav} />
@@ -79,7 +104,7 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
       {/* Background overlay - appears when nav is floating or mobile menu is open */}
       {(isMobile && isPinned) || (!isMobile && !isPinned && isNavVisible) ? (
         <div
-          className="fixed inset-0 z-30 bg-black/30"
+          className="fixed inset-0 z-40 bg-black/30"
           onClick={() => isMobile && togglePin()}
           aria-hidden="true"
         />

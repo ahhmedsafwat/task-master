@@ -5,14 +5,8 @@ import {
   Inbox,
   // BarChartBigIcon as ChartColumnBigIcon,
   LucideClipboardCheck,
-  LucideIcon,
 } from 'lucide-react'
-
-export interface NavItem {
-  title: string
-  href: string
-  icon: LucideIcon
-}
+import { NavItem } from '@/lib/types/types'
 
 // Navigation items definition
 export const navItems: NavItem[] = [

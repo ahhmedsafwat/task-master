@@ -19,9 +19,10 @@ export default async function Layout({
   return (
     <section className="bg-secondary dark:bg-primary flex max-h-screen overflow-hidden">
       <AppSidebar projects={projects.data} />
-      <div className="bg-background m-1.5 h-screen flex-1 overflow-y-scroll rounded-md border pt-4">
+      <div className="bg-background relative m-1.5 h-screen flex-1 overflow-y-auto rounded-md border">
         <DashboardHeader userData={user.data} />
-        {children}
+
+        <div className="pt-4">{children}</div>
       </div>
     </section>
   )

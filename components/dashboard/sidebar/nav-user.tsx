@@ -6,25 +6,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, Settings } from 'lucide-react'
+import { Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { signOut } from '@/lib/server/auth-actions'
 import { UserProfileCard } from '../user-profile-card'
 import { userProfile } from '@/lib/types/types'
+import { SignOut } from '@/components/auth/signout'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-export const NavUser = (props: { userData: userProfile }) => {
-  const { email, username, avatar_url } = props.userData
-
+export const NavUser = ({ userData }: { userData: userProfile }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="hover:bg-accent bg-background relative flex cursor-pointer items-center justify-between rounded-lg border py-2 pl-2 pr-2 shadow-lg transition-all">
-          <UserProfileCard
-            name={username || email?.split('@')[0]}
-            email={email || ''}
-            image={avatar_url}
-          />
-        </div>
+        <Avatar>
+          <AvatarImage src={userData.avatar_url || ''} />
+          <AvatarFallback>{userData.username}</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56 rounded-lg"
@@ -33,9 +29,9 @@ export const NavUser = (props: { userData: userProfile }) => {
       >
         <DropdownMenuLabel>
           <UserProfileCard
-            name={username || email?.split('@')[0]}
-            email={email || ''}
-            image={avatar_url}
+            name={userData.username || userData.email?.split('@')[0]}
+            email={userData.email}
+            image={userData.avatar_url}
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -48,14 +44,8 @@ export const NavUser = (props: { userData: userProfile }) => {
           <span>theme</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onClick={async () => {
-            await signOut()
-          }}
-        >
-          <LogOut className="text-destructive focus:text-destructive" />
-          <span>Log out</span>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <SignOut />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

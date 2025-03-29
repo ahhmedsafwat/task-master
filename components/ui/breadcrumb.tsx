@@ -1,33 +1,26 @@
+'use client'
+import { useBreadcrumbs } from '@/hooks/use-breadcrumbs'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { navItems } from '../dashboard/sidebar/sidebar-navigation'
 
-interface breadcrumbs {
-  label: string
-  href: string
-  active?: boolean
-}
-
-export default function BreadCrumbs({
-  breadcrumbs,
-  className,
-}: {
-  breadcrumbs: breadcrumbs[]
-  className?: string
-}) {
+export default function BreadCrumbs({ className }: { className?: string }) {
+  const breadcrumbs = useBreadcrumbs({ links: navItems })
   return (
-    <nav aria-label="breadCrumbs" className={cn('hidden lg:block', className)}>
+    <nav aria-label="breadCrumbs" className={cn('block', className)}>
       <ol className="flex">
         {breadcrumbs.map(({ label, href, active }, index) => (
           <li
             aria-current={active}
             key={href}
             className={cn(
-              active ? 'text-gray-900 dark:text-gray-300' : 'text-gray-500',
+              'text-base md:text-xl',
+              active ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500',
             )}
           >
             <Link href={href}>{label}</Link>
             {index < breadcrumbs.length - 1 ? (
-              <span className="mx-3 inline-block">/</span>
+              <span className="mx-3 inline-block text-sm">/</span>
             ) : null}
           </li>
         ))}
