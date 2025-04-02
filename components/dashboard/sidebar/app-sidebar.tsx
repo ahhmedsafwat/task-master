@@ -31,7 +31,7 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
   return (
     <>
       {/* Left side with menu icon (only on mobile) */}
-      <div className="absolute left-5 top-5 z-50">
+      <div className="absolute left-4 top-4 z-50">
         {isMobile && (
           <MenuIcon
             isMenuOpen={isPinned}

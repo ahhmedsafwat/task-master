@@ -9,17 +9,19 @@ import {
 import { Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { UserProfileCard } from '../user-profile-card'
-import { userProfile } from '@/lib/types/types'
 import { SignOut } from '@/components/auth/signout'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { getProfile } from '@/lib/server/quieries'
 
-export const NavUser = ({ userData }: { userData: userProfile }) => {
+export const NavUser = async () => {
+  const { data } = await getProfile()
+  if (!data) return null
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src={userData.avatar_url || ''} />
-          <AvatarFallback>{userData.username}</AvatarFallback>
+          <AvatarImage src={data.avatar_url || ''} />
+          <AvatarFallback>{data.username}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -29,9 +31,9 @@ export const NavUser = ({ userData }: { userData: userProfile }) => {
       >
         <DropdownMenuLabel>
           <UserProfileCard
-            name={userData.username || userData.email?.split('@')[0]}
-            email={userData.email}
-            image={userData.avatar_url}
+            name={data.username || data.email?.split('@')[0]}
+            email={data.email}
+            image={data.avatar_url}
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

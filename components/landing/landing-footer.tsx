@@ -5,6 +5,7 @@ import { Logo } from '@/components/ui/logo'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FooterLinkSection } from './footer-links'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const navigationItems = [
   { title: 'Features', href: 'features' },
@@ -58,25 +59,30 @@ export function LandingFooter() {
                   individuals.
                 </p>
               </div>
-              <div className="flex gap-3">
-                {socialLinks.map(({ href, icon: Icon, label }) => (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    asChild
-                    key={label + href}
-                  >
-                    <Link
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              <div className="flex flex-col items-start gap-3">
+                <div className="space-x-2">
+                  {socialLinks.map(({ href, icon: Icon, label }) => (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      asChild
+                      key={label + href}
                     >
-                      <Icon size={24} />
-                    </Link>
-                  </Button>
-                ))}
+                      <Link
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="border-gray-300 bg-neutral-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                      >
+                        <Icon size={24} />
+                      </Link>
+                    </Button>
+                  ))}
+                </div>
+                <div className="ml-2">
+                  <ThemeToggle />
+                </div>
               </div>
             </div>
 

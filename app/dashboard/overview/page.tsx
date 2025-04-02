@@ -1,4 +1,6 @@
 import { StatsCard } from '@/components/dashboard/overview/stats-card'
+import { TaskCreationDialog } from '@/components/dashboard/overview/task-creation-dialog'
+import { ActiveTasks } from '@/components/dashboard/overview/active-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 
 export default function Page() {
@@ -53,7 +55,6 @@ export default function Page() {
         isPositive: false,
       },
     },
-
     {
       title: '8',
       description: 'Overdue Tasks',
@@ -66,7 +67,7 @@ export default function Page() {
   ]
 
   return (
-    <div className="mx-auto space-y-6 p-4">
+    <div className="mx-auto space-y-6">
       {/* Quick Stats */}
       <div className="flex flex-wrap gap-4">
         {statsCards.map((card, index) => (
@@ -79,7 +80,14 @@ export default function Page() {
         ))}
       </div>
       {/* Main Content Grid */}
-      <div></div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_300px]">
+        <TaskCreationDialog />
+
+        <ActiveTasks />
+        <div className="space-y-6">
+          {/* Add additional sidebar content here */}
+        </div>
+      </div>
     </div>
   )
 }
