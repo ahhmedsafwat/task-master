@@ -6,6 +6,13 @@ import { NavigationItem } from './navigation-item'
 import Image from 'next/image'
 import { Plus } from 'lucide-react'
 import { Project } from '@/lib/types/types'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
@@ -22,7 +29,21 @@ export function SidebarProjects({
     <div title="projects" className="flex-1 overflow-y-auto">
       <div className="text-muted-foreground flex items-center justify-between rounded-md p-1.5 px-2 text-xs">
         <span>projects</span>
-        <Plus className="hover:bg-accent size-6 cursor-pointer rounded-full p-1 transition-colors duration-300" />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={'link'}
+                className="hover:bg-secondary-foreground bg-accent-foreground size-6 cursor-pointer rounded-full p-1 transition-colors duration-300"
+              >
+                <Plus />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create project</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="space-y-1.5">
         {projects.map((project: Project) => {
