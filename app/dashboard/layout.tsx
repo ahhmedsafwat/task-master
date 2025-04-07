@@ -1,6 +1,5 @@
 import { AppSidebar } from '@/components/dashboard/sidebar/app-sidebar'
 import { DashboardHeader } from '@/components/dashboard/sidebar/dashboard-header'
-import BreadCrumbs from '@/components/ui/breadcrumb'
 import { getProjects } from '@/lib/server/quieries'
 import { Metadata } from 'next'
 

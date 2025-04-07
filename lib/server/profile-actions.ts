@@ -6,11 +6,11 @@ export async function updateAvatar({
   file,
   userId,
 }: {
-  file: string
+  file: File
   userId: string
-}): Promise<string> {
+}) {
   try {
-    const fileExt = file.split('.').pop()
+    const fileExt = file.name.split('.').pop()
     const filePath = `${userId}/avatar.${fileExt}`
 
     const supabase = await createSupabaseClient()
@@ -18,7 +18,8 @@ export async function updateAvatar({
       .from('avatars')
       .upload(filePath, file, {
         upsert: true,
-        contentType: fileExt,
+        contentType: file.type,
+        cacheControl: '3600',
       })
 
     if (error) throw error

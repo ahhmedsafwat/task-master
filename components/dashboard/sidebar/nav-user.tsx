@@ -12,6 +12,7 @@ import { UserProfileCard } from '../user-profile-card'
 import { SignOut } from '@/components/auth/signout'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { getProfile } from '@/lib/server/quieries'
+import Link from 'next/link'
 
 export const NavUser = async () => {
   const { data } = await getProfile()
@@ -37,9 +38,11 @@ export const NavUser = async () => {
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer py-3">
-          <Settings />
-          <span>Settings</span>
+        <DropdownMenuItem className="cursor-pointer py-3" asChild>
+          <Link href={'/dashboard/settings/profile'}>
+            <Settings />
+            <span>Settings</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="py-3">
           <ThemeToggle />
