@@ -21,7 +21,11 @@ export const NavUser = async () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src={data.avatar_url || ''} />
+          <AvatarImage
+            src={data.avatar_url || ''}
+            className="object-cover"
+            alt={data.username || ''}
+          />
           <AvatarFallback>
             {data.username ? data.username.substring(0, 2).toUpperCase() : 'U'}
           </AvatarFallback>

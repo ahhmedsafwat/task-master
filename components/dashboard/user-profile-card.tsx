@@ -16,7 +16,11 @@ export function UserProfileCard({
   return (
     <div className={`flex items-center justify-start gap-1 ${className}`}>
       <Avatar>
-        <AvatarImage src={image || ''} alt={name ?? ''} />
+        <AvatarImage
+          src={image || ''}
+          alt={name ?? ''}
+          className="object-cover"
+        />
         <AvatarFallback>
           {name ? name.substring(0, 2).toUpperCase() : 'U'}
         </AvatarFallback>

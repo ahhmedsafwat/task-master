@@ -8,7 +8,6 @@ import { updateAvatar } from '@/lib/server/profile-actions'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/navigation'
 
 interface ProfileAvatarProps {
   avatarUrl: string | null
@@ -21,7 +20,6 @@ export const ProfileAvatar = ({
   username,
   id,
 }: ProfileAvatarProps) => {
-  const router = useRouter()
   // Get initials for avatar fallback
   const initials = username ? username.substring(0, 2).toUpperCase() : 'U'
   const [isLoading, setIsLoading] = useState(false)
@@ -30,6 +28,13 @@ export const ProfileAvatar = ({
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return
+
+    // Validate file size (5MB limit recommended)
+    const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+    if (event.target.files[0].size > MAX_SIZE) {
+      toast.error('File size exceeds 5MB limit')
+      return
+    }
 
     const file = event.target.files[0]
     setSelectedFile(file)
@@ -42,6 +47,7 @@ export const ProfileAvatar = ({
   const uploadAvatar = async () => {
     try {
       setIsLoading(true)
+      toast.loading('Uploading avatar...')
       const data = await updateAvatar({
         file: selectedFile as File,
         userId: id,
@@ -52,9 +58,8 @@ export const ProfileAvatar = ({
         toast.error('Failed to update avatar')
         return
       }
-
+      toast.dismiss()
       toast.success('Avatar updated successfully')
-      router.refresh()
     } catch (error) {
       toast.error(`Failed to update avatar : ${error}`)
     } finally {
