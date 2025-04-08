@@ -8,6 +8,7 @@ import { updateAvatar } from '@/lib/server/profile-actions'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useRouter } from 'next/navigation'
 
 interface ProfileAvatarProps {
   avatarUrl: string | null
@@ -20,6 +21,7 @@ export const ProfileAvatar = ({
   username,
   id,
 }: ProfileAvatarProps) => {
+  const router = useRouter()
   // Get initials for avatar fallback
   const initials = username ? username.substring(0, 2).toUpperCase() : 'U'
   const [isLoading, setIsLoading] = useState(false)
@@ -52,6 +54,7 @@ export const ProfileAvatar = ({
       }
 
       toast.success('Avatar updated successfully')
+      router.refresh()
     } catch (error) {
       toast.error(`Failed to update avatar : ${error}`)
     } finally {
@@ -60,11 +63,11 @@ export const ProfileAvatar = ({
   }
 
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-4 md:gap-6">
       {preview ? (
         <div className="flex flex-col items-center gap-2">
           <div className="relative">
-            <Avatar className="h-24 w-24">
+            <Avatar className="size-18 md:size-24">
               <AvatarImage
                 src={preview}
                 alt={username || 'User avatar'}
@@ -87,7 +90,7 @@ export const ProfileAvatar = ({
               aria-label="Upload avatar"
               role="button"
             >
-              <Camera className="size-4" />
+              <Camera className="size-3 md:size-4" />
               <span className="sr-only">Upload avatar</span>
             </Label>
           </div>
@@ -95,13 +98,14 @@ export const ProfileAvatar = ({
             variant="outline"
             disabled={isLoading}
             onClick={() => setPreview(null)}
+            size={'sm'}
           >
             Remove
           </Button>
         </div>
       ) : (
         <div className="relative">
-          <Avatar className="h-24 w-24">
+          <Avatar className="size-18 md:size-24">
             {avatarUrl ? (
               <AvatarImage
                 src={avatarUrl}
@@ -126,7 +130,7 @@ export const ProfileAvatar = ({
             aria-label="Upload avatar"
             role="button"
           >
-            <Camera className="size-4" />
+            <Camera className="size-3 md:size-4" />
             <span className="sr-only">Upload avatar</span>
           </Label>
         </div>
@@ -147,7 +151,7 @@ export const ProfileAvatar = ({
             'Change Avatar'
           )}
         </Button>
-        <p className="text-muted-foreground mt-2 text-sm">
+        <p className="text-muted-foreground mt-2 text-xs md:text-sm">
           JPG,WEBP or PNG Max 5MB.
         </p>
       </div>

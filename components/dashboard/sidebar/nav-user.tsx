@@ -22,11 +22,13 @@ export const NavUser = async () => {
       <DropdownMenuTrigger asChild>
         <Avatar>
           <AvatarImage src={data.avatar_url || ''} />
-          <AvatarFallback>{data.username}</AvatarFallback>
+          <AvatarFallback>
+            {data.username ? data.username.substring(0, 2).toUpperCase() : 'U'}
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-56 rounded-lg"
+        className="bg-card w-56 rounded-lg"
         align="end"
         sideOffset={4}
       >
@@ -38,8 +40,8 @@ export const NavUser = async () => {
           />
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer py-3" asChild>
-          <Link href={'/dashboard/settings/profile'}>
+        <DropdownMenuItem className="cursor-pointer py-2.5" asChild>
+          <Link href={'/dashboard/profile'}>
             <Settings />
             <span>Settings</span>
           </Link>

@@ -10,7 +10,7 @@ export const SignOut = () => {
       onClick={async () => {
         await signOut()
       }}
-      className="flex h-full w-full items-start justify-start gap-2 py-1.5"
+      className="flex h-full w-full items-start justify-start gap-2"
       variant={'ghost'}
     >
       <>

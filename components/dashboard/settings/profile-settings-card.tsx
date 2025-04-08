@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ProfileAvatar } from './profile-avatar'
-// import { ProfileForm } from './profile-form'
+import ProfileForm from './profile-form'
 import { getProfile } from '@/lib/server/quieries'
+import { Separator } from '@/components/ui/separator'
 
 export const ProfileSettingsCard = async () => {
   const { data: initialData } = await getProfile()
@@ -10,21 +11,24 @@ export const ProfileSettingsCard = async () => {
     return null
   }
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="bg-secondary mx-auto w-full max-w-4xl">
       <CardHeader>
         <CardTitle>Profile Settings</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="py-2 max-sm:px-2">
         <ProfileAvatar
           avatarUrl={initialData.avatar_url}
           username={initialData.username}
           id={initialData.id}
         />
-        {/* <ProfileForm
-            userId={initialData.id}
-            username={initialData.username}
-            email={initialData.email}
-          /> */}
+        <Separator className="my-3" />
+      </CardContent>
+      <CardContent>
+        <ProfileForm
+          userId={initialData.id}
+          email={initialData.email}
+          username={initialData.username}
+        />
       </CardContent>
     </Card>
   )

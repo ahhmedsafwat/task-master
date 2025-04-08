@@ -17,7 +17,9 @@ export function UserProfileCard({
     <div className={`flex items-center justify-start gap-1 ${className}`}>
       <Avatar>
         <AvatarImage src={image || ''} alt={name ?? ''} />
-        <AvatarFallback>{name?.charAt(0)}</AvatarFallback>
+        <AvatarFallback>
+          {name ? name.substring(0, 2).toUpperCase() : 'U'}
+        </AvatarFallback>
       </Avatar>
       <div className="flex w-full flex-1 flex-col">
         <span className="text-primary-foreground font-cabinet font-sm font-medium">
