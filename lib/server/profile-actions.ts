@@ -33,27 +33,6 @@ export async function updateAvatar({
       throw new Error('Failed to get public URL for the uploaded file')
     }
 
-    try {
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .list(userId)
-      if (error) throw error
-
-      if (data && data.length > 1) {
-        const filesToRemove = data
-          .filter((f) => f.name.split('.').pop() !== file.name.split('.').pop())
-          .map((f) => `${userId}/${f.name}`)
-
-        const { error: deleteError } = await supabase.storage
-          .from('avatars')
-          .remove(filesToRemove)
-
-        if (deleteError) throw deleteError
-      }
-    } catch (error) {
-      throw error
-    }
-
     // Update the profile with the new avatar URL
     const { error: updateError } = await supabase
       .from('profiles')

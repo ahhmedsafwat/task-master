@@ -68,11 +68,8 @@ export const ProfileAvatar = ({
     try {
       toast.loading('Processing image...')
 
-      console.log('cropperRef', cropperRef)
-
       // Get cropper instance
       const cropper = (cropperRef.current as any).cropper
-      console.log('cropper', cropper)
 
       // Get cropped canvas with specified dimensions
       const canvas = cropper.getCroppedCanvas({
@@ -81,7 +78,6 @@ export const ProfileAvatar = ({
         imageSmoothingEnabled: true,
         imageSmoothingQuality: 'high',
       })
-      console.log('canvas', canvas)
 
       // Convert canvas to blob
       const blob = await new Promise<Blob>((resolve) => {
@@ -89,14 +85,12 @@ export const ProfileAvatar = ({
           resolve(blob as Blob)
         }, 'image/jpg') // Use webp for better compression
       })
-      console.log('blob', blob)
 
       // Create a File from the blob
       const optimizedFile = new File([blob], 'avatar.jpg', {
         type: 'image/jpg',
       })
 
-      console.log('file', optimizedFile)
       // Upload the optimized file
       const data = await updateAvatar({
         file: optimizedFile,
@@ -122,13 +116,11 @@ export const ProfileAvatar = ({
       <div className="flex items-center gap-4 md:gap-6">
         <div className="relative">
           <Avatar className="size-18 md:size-24">
-            {avatarUrl ? (
-              <AvatarImage
-                src={avatarUrl}
-                alt={username || 'User avatar'}
-                className="object-cover"
-              />
-            ) : null}
+            <AvatarImage
+              src={avatarUrl ?? ''}
+              alt={username || 'User avatar'}
+              className="object-cover"
+            />
             <AvatarFallback className="text-lg">{initials}</AvatarFallback>
           </Avatar>
           <Input
