@@ -58,7 +58,10 @@ export async function login(
     if (error) {
       return {
         status: 'error',
-        message: error.message,
+        message:
+          error.message === 'Invalid login credentials'
+            ? 'Email or Password is wrong, please try again!'
+            : error.message,
       }
     }
 

@@ -1,13 +1,21 @@
 'use client'
 
+import { useState, useRef } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { ChangeEvent, useState } from 'react'
-import { Camera, Loader2 } from 'lucide-react'
+import { Camera } from 'lucide-react'
 import { updateAvatar } from '@/lib/server/profile-actions'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import Cropper from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
 
 interface ProfileAvatarProps {
   avatarUrl: string | null
@@ -22,93 +30,96 @@ export const ProfileAvatar = ({
 }: ProfileAvatarProps) => {
   // Get initials for avatar fallback
   const initials = username ? username.substring(0, 2).toUpperCase() : 'U'
-  const [isLoading, setIsLoading] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || event.target.files.length === 0) return
+  // State for cropper
+  const [image, setImage] = useState<string | null>(null)
+  const [cropperOpen, setCropperOpen] = useState(false)
+  const cropperRef = useRef<HTMLImageElement>(null)
 
-    // Validate file size (5MB limit recommended)
-    const MAX_SIZE = 5 * 1024 * 1024 // 5MB
-    if (event.target.files[0].size > MAX_SIZE) {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+
+    if (!file) return
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
       toast.error('File size exceeds 5MB limit')
       return
     }
 
-    const file = event.target.files[0]
-    setSelectedFile(file)
-    const objectUrl = URL.createObjectURL(file)
-    setPreview(objectUrl)
-
-    return () => URL.revokeObjectURL(preview as string)
+    // Create a URL for the image
+    const imageUrl = URL.createObjectURL(file)
+    setImage(imageUrl)
+    setCropperOpen(true)
   }
 
-  const uploadAvatar = async () => {
+  const closeCropper = () => {
+    setCropperOpen(false)
+    // Clean up object URL
+    if (image) {
+      URL.revokeObjectURL(image)
+      setImage(null)
+    }
+  }
+
+  const cropAndUpload = async () => {
+    if (!cropperRef.current || !image) return
+
     try {
-      setIsLoading(true)
-      toast.loading('Uploading avatar...')
+      toast.loading('Processing image...')
+
+      console.log('cropperRef', cropperRef)
+
+      // Get cropper instance
+      const cropper = (cropperRef.current as any).cropper
+      console.log('cropper', cropper)
+
+      // Get cropped canvas with specified dimensions
+      const canvas = cropper.getCroppedCanvas({
+        width: 320,
+        height: 320,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+      })
+      console.log('canvas', canvas)
+
+      // Convert canvas to blob
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob: Blob) => {
+          resolve(blob as Blob)
+        }, 'image/jpg') // Use webp for better compression
+      })
+      console.log('blob', blob)
+
+      // Create a File from the blob
+      const optimizedFile = new File([blob], 'avatar.jpg', {
+        type: 'image/jpg',
+      })
+
+      console.log('file', optimizedFile)
+      // Upload the optimized file
       const data = await updateAvatar({
-        file: selectedFile as File,
+        file: optimizedFile,
         userId: id,
       })
 
-      setPreview(null)
       if (!data) {
         toast.error('Failed to update avatar')
         return
       }
+
       toast.dismiss()
       toast.success('Avatar updated successfully')
+      closeCropper()
     } catch (error) {
-      toast.error(`Failed to update avatar : ${error}`)
-    } finally {
-      setIsLoading(false)
+      toast.dismiss()
+      toast.error(`${error}`)
     }
   }
 
   return (
-    <div className="flex items-center gap-4 md:gap-6">
-      {preview ? (
-        <div className="flex flex-col items-center gap-2">
-          <div className="relative">
-            <Avatar className="size-18 md:size-24">
-              <AvatarImage
-                src={preview}
-                alt={username || 'User avatar'}
-                className="object-cover"
-              />
-              <AvatarFallback className="text-lg">{initials}</AvatarFallback>
-            </Avatar>
-            <Input
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              className="hidden"
-              id="avatar-upload"
-              aria-label="Upload avatar"
-            />
-            <Label
-              htmlFor="avatar-upload"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 absolute bottom-0 right-0 cursor-pointer rounded-full p-2"
-              tabIndex={0}
-              aria-label="Upload avatar"
-              role="button"
-            >
-              <Camera className="size-3 md:size-4" />
-              <span className="sr-only">Upload avatar</span>
-            </Label>
-          </div>
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            onClick={() => setPreview(null)}
-            size={'sm'}
-          >
-            Remove
-          </Button>
-        </div>
-      ) : (
+    <>
+      <div className="flex items-center gap-4 md:gap-6">
         <div className="relative">
           <Avatar className="size-18 md:size-24">
             {avatarUrl ? (
@@ -123,7 +134,7 @@ export const ProfileAvatar = ({
           <Input
             type="file"
             onChange={handleFileChange}
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp"
             className="hidden"
             id="avatar-upload"
             aria-label="Upload avatar"
@@ -139,27 +150,57 @@ export const ProfileAvatar = ({
             <span className="sr-only">Upload avatar</span>
           </Label>
         </div>
-      )}
-      <div>
-        <Button
-          variant="outline"
-          disabled={isLoading || !preview}
-          onClick={uploadAvatar}
-          className="relative"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Uploading...
-            </>
-          ) : (
-            'Change Avatar'
-          )}
-        </Button>
-        <p className="text-muted-foreground mt-2 text-xs md:text-sm">
-          JPG,WEBP or PNG Max 5MB.
-        </p>
+
+        <div>
+          <h2 className="font-geist-mono text-2xl font-bold [word-spacing:-6px]">
+            Your Avatar
+          </h2>
+          <p className="text-muted-foreground mt-2 text-xs md:text-sm">
+            JPG, WEBP or PNG. Max 5MB.
+          </p>
+        </div>
       </div>
-    </div>
+
+      {/* Image Cropper Dialog */}
+      <Dialog
+        open={cropperOpen}
+        onOpenChange={(open) => !open && closeCropper()}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Crop Your Avatar</DialogTitle>
+          </DialogHeader>
+
+          <div className="mt-4">
+            {image && (
+              <Cropper
+                src={image}
+                style={{ height: 300, width: '100%' }}
+                initialAspectRatio={1}
+                aspectRatio={1}
+                guides={false}
+                viewMode={1}
+                ref={cropperRef}
+                dragMode="move"
+                cropBoxMovable={true}
+                cropBoxResizable={true}
+                autoCropArea={1}
+                highlight={false}
+                background={false}
+                responsive={true}
+                checkOrientation={false}
+              />
+            )}
+          </div>
+
+          <div className="mt-4 flex justify-end gap-2">
+            <Button variant="outline" onClick={closeCropper}>
+              Cancel
+            </Button>
+            <Button onClick={cropAndUpload}>Save Avatar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
