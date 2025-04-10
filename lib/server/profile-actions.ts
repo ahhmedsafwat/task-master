@@ -1,6 +1,7 @@
 'use server'
 
 import { createSupabaseClient } from '@/utils/supabase/server'
+import { revalidatePath } from 'next/cache'
 
 export async function updateAvatar({
   file,
@@ -40,7 +41,7 @@ export async function updateAvatar({
       .eq('id', userId)
 
     if (updateError) throw updateError
-
+    revalidatePath('/dashboard/profile')
     return publicUrl
   } catch (error) {
     console.error('Avatar update error:', error)
@@ -77,6 +78,7 @@ export async function updateUsername({
       }
     }
 
+    revalidatePath('/dashboard/profile')
     return {
       status: 'success',
       message: 'Username updated successfully',
@@ -86,6 +88,26 @@ export async function updateUsername({
     return {
       status: 'error',
       message: 'An unexpected error occurred',
+    }
+  }
+}
+
+export async function DeleteProfile({ userId }: { userId: string }) {
+  try {
+    const supabase = await createSupabaseClient()
+    const { error } = await supabase.from('profiles').delete().eq('id', userId)
+    if (error) {
+      return {
+        status: 'error',
+        message: 'Failed to delete profile',
+      }
+    }
+    await supabase.auth.signOut()
+  } catch (error) {
+    console.error('Profile deletion error:', error)
+    return {
+      status: 'error',
+      message: error,
     }
   }
 }

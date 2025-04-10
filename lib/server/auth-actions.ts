@@ -9,7 +9,6 @@ import {
   signupSchema,
 } from '@/lib/types/zod'
 import { AuthResponse } from '@/lib/types/types'
-import { revalidatePath } from 'next/cache'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 const AUTH_CALLBACK_URL = `${APP_URL}/auth/callback`
@@ -157,7 +156,6 @@ export async function signOut() {
     const supabase = await createSupabaseClient()
     await supabase.auth.signOut()
 
-    revalidatePath('/dashboard')
     redirect('/auth')
   } catch (error) {
     console.error('Logout error:', error)

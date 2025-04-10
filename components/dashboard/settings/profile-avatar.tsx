@@ -106,8 +106,8 @@ export const ProfileAvatar = ({
       toast.success('Avatar updated successfully')
       closeCropper()
     } catch (error) {
-      toast.dismiss()
       toast.error(`${error}`)
+      toast.dismiss()
     }
   }
 

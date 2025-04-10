@@ -1,13 +1,10 @@
-// profile-form.jsx
 'use client'
-
 import React, { useState } from 'react'
 import { updateUsername } from '@/lib/server/profile-actions'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 interface ProfileFormProps {
   userId: string
@@ -15,45 +12,42 @@ interface ProfileFormProps {
   username: string | null
 }
 
-export default function ProfileForm({
-  userId,
-  email,
-  username,
-}: ProfileFormProps) {
-  const router = useRouter()
+export function ProfileForm({ userId, email, username }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const handleFormSubmit = async (fromData: FormData) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
+      event.preventDefault()
       setIsLoading(true)
 
-      const name = fromData.get('name') as string
-      const result = await updateUsername({
+      const formData = new FormData(event.currentTarget)
+      const name = formData.get('name') as string
+
+      const { message, status } = await updateUsername({
         userId: userId,
         username: name,
       })
 
-      if (!result) {
-        toast.error('Failed to update username')
+      if (status === 'error') {
+        toast.error(message)
         return
       }
 
-      toast.success('Username updated successfully')
-      router.refresh()
+      toast.success(message)
     } catch (error) {
-      toast.error(`Failed to update username : ${error}`)
+      toast.error(`${error}`)
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <form className="space-y-4" action={handleFormSubmit}>
+    <form className="space-y-4" onSubmit={handleFormSubmit}>
       <div className="space-y-2">
         <Label htmlFor="name">Display Name</Label>
         <Input
           id="name"
           name="name"
-          defaultValue={username ?? ''}
+          defaultValue={username ?? email.split('@')[0]}
           className="bg-white/5"
         />
       </div>
