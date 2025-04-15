@@ -1,8 +1,6 @@
 'use client'
-
 import { usePathname } from 'next/navigation'
 import { NavigationItem } from './navigation-item'
-
 import Image from 'next/image'
 import { Plus } from 'lucide-react'
 import { Project } from '@/lib/types/types'
@@ -34,7 +32,7 @@ export function SidebarProjects({
             <TooltipTrigger asChild>
               <Button
                 variant={'link'}
-                className="hover:bg-secondary-foreground bg-accent-foreground size-6 cursor-pointer rounded-full p-1 transition-colors duration-300"
+                className="hover:bg-secondary-foreground bg-accent-foreground box-content size-3 cursor-pointer rounded-md p-0.5 transition-colors duration-300"
               >
                 <Plus />
               </Button>

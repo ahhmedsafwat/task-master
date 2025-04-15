@@ -80,13 +80,9 @@ export default function Page() {
         ))}
       </div>
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_300px]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <TaskCreationDialog />
-
         <ActiveTasks />
-        <div className="space-y-6">
-          {/* Add additional sidebar content here */}
-        </div>
       </div>
     </div>
   )
