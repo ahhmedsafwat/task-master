@@ -1,7 +1,7 @@
 import { StatsCard } from '@/components/dashboard/overview/stats-card'
-import { TaskCreationDialog } from '@/components/dashboard/overview/task-creation-dialog'
-import { ActiveTasks } from '@/components/dashboard/overview/active-tasks'
+import { OverViewTasks } from '@/components/dashboard/overview/overview-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
+import { OverViewProjects } from '@/components/dashboard/overview/overview-projects'
 
 export default function Page() {
   // Mock data - replace with real data from your backend
@@ -66,6 +66,50 @@ export default function Page() {
     },
   ]
 
+  // Projects data
+  const projectTasks = [
+    {
+      id: 'p1',
+      title: 'Yellow Branding',
+      project: '1 task due soon',
+      dueIn: '',
+    },
+    {
+      id: 'p2',
+      title: 'Mogo Web Design',
+      project: 'no task',
+      dueIn: '',
+    },
+    {
+      id: 'p3',
+      title: 'Futurework',
+      project: '7 task due soon',
+      dueIn: '',
+    },
+  ]
+
+  // People data
+  const peopleData = [
+    {
+      id: 'pe1',
+      title: 'Marc Atenson',
+      project: 'marcmine@gmail.com',
+      dueIn: '',
+    },
+    {
+      id: 'pe2',
+      title: 'Susan Drake',
+      project: 'contact@susandrake.com',
+      dueIn: '',
+    },
+    {
+      id: 'pe3',
+      title: 'Ronald Richards',
+      project: 'ronaldrichards@gmail.com',
+      dueIn: '',
+    },
+  ]
+
   return (
     <div className="mx-auto space-y-6">
       {/* Quick Stats */}
@@ -80,9 +124,9 @@ export default function Page() {
         ))}
       </div>
       {/* Main Content Grid */}
-      <div className="grid grid-cols-4 gap-6">
-        <TaskCreationDialog />
-        <ActiveTasks />
+      <div className="grid grid-cols-2 gap-6">
+        <OverViewTasks />
+        <OverViewProjects />
       </div>
     </div>
   )

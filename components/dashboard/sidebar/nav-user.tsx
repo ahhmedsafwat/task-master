@@ -19,7 +19,7 @@ export const NavUser = async () => {
   if (!data) return null
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar>
           <AvatarImage
             src={data.avatar_url || ''}

@@ -74,15 +74,13 @@ export function AppSidebar({ projects }: { projects: Project[] }) {
         <div
           ref={navRef}
           className={cn(
-            'bg-secondary dark:bg-primary relative z-40 flex h-full w-60 flex-col py-4 pl-2 transition-all duration-300 ease-in-out',
+            'bg-secondary dark:bg-primary relative z-40 flex h-full w-60 flex-col py-4 pl-2 pr-2 transition-all duration-300 ease-in-out',
             // Floating state when not pinned but hovering
             !isPinned && !isMobile && isNavVisible
-              ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md pr-2 shadow-2xl'
+              ? 'left-0 m-2 h-[calc(100%-1rem)] rounded-md border shadow-2xl'
               : !isNavVisible && '-left-60',
-            // Fixed position for mobile - ensure it contains the dropdown
-            isMobile &&
-              isPinned &&
-              'fixed left-0 overflow-y-auto overflow-x-visible pr-2',
+            // Fixed position for mobile
+            isMobile && isPinned && 'fixed left-0',
           )}
         >
           {/* Logo at the top */}

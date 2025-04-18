@@ -20,7 +20,8 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         inverted: 'bg-foreground text-background hover:bg-foreground/90',
         galssy:
-          'bg-background/50 glass-morph border border-primary-foreground  shadow-[0px_5px_18px_rgba(204,_204,_204,_0.2)] dark:shadow-[0px_5px_18px_rgba(204,_204,_204,_0.1)]',
+          'glass-morph border border-primary-foreground shadow-sm hover:bg-accent',
+        main: 'bg-main text-foreground shadow-xs hover:bg-main/90',
       },
       size: {
         default: 'h-9 px-4 py-2',
