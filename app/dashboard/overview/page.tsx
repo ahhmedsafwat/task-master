@@ -80,7 +80,7 @@ export default function Page() {
         ))}
       </div>
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid grid-cols-4 gap-6">
         <TaskCreationDialog />
         <ActiveTasks />
       </div>

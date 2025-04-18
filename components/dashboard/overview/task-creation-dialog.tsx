@@ -31,7 +31,7 @@ export function TaskCreationDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-secondary hover:bg-secondary/80 h-44">
+        <Button className="bg-secondary hover:bg-secondary/80">
           <Plus></Plus>
           Create a new task
         </Button>

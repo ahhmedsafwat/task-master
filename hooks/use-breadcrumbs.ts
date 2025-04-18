@@ -12,18 +12,12 @@ export const useBreadcrumbs = () => {
   let currentPath = ''
 
   return segments.map((segment) => {
-    currentPath += `/${segment}`
+    currentPath += `/dashboard/${segment}`
 
     return {
       label: segment,
       href: currentPath,
-      active:
-        currentPath ===
-        pathname
-          .slice(0)
-          .split('/')
-          .filter((filter) => filter !== 'dashboard')
-          .join('/'),
+      active: currentPath === pathname,
     }
   })
 }
