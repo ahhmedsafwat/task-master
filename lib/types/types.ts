@@ -1,5 +1,5 @@
 import { ElementType } from 'react'
-import { Tables } from './database.types'
+import { Tables, TablesInsert } from './database.types'
 import { LucideIcon } from 'lucide-react'
 
 export interface AuthResponse {
@@ -7,6 +7,11 @@ export interface AuthResponse {
   message: string | null
   errors?: Record<string, string[]>
   redirectTo?: string
+}
+
+export interface TaskResponse {
+  status: 'error' | 'created' | 'updated' | 'deleted' | 'idle'
+  message: string | null
 }
 
 export type IconComponent = ElementType<{
@@ -19,6 +24,7 @@ export interface Project extends Tables<'projects'> {
 }
 
 export interface userProfile {
+  id?: string
   email: string
   avatar_url: string | null
   username: string | null
@@ -28,4 +34,8 @@ export interface NavItem {
   title: string
   href: string
   icon: LucideIcon
+}
+
+export interface createTaskprops extends TablesInsert<'tasks'> {
+  userProfile: userProfile | null
 }

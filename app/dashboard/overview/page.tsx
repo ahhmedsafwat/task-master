@@ -2,8 +2,9 @@ import { StatsCard } from '@/components/dashboard/overview/stats-card'
 import { OverViewTasks } from '@/components/dashboard/overview/overview-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 import { OverViewProjects } from '@/components/dashboard/overview/overview-projects'
+import { createSupabaseClient } from '@/utils/supabase/server'
 
-export default function Page() {
+export default async function Page() {
   // Mock data - replace with real data from your backend
   const stats = {
     activeProjects: 5,
@@ -110,6 +111,9 @@ export default function Page() {
     },
   ]
 
+  const supabase = await createSupabaseClient()
+  const { data } = await supabase.auth.getUser()
+
   return (
     <div className="mx-auto space-y-6">
       {/* Quick Stats */}
@@ -125,7 +129,7 @@ export default function Page() {
       </div>
       {/* Main Content Grid */}
       <div className="grid grid-cols-2 gap-6">
-        <OverViewTasks />
+        <OverViewTasks userprofile={data.user || null} />
         <OverViewProjects />
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { CardContent } from '@/components/ui/card'
+'use client'
+import { CardContent, CardFooter } from '@/components/ui/card'
 import { Eye, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { OverViewCard } from './overview-card'
@@ -9,6 +10,11 @@ import {
   TooltipContent,
   Tooltip,
 } from '@/components/ui/tooltip'
+import { createTask } from '@/lib/server/tasks-actions'
+import { User } from '@supabase/supabase-js'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import Link from 'next/link'
 
 interface Task {
   id: string
@@ -21,9 +27,10 @@ interface Task {
 interface ActiveTasksProps {
   tasks?: Task[]
   className?: string
+  userprofile?: User | null
 }
 
-export function OverViewTasks({ tasks }: ActiveTasksProps) {
+export function OverViewTasks({ tasks, userprofile }: ActiveTasksProps) {
   // Mock data - replace with real data from API
   const mockTasks: Task[] = [
     {
@@ -58,21 +65,50 @@ export function OverViewTasks({ tasks }: ActiveTasksProps) {
       bodyChildren={<OverViewTasksBody tasks={tasksToShow} />}
       title="Tasks"
       className="dark:bg-secondary bg-accent"
-      headerChildren={<OverViewTasksHeader />}
+      headerChildren={<OverViewTasksHeader userprofile={userprofile} />}
     />
   )
 }
 
-const OverViewTasksHeader = () => {
+// Method 1: Using direct server action with onClick
+const OverViewTasksHeader = ({ userprofile }: ActiveTasksProps) => {
+  const [isCreating, setIsCreating] = useState(false)
+
+  const handleCreateTask = async () => {
+    if (isCreating) return
+
+    setIsCreating(true)
+    try {
+      const response = await createTask({
+        title: 'New task',
+        userProfile: null,
+        creator_id: userprofile?.id ?? '',
+      })
+
+      if (response.status === 'error') {
+        toast.error(response.message || 'Failed to create task')
+      }
+    } catch {
+      toast.error('Failed to create task')
+    } finally {
+      setIsCreating(false)
+    }
+  }
+
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant={'main'} size={'icon'}>
-            <Plus />
+          <Button
+            variant={'main'}
+            size={'icon'}
+            onClick={handleCreateTask}
+            disabled={isCreating}
+          >
+            <Plus className="text-white" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Create task</TooltipContent>
+        <TooltipContent>Create new task</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   )
@@ -82,56 +118,68 @@ const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
   const tasksToShow = tasks || []
   const isEmpty = tasksToShow.length === 0
   return (
-    <CardContent>
-      {isEmpty ? (
-        <div className="flex h-48 items-center justify-center">
-          <p className="text-muted-foreground text-sm">No items to display</p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {tasksToShow.map((task) => (
-            <div
-              key={task.id}
-              className="bg-primary hover:bg-accent/50 relative flex flex-col rounded-lg border border-dashed p-3 shadow-md transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-medium">{task.title}</h3>
-                  <p className="text-muted-foreground text-sm">
-                    {task.project}
-                  </p>
-                </div>
-                <button
+    <>
+      <CardContent>
+        {isEmpty ? (
+          <div className="flex h-48 items-center justify-center">
+            <p className="text-muted-foreground text-sm">No items to display</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {tasksToShow.map((task) => (
+              <div
+                key={task.id}
+                className="dark:bg-primary bg-secondary dark:hover:bg-accent/50 hover:bg-muted relative flex cursor-pointer items-center justify-between rounded-lg border border-dashed p-3 shadow-md transition-colors"
+              >
+                <Link href={'/dashboard/my-tasks'}>
+                  <div>
+                    <h3 className="font-medium">{task.title}</h3>
+                    <p className="text-muted-foreground text-sm">
+                      {task.project}
+                    </p>
+                    <span>
+                      {task.dueIn && (
+                        <div className="mt-2 flex items-center">
+                          <div
+                            className={cn(
+                              'mr-2 h-2 w-2 rounded-full',
+                              task.dueType === 'soon'
+                                ? 'bg-in-progress'
+                                : task.dueType === 'overdue'
+                                  ? 'bg-destructive'
+                                  : 'bg-success',
+                            )}
+                          />
+                          <span className="text-muted-foreground text-xs">
+                            Due {task.dueIn}
+                          </span>
+                        </div>
+                      )}
+                    </span>
+                  </div>
+                </Link>
+                <Button
                   aria-label="View details"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  variant={'secondary'}
+                  size={'icon'}
+                  onClick={() => {
+                    // Handle view details action
+                    toast('View task details')
+                  }}
                   tabIndex={0}
                 >
                   <Eye size={18} />
-                </button>
+                </Button>
               </div>
-              <span>
-                {task.dueIn && (
-                  <div className="mt-2 flex items-center">
-                    <div
-                      className={cn(
-                        'mr-2 h-2 w-2 rounded-full',
-                        task.dueType === 'soon'
-                          ? 'bg-amber-500'
-                          : task.dueType === 'overdue'
-                            ? 'bg-red-500'
-                            : 'bg-green-500',
-                      )}
-                    />
-                    <span className="text-muted-foreground text-xs">
-                      Due {task.dueIn}
-                    </span>
-                  </div>
-                )}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </CardContent>
+            ))}
+          </div>
+        )}
+      </CardContent>
+      <CardFooter className="w-full">
+        <Button asChild variant={'inverted'} className="w-full text-center">
+          <Link href={'/dashboard/my-tasks'}>View all tasks</Link>
+        </Button>
+      </CardFooter>
+    </>
   )
 }
