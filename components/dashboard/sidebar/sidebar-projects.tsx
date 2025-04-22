@@ -11,10 +11,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
+import { Tables } from '@/lib/types/database.types'
 
 interface SidebarProjectsProps {
   onItemClick?: () => void
-  projects: Project[]
+  projects: Tables<'projects'>[]
 }
 
 export function SidebarProjects({
@@ -31,7 +32,7 @@ export function SidebarProjects({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant={'link'}
+                variant={'inverted'}
                 className="hover:bg-secondary-foreground bg-accent-foreground box-content size-3 cursor-pointer rounded-md p-0.5 transition-colors duration-300"
               >
                 <Plus />
@@ -52,7 +53,7 @@ export function SidebarProjects({
               title={project.name}
               isActive={isActive}
               key={project.id + project.name}
-              icon={project.icon}
+              project_cover={project.project_covers}
               customIcon={
                 project.project_covers ? (
                   <div className="mr-2">

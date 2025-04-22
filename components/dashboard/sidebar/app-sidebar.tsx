@@ -6,14 +6,15 @@ import { useSidebar } from '@/hooks/use-sidebar'
 
 import { SidebarNavigation } from './sidebar-navigation'
 import { SidebarProjects } from './sidebar-projects'
-import { Project } from '@/lib/types/types'
+
 import { MenuIcon } from '@/components/ui/menu-icon'
 
 import { PanelLeftClose, PanelRightClose } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SidebarHeader } from './sidebar-header'
+import { Tables } from '@/lib/types/database.types'
 
-export function AppSidebar({ projects }: { projects: Project[] }) {
+export function AppSidebar({ projects }: { projects: Tables<'projects'>[] }) {
   // Use our custom sidebar hook
   const {
     isPinned,

@@ -17,9 +17,9 @@ export default async function Layout({
   if (!projects.data) return null
 
   return (
-    <section className="bg-secondary dark:bg-primary flex max-h-screen overflow-hidden">
+    <section className="bg-secondary dashboard dark:bg-primary flex max-h-screen overflow-hidden">
       <AppSidebar projects={projects.data} />
-      <div className="bg-background relative m-1.5 h-screen flex-1 overflow-y-auto rounded-md border">
+      <div className="bg-background dashboard relative m-1.5 h-screen flex-1 overflow-y-auto rounded-md border">
         <DashboardHeader />
         <div className="p-4">{children}</div>
       </div>

@@ -9,10 +9,10 @@ export const useBreadcrumbs = () => {
     .split('/')
     .filter((filter) => filter !== 'dashboard')
 
-  let currentPath = ''
+  let currentPath = '/dashboard'
 
   return segments.map((segment) => {
-    currentPath += `/dashboard/${segment}`
+    currentPath += `/${segment}`
 
     return {
       label: segment,

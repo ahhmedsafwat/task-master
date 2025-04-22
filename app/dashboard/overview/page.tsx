@@ -1,10 +1,12 @@
+'use client'
 import { StatsCard } from '@/components/dashboard/overview/stats-card'
 import { OverViewTasks } from '@/components/dashboard/overview/overview-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 import { OverViewProjects } from '@/components/dashboard/overview/overview-projects'
-import { createSupabaseClient } from '@/utils/supabase/server'
+import { Button } from '@/components/ui/button'
+import { assigneTask } from '@/lib/server/tasks-actions'
 
-export default async function Page() {
+export default function Page() {
   // Mock data - replace with real data from your backend
   const stats = {
     activeProjects: 5,
@@ -67,52 +69,49 @@ export default async function Page() {
     },
   ]
 
-  // Projects data
-  const projectTasks = [
-    {
-      id: 'p1',
-      title: 'Yellow Branding',
-      project: '1 task due soon',
-      dueIn: '',
-    },
-    {
-      id: 'p2',
-      title: 'Mogo Web Design',
-      project: 'no task',
-      dueIn: '',
-    },
-    {
-      id: 'p3',
-      title: 'Futurework',
-      project: '7 task due soon',
-      dueIn: '',
-    },
-  ]
+  // // Projects data
+  // const projectTasks = [
+  //   {
+  //     id: 'p1',
+  //     title: 'Yellow Branding',
+  //     project: '1 task due soon',
+  //     dueIn: '',
+  //   },
+  //   {
+  //     id: 'p2',
+  //     title: 'Mogo Web Design',
+  //     project: 'no task',
+  //     dueIn: '',
+  //   },
+  //   {
+  //     id: 'p3',
+  //     title: 'Futurework',
+  //     project: '7 task due soon',
+  //     dueIn: '',
+  //   },
+  // ]
 
-  // People data
-  const peopleData = [
-    {
-      id: 'pe1',
-      title: 'Marc Atenson',
-      project: 'marcmine@gmail.com',
-      dueIn: '',
-    },
-    {
-      id: 'pe2',
-      title: 'Susan Drake',
-      project: 'contact@susandrake.com',
-      dueIn: '',
-    },
-    {
-      id: 'pe3',
-      title: 'Ronald Richards',
-      project: 'ronaldrichards@gmail.com',
-      dueIn: '',
-    },
-  ]
-
-  const supabase = await createSupabaseClient()
-  const { data } = await supabase.auth.getUser()
+  // // People data
+  // const peopleData = [
+  //   {
+  //     id: 'pe1',
+  //     title: 'Marc Atenson',
+  //     project: 'marcmine@gmail.com',
+  //     dueIn: '',
+  //   },
+  //   {
+  //     id: 'pe2',
+  //     title: 'Susan Drake',
+  //     project: 'contact@susandrake.com',
+  //     dueIn: '',
+  //   },
+  //   {
+  //     id: 'pe3',
+  //     title: 'Ronald Richards',
+  //     project: 'ronaldrichards@gmail.com',
+  //     dueIn: '',
+  //   },
+  // ]
 
   return (
     <div className="mx-auto space-y-6">
@@ -129,8 +128,13 @@ export default async function Page() {
       </div>
       {/* Main Content Grid */}
       <div className="grid grid-cols-2 gap-6">
-        <OverViewTasks userprofile={data.user || null} />
+        <OverViewTasks />
         <OverViewProjects />
+        <Button
+          onClick={async () => {
+            await assigneTask()
+          }}
+        ></Button>
       </div>
     </div>
   )

@@ -17,7 +17,7 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        link: 'text-primary-forground underline-offset-4 hover:underline',
         inverted: 'bg-foreground text-background hover:bg-foreground/90',
         galssy:
           'glass-morph border border-primary-foreground shadow-sm hover:bg-accent',
@@ -28,7 +28,7 @@ const buttonVariants = cva(
         sm: 'h-8 rounded-md px-3 text-xs',
         lg: 'h-11 py-5 px-6',
         icon: 'h-9 w-9',
-        smIcon: 'h-6 w-6',
+        smIcon: 'h-7 w-7',
       },
     },
 

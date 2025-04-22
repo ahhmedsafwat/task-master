@@ -144,6 +144,16 @@
     background: #b34522;
     color: #fff;
   }
+
+  section.dashboard ::selection {
+    background: #373b67;
+    color: #fff;
+  }
+}
+
+textarea {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 @layer base {

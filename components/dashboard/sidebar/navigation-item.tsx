@@ -1,4 +1,3 @@
-import { IconComponent } from '@/lib/types/types'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { ReactNode } from 'react'
@@ -7,7 +6,7 @@ import { ReactNode } from 'react'
 
 interface NavigationItemProps {
   href: string
-  icon?: IconComponent
+  project_cover: string | null
   customIcon?: ReactNode
   title: string
   isActive?: boolean
@@ -16,7 +15,7 @@ interface NavigationItemProps {
 
 export function NavigationItem({
   href,
-  icon: Icon,
+  project_cover: Icon,
   customIcon,
   title,
   isActive = false,
@@ -37,10 +36,11 @@ export function NavigationItem({
       <div className="flex items-center">
         {customIcon ||
           (Icon && (
-            <Icon
-              size={16}
-              className={cn('mr-2', isActive ? 'opacity-100' : 'opacity-80')}
-            />
+            <div
+              className={cn('mr-2', isActive ? 'opacity-100' : 'opacity-75')}
+            >
+              {Icon}
+            </div>
           ))}
         <span className="text-sm">{title}</span>
       </div>

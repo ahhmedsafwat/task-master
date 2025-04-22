@@ -60,3 +60,51 @@ export const signupSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginSchema>
 export type SignupFormData = z.infer<typeof signupSchema>
+
+// Define Zod schema for task creation
+export const TaskSchema = z
+  .object({
+    title: z.string().min(1, 'Task title is required'),
+    markdown_content: z.string().optional(),
+    is_private: z.boolean().default(true),
+    priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('LOW'),
+    status: z.enum(['BACKLOG', 'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
+    project_id: z.string().nullable().optional(),
+    assignee_id: z.string().nullable().optional(),
+    due_date: z
+      .string()
+      .refine((val) => {
+        if (!val) return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      }, 'Invalid date format')
+      .nullable()
+      .optional(),
+    start_date: z
+      .string()
+      .refine((val) => {
+        if (!val) return true
+        const date = new Date(val)
+        return !isNaN(date.getTime())
+      }, 'Invalid date format')
+      .nullable()
+      .optional(),
+  })
+  .refine(
+    (data) => {
+      // Custom validation: start_date should be before due_date if both exist
+      if (data.start_date && data.due_date) {
+        const startDate = new Date(data.start_date)
+        const dueDate = new Date(data.due_date)
+        return startDate <= dueDate
+      }
+      return true
+    },
+    {
+      message: 'Start date must be before due date',
+      path: ['start_date'],
+    },
+  )
+
+// Infer the type from the schema for TypeScript
+export type TaskInput = z.infer<typeof TaskSchema>
