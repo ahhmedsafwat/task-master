@@ -51,19 +51,27 @@ export async function createTask(
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
 
-    // Check project access if a project_id is provided
+    // Check project access if a project_id is provided and user is not a member of the project
     if (validData.project_id) {
-      const { data: projectAccess } = await supabase
-        .from('project_members')
-        .select('role')
-        .eq('project_id', validData.project_id)
-        .eq('user_id', user.id)
-        .single()
+      try {
+        const { data: projectAccess } = await supabase
+          .from('project_members')
+          .select('role')
+          .eq('project_id', validData.project_id)
+          .eq('user_id', user.id)
+          .single()
 
-      if (!projectAccess || projectAccess.role === 'VIEWER') {
+        if (!projectAccess || projectAccess.role === 'VIEWER') {
+          return {
+            status: 'error',
+            message: 'You do not have access to create tasks in this project',
+          }
+        }
+      } catch (error) {
+        console.error('Error checking project access:', error)
         return {
           status: 'error',
-          message: 'You do not have access to create tasks in this project',
+          message: 'Failed to check project access',
         }
       }
     }

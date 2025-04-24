@@ -146,8 +146,8 @@
   }
 
   section.dashboard ::selection {
-    background: #373b67;
-    color: #fff;
+    background: #373b67 !important;
+    color: #fff !important;
   }
 }
 

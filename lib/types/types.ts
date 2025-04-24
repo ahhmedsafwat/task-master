@@ -1,5 +1,4 @@
-import { ElementType } from 'react'
-import { Tables, TablesInsert } from '@/lib/types/database.types'
+import { TablesInsert } from '@/lib/types/database.types'
 import { LucideIcon } from 'lucide-react'
 
 export interface AuthResponse {
@@ -17,8 +16,6 @@ export interface TaskResponse {
     taskId?: string
   }
 }
-
-export interface Project extends Tables<'projects'> {}
 
 export interface userProfile {
   id?: string
