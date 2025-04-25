@@ -9,15 +9,15 @@ interface createTaskFormData extends TablesInsert<'tasks'> {
 export function useCreateTaskForm() {
   const [formData, setFormData] = useState<createTaskFormData>({
     title: '',
-    assignee_id: '',
+    assignee_id: undefined,
     markdown_content: '',
     is_private: true,
     project_id: null,
     priority: 'LOW',
     status: 'BACKLOG',
     creator_id: '',
-    due_date: new Date().toISOString(),
-    start_date: new Date().toISOString(),
+    due_date: null,
+    start_date: null,
   })
 
   const updateFormDataFields = <K extends keyof createTaskFormData>(
@@ -78,7 +78,7 @@ export function useCreateTaskForm() {
   const filteredProjects = useMemo(
     () =>
       searchProjectQuery.trim() === ''
-        ? projects
+        ? []
         : projects.filter((project) =>
             project.name
               ?.toLowerCase()
@@ -90,7 +90,7 @@ export function useCreateTaskForm() {
   const filteredUsers = useMemo(
     () =>
       searchUserQuery.trim() === ''
-        ? users
+        ? []
         : users.filter(
             (user) =>
               user.username
@@ -104,15 +104,15 @@ export function useCreateTaskForm() {
   const resetFormData = () => {
     setFormData({
       title: '',
-      assignee_id: '',
+      assignee_id: undefined,
       markdown_content: '',
       is_private: true,
       project_id: null,
       priority: 'LOW',
       status: 'BACKLOG',
       creator_id: '',
-      due_date: new Date().toISOString(),
-      start_date: new Date().toISOString(),
+      due_date: null,
+      start_date: null,
     })
 
     setSearchProjectQuery('')
@@ -125,6 +125,8 @@ export function useCreateTaskForm() {
     formData,
     searchProjectQuery,
     searchUserQuery,
+    projects,
+    users,
     setProjects,
     setUsers,
     updateFormDataFields,
