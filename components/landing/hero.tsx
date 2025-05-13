@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic'
 // Import ThreeBackground with dynamic import to prevent SSR issues
 const ThreeBackground = dynamic(() => import('./three-background'), {
   ssr: false,
+  loading: () => <div className="bg-background absolute inset-0 -z-20" />,
 })
 
 const enteryVariant: Variants = {

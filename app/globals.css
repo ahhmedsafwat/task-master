@@ -132,7 +132,8 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
   }
 
   body {
@@ -143,6 +144,10 @@
   ::selection {
     background: #b34522;
     color: #fff;
+  }
+
+  section.dashboard {
+    scrollbar-width: none;
   }
 
   section.dashboard ::selection {

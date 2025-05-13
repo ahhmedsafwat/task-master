@@ -38,7 +38,7 @@ import { format } from 'date-fns'
 import { CalendarIcon, Link, Plus } from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { SearchDropDown } from './search-drop-down'
+import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
 
 // Date picker field component
 const DatePickerField = ({
@@ -90,119 +90,6 @@ const DatePickerField = ({
     <input type="hidden" name={id.toLowerCase()} value={date ?? ''} />
   </div>
 )
-
-// Project selection component with SearchDropDown
-type ProjectItem = {
-  id: string
-  name: string
-}
-
-const ProjectSelection = ({
-  filteredProjects,
-  searchProjectQuery,
-  setSearchProjectQuery,
-  updateFormData,
-  projectId,
-  isPrivate,
-}: {
-  filteredProjects: Array<{ id?: string; name?: string }>
-  searchProjectQuery: string
-  setSearchProjectQuery: (query: string) => void
-  updateFormData: (field: string, value: any) => void
-  projectId: string | null
-  isPrivate: boolean
-}) => {
-  // Filter out projects with missing id or name
-  const validProjects: ProjectItem[] = filteredProjects
-    .filter(
-      (project): project is { id: string; name: string } =>
-        typeof project.id === 'string' && typeof project.name === 'string',
-    )
-    .map((project) => ({
-      id: project.id,
-      name: project.name,
-    }))
-
-  return (
-    <div className="space-y-2">
-      <Label htmlFor="project-search">Project</Label>
-      <SearchDropDown
-        items={validProjects}
-        placeholder="Search projects..."
-        searchQuery={searchProjectQuery}
-        setSearchQuery={setSearchProjectQuery}
-        disabled={!isPrivate}
-        onItemSelect={(id, name) => {
-          updateFormData('project_id', id)
-          setSearchProjectQuery(name)
-        }}
-      />
-      {/* Hidden input for form submission */}
-      <input type="hidden" name="project_id" value={projectId || ''} />
-    </div>
-  )
-}
-
-// Assignee selection component with SearchDropDown
-type UserItem = {
-  id: string
-  name: string
-  email?: string
-}
-
-const AssigneeSelection = ({
-  filteredUsers,
-  searchUserQuery,
-  setSearchUserQuery,
-  updateFormData,
-  assigneeId,
-  isDisabled,
-}: {
-  filteredUsers: Array<{ id?: string; username?: string; email?: string }>
-  searchUserQuery: string
-  setSearchUserQuery: (query: string) => void
-  updateFormData: (field: string, value: any) => void
-  assigneeId: string | undefined
-  isDisabled: boolean
-}) => {
-  // Filter out users with missing id or username
-  const validUsers: UserItem[] = filteredUsers
-    .filter(
-      (user): user is { id: string; username: string; email: string } =>
-        typeof user.id === 'string' &&
-        typeof user.username === 'string' &&
-        typeof user.email === 'string',
-    )
-    .map((user) => ({
-      id: user.id,
-      name: user.username,
-      email: user.email,
-    }))
-
-  return (
-    <div className="space-y-2">
-      <Label
-        htmlFor="assignee-search"
-        className={cn(isDisabled ? 'text-muted-foreground' : '')}
-      >
-        Assignee
-      </Label>
-      <SearchDropDown
-        items={validUsers}
-        placeholder="Search users..."
-        searchQuery={searchUserQuery}
-        setSearchQuery={setSearchUserQuery}
-        disabled={isDisabled}
-        onItemSelect={(id, name) => {
-          updateFormData('assignee_id', id)
-          setSearchUserQuery(name)
-        }}
-      />
-      {/* Hidden input for form submission */}
-      <input type="hidden" name="assignee_id" value={assigneeId || ''} />
-    </div>
-  )
-}
 
 // Priority and Status selection component
 const PriorityStatusSelections = ({
@@ -300,33 +187,25 @@ const TaskForm = ({
   resetFormData: () => void
 }) => {
   const {
-    filteredProjects,
-    filteredUsers,
     formData,
+    filteredProjects,
     searchProjectQuery,
-    searchUserQuery,
     setSearchProjectQuery,
-    setSearchUserQuery,
+
     updateFormDataFields,
   } = useCreateTaskForm()
 
-  // Use action state for the createTask server action
-  const [createTaskState] = useActionState<TaskResponse, FormData>(createTask, {
-    status: 'idle',
-    message: null,
-  })
-
-  // Handle response from server action
+  // Handle server action responses
   useEffect(() => {
-    if (createTaskState.status === 'error' && createTaskState.message) {
-      toast.error(createTaskState.message)
+    if (createTaskAction.status === 'error' && createTaskAction.message) {
+      toast.error(createTaskAction.message)
     }
 
-    if (createTaskState.status === 'created') {
-      toast.success(createTaskState.message, {
+    if (createTaskAction.status === 'created') {
+      toast.success(createTaskAction.message, {
         description: (
           <Link
-            href={`/dashboard/${createTaskState.data?.taskId}`}
+            href={`/dashboard/${createTaskAction.data?.taskId}`}
             className="text-blue-500 underline"
           >
             View task
@@ -336,7 +215,9 @@ const TaskForm = ({
       onSuccess()
       resetFormData()
     }
-  }, [createTaskState, onSuccess, resetFormData])
+
+    // Setup action state listener
+  }, [createTaskAction, onSuccess, resetFormData])
 
   return (
     <form
@@ -363,15 +244,22 @@ const TaskForm = ({
       {/* Form Fields Grid */}
       <div className="flex flex-col space-y-4">
         {/* Project Selection */}
-        <ProjectSelection
-          filteredProjects={filteredProjects}
-          searchProjectQuery={searchProjectQuery}
-          setSearchProjectQuery={setSearchProjectQuery}
-          updateFormData={(field, value) =>
-            updateFormDataFields(field as any, value)
-          }
-          projectId={formData.project_id || ''}
-          isPrivate={!!formData.is_private}
+        <ProjectsSearchDropDown
+          projects={filteredProjects as { id: string; name: string }[]}
+          label="Project"
+          searchQuery={searchProjectQuery}
+          setSearchQuery={setSearchProjectQuery}
+          onProjectSelect={(value) => {
+            updateFormDataFields('project_id', value)
+          }}
+          placeholder="Search projects..."
+          disabled={!!formData.is_private}
+        />
+        {/* Hidden input for form submission */}
+        <input
+          type="hidden"
+          name={'project_id'}
+          value={formData.project_id || ''}
         />
 
         {/* Priority and Status */}
@@ -383,22 +271,17 @@ const TaskForm = ({
           }
         />
 
-        {/* Assignee Selection */}
-        <AssigneeSelection
-          filteredUsers={
-            filteredUsers as {
-              id?: string
-              username?: string
-              email?: string
-            }[]
-          }
-          searchUserQuery={searchUserQuery}
-          setSearchUserQuery={setSearchUserQuery}
-          updateFormData={(field, value) =>
-            updateFormDataFields(field as any, value)
-          }
-          assigneeId={formData.assignee_id}
-          isDisabled={!formData.project_id || !!formData.is_private}
+        {/* Assignees Selection - Replace single assignee with multiple assignees */}
+        {/* <MultiSelectAssignees
+          users={users}
+          placeholder="search user assign..."
+          maxDisplayItems={3}
+        /> */}
+        {/* Hidden input for form submission - array of assignee IDs */}
+        <input
+          type="hidden"
+          name="assignee_ids"
+          value={JSON.stringify(formData.assignee_ids || [])}
         />
 
         {/* Start Date */}
@@ -413,7 +296,7 @@ const TaskForm = ({
         <DatePickerField
           id="due_date"
           label="Due Date"
-          date={formData.start_date || null}
+          date={formData.due_date || null}
           onSelect={(date) => updateFormDataFields('due_date', date)}
         />
 
@@ -457,7 +340,7 @@ const TaskForm = ({
 // Main component
 export const OverViewTasksHeader = () => {
   const [openDialog, setOpenDialog] = useState(false)
-  const [createTaskState, createTaskAction, isPending] = useActionState<
+  const [, createTaskAction, isPending] = useActionState<
     TaskResponse,
     FormData
   >(createTask, {

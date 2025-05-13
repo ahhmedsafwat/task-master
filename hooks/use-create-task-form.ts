@@ -3,13 +3,13 @@ import { userProfile } from '@/lib/types/types'
 import { useEffect, useMemo, useState } from 'react'
 
 interface createTaskFormData extends TablesInsert<'tasks'> {
-  assignee_id: string | undefined
+  assignee_ids: string[]
 }
 
 export function useCreateTaskForm() {
   const [formData, setFormData] = useState<createTaskFormData>({
     title: '',
-    assignee_id: undefined,
+    assignee_ids: [],
     markdown_content: '',
     is_private: true,
     project_id: null,
@@ -30,12 +30,74 @@ export function useCreateTaskForm() {
   const [searchProjectQuery, setSearchProjectQuery] = useState('')
   const [searchUserQuery, setSearchUserQuery] = useState('')
 
+  const [selectedUsers, setSelectedUsers] = useState<userProfile[]>([])
+
   const [users, setUsers] = useState<userProfile[]>([])
   const [projects, setProjects] = useState<Partial<Tables<'projects'>>[]>([])
 
   // Mock projects and users for demonstration
   useEffect(() => {
     setProjects([
+      {
+        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        name: 'Website Redesign',
+        creator_id: '',
+      },
+      {
+        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
+        name: 'Mobile App',
+        creator_id: '',
+      },
+      {
+        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
+        name: 'Dashboard UI',
+        creator_id: '',
+      },
+      {
+        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        name: 'Website Redesign',
+        creator_id: '',
+      },
+      {
+        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
+        name: 'Mobile App',
+        creator_id: '',
+      },
+      {
+        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
+        name: 'Dashboard UI',
+        creator_id: '',
+      },
+      {
+        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        name: 'Website Redesign',
+        creator_id: '',
+      },
+      {
+        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
+        name: 'Mobile App',
+        creator_id: '',
+      },
+      {
+        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
+        name: 'Dashboard UI',
+        creator_id: '',
+      },
+      {
+        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        name: 'Website Redesign',
+        creator_id: '',
+      },
+      {
+        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
+        name: 'Mobile App',
+        creator_id: '',
+      },
+      {
+        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
+        name: 'Dashboard UI',
+        creator_id: '',
+      },
       {
         id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
         name: 'Website Redesign',
@@ -78,7 +140,7 @@ export function useCreateTaskForm() {
   const filteredProjects = useMemo(
     () =>
       searchProjectQuery.trim() === ''
-        ? []
+        ? projects
         : projects.filter((project) =>
             project.name
               ?.toLowerCase()
@@ -90,7 +152,7 @@ export function useCreateTaskForm() {
   const filteredUsers = useMemo(
     () =>
       searchUserQuery.trim() === ''
-        ? []
+        ? users
         : users.filter(
             (user) =>
               user.username
@@ -101,10 +163,32 @@ export function useCreateTaskForm() {
     [searchUserQuery, users],
   )
 
+  const addSelectedUser = (user: userProfile) => {
+    if (!selectedUsers.some((selected) => selected.id === user.id)) {
+      const newSelectedUsers = [...selectedUsers, user]
+      setSelectedUsers(newSelectedUsers)
+
+      updateFormDataFields(
+        'assignee_ids',
+        newSelectedUsers.map((user) => user.id).filter(Boolean) as string[],
+      )
+    }
+  }
+
+  const removeSelectedUser = (userId: string) => {
+    const newSelectedUsers = selectedUsers.filter((user) => user.id !== userId)
+    setSelectedUsers(newSelectedUsers)
+
+    updateFormDataFields(
+      'assignee_ids',
+      newSelectedUsers.map((user) => user.id).filter(Boolean) as string[],
+    )
+  }
+
   const resetFormData = () => {
     setFormData({
       title: '',
-      assignee_id: undefined,
+      assignee_ids: [],
       markdown_content: '',
       is_private: true,
       project_id: null,
@@ -115,6 +199,7 @@ export function useCreateTaskForm() {
       start_date: null,
     })
 
+    setSelectedUsers([])
     setSearchProjectQuery('')
     setSearchUserQuery('')
   }
@@ -127,6 +212,9 @@ export function useCreateTaskForm() {
     searchUserQuery,
     projects,
     users,
+    selectedUsers,
+    addSelectedUser,
+    removeSelectedUser,
     setProjects,
     setUsers,
     updateFormDataFields,

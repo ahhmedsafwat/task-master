@@ -1,29 +1,33 @@
-import { Input } from '@/components/ui/input'
 import { useState } from 'react'
+import { Input } from './input'
+import { Label } from './label'
 
-interface searchDropDownProps {
-  items: { id: string; name: string; email?: string }[]
+interface ProjectsSearchDropDownProps {
+  projects: { id: string; name: string }[]
+  label: string
   placeholder: string
   searchQuery: string
   setSearchQuery: (query: string) => void
+  onProjectSelect: (value: string) => void
   disabled?: boolean
-  onItemSelect: (id: string, name: string) => void
 }
 
-export const SearchDropDown = ({
-  items,
+export const ProjectsSearchDropDown = ({
+  projects,
+  label,
   placeholder,
-  onItemSelect,
   searchQuery,
+  onProjectSelect,
   setSearchQuery,
   disabled,
-}: searchDropDownProps) => {
+}: ProjectsSearchDropDownProps) => {
   const [searchDropDown, setSearchDropDown] = useState(false)
 
   return (
     <div>
+      <Label htmlFor={label}>{label}</Label>
       <Input
-        id="item-search"
+        id={label}
         placeholder={placeholder}
         className="w-full"
         value={searchQuery}
@@ -33,34 +37,29 @@ export const SearchDropDown = ({
         autoComplete="off"
         disabled={disabled}
       />
-      {searchDropDown && searchQuery.length > 0 && items.length > 0 && (
-        <div className="bg-popover absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md shadow-md">
-          {items.map((item) => (
+      {searchDropDown && projects.length > 0 && (
+        <div className="bg-popover absolute z-10 mt-1 max-h-40 w-[calc(100%-20px)] overflow-auto rounded-md shadow-md">
+          {projects.map((project) => (
             <div
-              key={item.id}
+              key={project.id}
               className="hover:bg-accent cursor-pointer px-3 py-2"
               tabIndex={0} // Make it focusable
               onMouseDown={() => {
                 // Use onMouseDown to fire before onBlur
-                onItemSelect(item.id, item.name)
-                setSearchQuery(item.name || '')
+                onProjectSelect(project.id)
+                setSearchQuery(project.name || '')
                 setSearchDropDown(false)
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  onItemSelect(item.id, item.name)
-                  setSearchQuery(item.name || '')
+                  onProjectSelect(project.id)
+                  setSearchQuery(project.name || '')
                   setSearchDropDown(false)
                 }
               }}
-              aria-label={`Select item ${item.name}`}
+              aria-label={`Select item ${project.name}`}
             >
-              <div>{item.name}</div>
-              {item.email && (
-                <div className="text-muted-foreground text-xs">
-                  {item.email}
-                </div>
-              )}
+              <div>{project.name}</div>
             </div>
           ))}
         </div>
