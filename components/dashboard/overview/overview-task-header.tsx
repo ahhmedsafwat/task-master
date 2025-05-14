@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
@@ -10,11 +9,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
 import {
   Select,
   SelectContent,
@@ -32,64 +26,14 @@ import {
 } from '@/components/ui/tooltip'
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
 import { createTask } from '@/lib/server/tasks-actions'
-import { TaskResponse } from '@/lib/types/types'
-import { cn } from '@/lib/utils'
-import { format } from 'date-fns'
-import { CalendarIcon, Link, Plus } from 'lucide-react'
+import { TaskResponse, userProfile } from '@/lib/types/types'
+import { Link, Plus } from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
-
-// Date picker field component
-const DatePickerField = ({
-  id,
-  label,
-  date,
-  onSelect,
-}: {
-  id: string
-  label: string
-  date: string | null
-  onSelect: (date: string | null) => void
-}) => (
-  <div className="space-y-2">
-    <Label htmlFor={id}>{label}</Label>
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          id={id}
-          variant="outline"
-          className={cn(
-            'w-full justify-start text-left font-normal',
-            !date && 'text-muted-foreground',
-          )}
-          aria-label={
-            date
-              ? `Selected ${label.toLowerCase()}: ${format(new Date(date), 'PPP')}`
-              : `Pick a ${label.toLowerCase()}`
-          }
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(new Date(date), 'PPP') : `Pick a date`}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar
-          mode="single"
-          selected={date ? new Date(date) : undefined}
-          onSelect={(selectedDate) => {
-            onSelect(
-              selectedDate instanceof Date ? selectedDate.toISOString() : null,
-            )
-          }}
-          initialFocus
-        />
-      </PopoverContent>
-    </Popover>
-    {/* Hidden input for form submission */}
-    <input type="hidden" name={id.toLowerCase()} value={date ?? ''} />
-  </div>
-)
+import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
+import { Tables } from '@/lib/types/database.types'
+import { DatePickerField } from './overview-task-data-picker'
 
 // Priority and Status selection component
 const PriorityStatusSelections = ({
@@ -97,8 +41,8 @@ const PriorityStatusSelections = ({
   status,
   updateFormData,
 }: {
-  priority: string | null | undefined
-  status: string | null | undefined
+  priority: string | null
+  status: string | null
   updateFormData: (field: string, value: any) => void
 }) => (
   <>
@@ -186,15 +130,10 @@ const TaskForm = ({
   onSuccess: () => void
   resetFormData: () => void
 }) => {
-  const {
-    formData,
-    filteredProjects,
-    searchProjectQuery,
-    setSearchProjectQuery,
+  const { formData, updateFormDataFields } = useCreateTaskForm()
 
-    updateFormDataFields,
-  } = useCreateTaskForm()
-
+  const [users, setUsers] = useState<userProfile[]>([])
+  const [projects, setProjects] = useState<Partial<Tables<'projects'>>[]>([])
   // Handle server action responses
   useEffect(() => {
     if (createTaskAction.status === 'error' && createTaskAction.message) {
@@ -216,6 +155,47 @@ const TaskForm = ({
       resetFormData()
     }
 
+    // Mock projects and users for demonstration
+
+    setProjects([
+      {
+        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        name: 'Website Redesign',
+        creator_id: '',
+      },
+      {
+        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
+        name: 'Mobile App',
+        creator_id: '',
+      },
+      {
+        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
+        name: 'Dashboard UI',
+        creator_id: '',
+      },
+    ])
+
+    setUsers([
+      {
+        id: 'a03c3921-b52f-49e2-add8-ccd24983834b',
+        username: 'John Doe',
+        email: 'john@example.com',
+        avatar_url: '',
+      },
+      {
+        id: 'user2',
+        username: 'Jane Smith',
+        email: 'jane@example.com',
+        avatar_url: '',
+      },
+      {
+        id: 'user3',
+        username: 'Alex Johnson',
+        email: 'alex@example.com',
+        avatar_url: '',
+      },
+    ])
+
     // Setup action state listener
   }, [createTaskAction, onSuccess, resetFormData])
 
@@ -235,7 +215,7 @@ const TaskForm = ({
             className="h-12 text-pretty rounded-md border-0 p-2 font-bold shadow-none ring-0 selection:bg-[#373b67] placeholder:text-base focus-visible:ring-0 md:text-lg"
             autoFocus
             required
-            value={formData.title || ''}
+            value={formData.title ?? ''}
             onChange={(e) => updateFormDataFields('title', e.target.value)}
           />
         </DialogTitle>
@@ -245,10 +225,8 @@ const TaskForm = ({
       <div className="flex flex-col space-y-4">
         {/* Project Selection */}
         <ProjectsSearchDropDown
-          projects={filteredProjects as { id: string; name: string }[]}
+          projects={projects as { id: string; name: string }[]}
           label="Project"
-          searchQuery={searchProjectQuery}
-          setSearchQuery={setSearchProjectQuery}
           onProjectSelect={(value) => {
             updateFormDataFields('project_id', value)
           }}
@@ -259,24 +237,25 @@ const TaskForm = ({
         <input
           type="hidden"
           name={'project_id'}
-          value={formData.project_id || ''}
+          value={formData.project_id ?? ''}
         />
 
         {/* Priority and Status */}
         <PriorityStatusSelections
-          priority={formData.priority}
-          status={formData.status}
+          priority={formData.priority ?? ''}
+          status={formData.status ?? ''}
           updateFormData={(field, value) =>
             updateFormDataFields(field as any, value)
           }
         />
 
         {/* Assignees Selection - Replace single assignee with multiple assignees */}
-        {/* <MultiSelectAssignees
+        <MultiSelectAssignees
           users={users}
           placeholder="search user assign..."
           maxDisplayItems={3}
-        /> */}
+          onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
+        />
         {/* Hidden input for form submission - array of assignee IDs */}
         <input
           type="hidden"
@@ -290,14 +269,6 @@ const TaskForm = ({
           label="Start Date"
           date={formData.start_date || null}
           onSelect={(date) => updateFormDataFields('start_date', date)}
-        />
-
-        {/* Due Date */}
-        <DatePickerField
-          id="due_date"
-          label="Due Date"
-          date={formData.due_date || null}
-          onSelect={(date) => updateFormDataFields('due_date', date)}
         />
 
         {/* Private Task Checkbox */}

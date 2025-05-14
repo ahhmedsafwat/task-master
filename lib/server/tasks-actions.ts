@@ -30,7 +30,7 @@ export async function createTask(
       priority: (formData.get('priority') as string) || 'LOW',
       status: (formData.get('status') as string) || 'BACKLOG',
       project_id: (formData.get('project_id') as string) || null,
-      assignee_id: (formData.get('assignee_id') as string) || null,
+      assignee_ids: (formData.getAll('assignee_ids') as string[]) || null,
       due_date: (formData.get('due_date') as string) || null,
       start_date: (formData.get('start_date') as string) || null,
     }
@@ -103,19 +103,20 @@ export async function createTask(
     }
 
     const taskId = data?.[0]?.id
-    console.log('Task assignee:', validData.assignee_id)
+    console.log('Task assignee:', validData.assignee_ids)
     // If we have an assignee and a task was created successfully, assign the user to the task
-    if (validData.assignee_id && taskId) {
+    if (validData.assignee_ids?.length && taskId) {
       try {
+        const assignmentRecords = validData.assignee_ids.map((userId) => ({
+          task_id: taskId,
+          user_id: userId,
+        }))
+
         const { data, error: assignError } = await supabase
           .from('task_assignees')
-          .insert([
-            {
-              task_id: taskId,
-              user_id: validData.assignee_id,
-            },
-          ])
+          .insert(assignmentRecords)
           .select()
+
         console.log('succcess', data)
         if (assignError) {
           console.error('Error assigning user to task:', assignError)

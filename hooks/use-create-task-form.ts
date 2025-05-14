@@ -1,6 +1,5 @@
-import { Tables, TablesInsert } from '@/lib/types/database.types'
-import { userProfile } from '@/lib/types/types'
-import { useEffect, useMemo, useState } from 'react'
+import { TablesInsert } from '@/lib/types/database.types'
+import { useState } from 'react'
 
 interface createTaskFormData extends TablesInsert<'tasks'> {
   assignee_ids: string[]
@@ -27,164 +26,6 @@ export function useCreateTaskForm() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const [searchProjectQuery, setSearchProjectQuery] = useState('')
-  const [searchUserQuery, setSearchUserQuery] = useState('')
-
-  const [selectedUsers, setSelectedUsers] = useState<userProfile[]>([])
-
-  const [users, setUsers] = useState<userProfile[]>([])
-  const [projects, setProjects] = useState<Partial<Tables<'projects'>>[]>([])
-
-  // Mock projects and users for demonstration
-  useEffect(() => {
-    setProjects([
-      {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
-        name: 'Website Redesign',
-        creator_id: '',
-      },
-      {
-        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
-        name: 'Mobile App',
-        creator_id: '',
-      },
-      {
-        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
-        name: 'Dashboard UI',
-        creator_id: '',
-      },
-      {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
-        name: 'Website Redesign',
-        creator_id: '',
-      },
-      {
-        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
-        name: 'Mobile App',
-        creator_id: '',
-      },
-      {
-        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
-        name: 'Dashboard UI',
-        creator_id: '',
-      },
-      {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
-        name: 'Website Redesign',
-        creator_id: '',
-      },
-      {
-        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
-        name: 'Mobile App',
-        creator_id: '',
-      },
-      {
-        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
-        name: 'Dashboard UI',
-        creator_id: '',
-      },
-      {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
-        name: 'Website Redesign',
-        creator_id: '',
-      },
-      {
-        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
-        name: 'Mobile App',
-        creator_id: '',
-      },
-      {
-        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
-        name: 'Dashboard UI',
-        creator_id: '',
-      },
-      {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
-        name: 'Website Redesign',
-        creator_id: '',
-      },
-      {
-        id: 'dc525794-93d8-4d18-a14a-429a039cedc0',
-        name: 'Mobile App',
-        creator_id: '',
-      },
-      {
-        id: '64190958-948b-4ef0-aaf6-a293460fe97e',
-        name: 'Dashboard UI',
-        creator_id: '',
-      },
-    ])
-
-    setUsers([
-      {
-        id: 'a03c3921-b52f-49e2-add8-ccd24983834b',
-        username: 'John Doe',
-        email: 'john@example.com',
-        avatar_url: '',
-      },
-      {
-        id: 'user2',
-        username: 'Jane Smith',
-        email: 'jane@example.com',
-        avatar_url: '',
-      },
-      {
-        id: 'user3',
-        username: 'Alex Johnson',
-        email: 'alex@example.com',
-        avatar_url: '',
-      },
-    ])
-  }, [])
-
-  const filteredProjects = useMemo(
-    () =>
-      searchProjectQuery.trim() === ''
-        ? projects
-        : projects.filter((project) =>
-            project.name
-              ?.toLowerCase()
-              .includes(searchProjectQuery.toLowerCase()),
-          ),
-    [searchProjectQuery, projects],
-  )
-
-  const filteredUsers = useMemo(
-    () =>
-      searchUserQuery.trim() === ''
-        ? users
-        : users.filter(
-            (user) =>
-              user.username
-                ?.toLowerCase()
-                .includes(searchUserQuery.toLowerCase()) ||
-              user.email.toLowerCase().includes(searchUserQuery.toLowerCase()),
-          ),
-    [searchUserQuery, users],
-  )
-
-  const addSelectedUser = (user: userProfile) => {
-    if (!selectedUsers.some((selected) => selected.id === user.id)) {
-      const newSelectedUsers = [...selectedUsers, user]
-      setSelectedUsers(newSelectedUsers)
-
-      updateFormDataFields(
-        'assignee_ids',
-        newSelectedUsers.map((user) => user.id).filter(Boolean) as string[],
-      )
-    }
-  }
-
-  const removeSelectedUser = (userId: string) => {
-    const newSelectedUsers = selectedUsers.filter((user) => user.id !== userId)
-    setSelectedUsers(newSelectedUsers)
-
-    updateFormDataFields(
-      'assignee_ids',
-      newSelectedUsers.map((user) => user.id).filter(Boolean) as string[],
-    )
-  }
-
   const resetFormData = () => {
     setFormData({
       title: '',
@@ -198,28 +39,11 @@ export function useCreateTaskForm() {
       due_date: null,
       start_date: null,
     })
-
-    setSelectedUsers([])
-    setSearchProjectQuery('')
-    setSearchUserQuery('')
   }
 
   return {
-    filteredProjects,
-    filteredUsers,
     formData,
-    searchProjectQuery,
-    searchUserQuery,
-    projects,
-    users,
-    selectedUsers,
-    addSelectedUser,
-    removeSelectedUser,
-    setProjects,
-    setUsers,
     updateFormDataFields,
-    setSearchProjectQuery,
-    setSearchUserQuery,
     resetFormData,
   }
 }

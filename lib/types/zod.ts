@@ -70,7 +70,7 @@ export const TaskSchema = z
     priority: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('LOW'),
     status: z.enum(['BACKLOG', 'IN_PROGRESS', 'COMPLETED']).default('BACKLOG'),
     project_id: z.string().nullable().optional(),
-    assignee_id: z.string().nullable().optional(),
+    assignee_ids: z.array(z.string()).nullable(),
     due_date: z
       .string()
       .refine((val) => {
