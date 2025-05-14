@@ -3,7 +3,6 @@ import { usePathname } from 'next/navigation'
 import { NavigationItem } from './navigation-item'
 import Image from 'next/image'
 import { Plus } from 'lucide-react'
-import { Project } from '@/lib/types/types'
 import {
   Tooltip,
   TooltipContent,
@@ -45,7 +44,7 @@ export function SidebarProjects({
         </TooltipProvider>
       </div>
       <div className="space-y-1.5">
-        {projects.map((project: Project) => {
+        {projects.map((project: Tables<'projects'>) => {
           const isActive = pathname === `/dashboard/projects/${project.name}`
           return (
             <NavigationItem
@@ -53,19 +52,16 @@ export function SidebarProjects({
               title={project.name}
               isActive={isActive}
               key={project.id + project.name}
-              project_cover={project.project_covers}
               customIcon={
                 project.project_covers ? (
-                  <div className="mr-2">
-                    <Image
-                      src={project.project_covers}
-                      alt={project.name}
-                      height={24}
-                      width={24}
-                      className="rounded-sm object-cover"
-                      unoptimized
-                    />
-                  </div>
+                  <Image
+                    src={project.project_covers}
+                    alt={project.name}
+                    height={24}
+                    width={24}
+                    className="rounded-sm object-cover"
+                    unoptimized
+                  />
                 ) : undefined
               }
               onClick={onItemClick}

@@ -1,5 +1,5 @@
 import { TablesInsert } from '@/lib/types/database.types'
-import { LucideIcon } from 'lucide-react'
+import { ReactNode } from 'react'
 
 export interface AuthResponse {
   status: 'error' | 'success' | 'idle'
@@ -27,7 +27,7 @@ export interface userProfile {
 export interface NavItem {
   title: string
   href: string
-  icon: LucideIcon
+  icon: ReactNode
 }
 
 export interface createTaskprops extends TablesInsert<'tasks'> {

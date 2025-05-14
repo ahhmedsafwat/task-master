@@ -13,18 +13,18 @@ export const navItems: NavItem[] = [
   {
     title: 'Overview',
     href: '/dashboard/overview',
-    icon: LayoutDashboard,
+    icon: <LayoutDashboard size={18} />,
   },
   {
     title: 'Tasks',
     href: '/dashboard/my-tasks',
-    icon: LucideClipboardCheck,
+    icon: <LucideClipboardCheck size={18} />,
   },
 
   {
     title: 'Inbox',
     href: '/dashboard/notifications',
-    icon: Inbox,
+    icon: <Inbox size={18} />,
   },
 ]
 interface SidebarNavigationProps {
@@ -45,7 +45,7 @@ export function SidebarNavigation({ onItemClick }: SidebarNavigationProps) {
               key={item.href}
               href={item.href}
               title={item.title}
-              icon={item.icon}
+              customIcon={item.icon}
               isActive={isActive}
               onClick={onItemClick}
             />

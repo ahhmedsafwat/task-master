@@ -17,7 +17,6 @@ export const createTask = async ({
   user,
   title,
   creator_id,
-  description = '',
   project_id,
   is_private = true,
   status = 'BACKLOG',
@@ -34,7 +33,6 @@ export const createTask = async ({
       {
         creator_id,
         title,
-        description,
         is_private,
         status,
         priority,
@@ -56,7 +54,6 @@ export const updateTask = async ({
   user,
   title,
   id,
-  description = '',
   is_private = true,
   status = 'BACKLOG',
   priority = 'LOW',
@@ -70,7 +67,6 @@ export const updateTask = async ({
     .from('tasks')
     .update({
       title,
-      description,
       is_private,
       status,
       priority,

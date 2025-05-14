@@ -6,7 +6,6 @@ import { ReactNode } from 'react'
 
 interface NavigationItemProps {
   href: string
-  project_cover: string | null
   customIcon?: ReactNode
   title: string
   isActive?: boolean
@@ -15,7 +14,6 @@ interface NavigationItemProps {
 
 export function NavigationItem({
   href,
-  project_cover: Icon,
   customIcon,
   title,
   isActive = false,
@@ -34,14 +32,9 @@ export function NavigationItem({
       onClick={onClick}
     >
       <div className="flex items-center">
-        {customIcon ||
-          (Icon && (
-            <div
-              className={cn('mr-2', isActive ? 'opacity-100' : 'opacity-75')}
-            >
-              {Icon}
-            </div>
-          ))}
+        <div className={cn('mr-1.5', isActive ? 'opacity-100' : 'opacity-75')}>
+          {customIcon}
+        </div>
         <span className="text-sm">{title}</span>
       </div>
     </Link>
