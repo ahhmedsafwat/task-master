@@ -31,7 +31,7 @@ import { Link, Plus } from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
-// import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
+import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
 import { Tables } from '@/lib/types/database.types'
 import { DatePickerField } from './overview-task-data-picker'
 
@@ -214,7 +214,7 @@ const TaskForm = ({
             id="task-title"
             name="title"
             placeholder="Task title"
-            className="h-12 text-pretty rounded-md border-0 p-2 font-bold shadow-none ring-0 selection:bg-[#373b67] placeholder:text-base focus-visible:ring-0 md:text-lg"
+            className="text-2xl! h-14 text-pretty rounded-md border-0 p-2 font-bold shadow-none ring-0 selection:bg-[#373b67] placeholder:text-2xl focus-visible:ring-0"
             autoFocus
             required
             value={formData.title ?? ''}
@@ -252,12 +252,12 @@ const TaskForm = ({
         />
 
         {/* Assignees Selection - Replace single assignee with multiple assignees */}
-        {/* <MultiSelectAssignees
+        <MultiSelectAssignees
           users={users}
           placeholder="search user assign..."
           maxDisplayItems={3}
           onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
-        /> */}
+        />
         {/* Hidden input for form submission - array of assignee IDs */}
         {formData.assignee_ids.map((id) => (
           <input type="hidden" key={id} name="assignee_ids" value={id} />

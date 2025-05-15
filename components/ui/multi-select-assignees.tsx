@@ -1,175 +1,174 @@
-// 'use client'
+'use client'
 
-// import type React from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { cn } from '@/lib/utils'
+import { Input } from '@/components/ui/input'
+import { X } from 'lucide-react'
+import { userProfile } from '@/lib/types/types'
 
-// import { useState, useRef, useCallback } from 'react'
-// import { X, Check } from 'lucide-react'
-// import { cn } from '@/lib/utils'
-// import { Input } from '@/components/ui/input'
-// import { userProfile } from '@/lib/types/types'
+type MultiSelectProps = {
+  users: userProfile[]
+  placeholder?: string
+  onItemSelect?: (value: string[]) => void
+  maxDisplayItems?: number
+  disabled?: boolean
+  className?: string
+}
 
-// type MultiSelectProps = {
-//   users: userProfile[]
-//   placeholder?: string
-//   onItemSelect?: (value: string[]) => void
-//   maxDisplayItems?: number
-//   disabled?: boolean
-//   className?: string
-// }
+export function MultiSelectAssignees({
+  users,
+  placeholder = 'Select options...',
+  maxDisplayItems = 3,
+  disabled = false,
+  onItemSelect,
+  className,
+}: MultiSelectProps) {
+  const [searchDropDown, setSearchDropDown] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedUsers, setSelectedUsers] = useState<userProfile[]>([])
 
-// export function MultiSelectAssignees({
-//   users,
-//   placeholder = 'Select options...',
-//   maxDisplayItems = 3,
-//   disabled = false,
-//   onItemSelect,
-// }: MultiSelectProps) {
-//   const [open, setOpen] = useState(false)
-//   const [selected, setSelected] = useState<string[]>([])
-//   const [inputValue, setInputValue] = useState('')
+  const dropDownRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-//   const inputRef = useRef<HTMLInputElement>(null)
+  const filteredUsers = useMemo(
+    () =>
+      searchQuery.trim() === ''
+        ? users.filter((user) => !selectedUsers.some((p) => p.id === user.id))
+        : users
+            .filter((user) => !selectedUsers.some((p) => p.id === user.id))
+            .filter((user) =>
+              user.username?.toLowerCase().includes(searchQuery.toLowerCase()),
+            ),
+    [searchQuery, users, selectedUsers],
+  )
 
-//   // Update filtered users whenever inputValue changes
-//   const filteredUsers = users.filter((user) =>
-//     user.username?.toLowerCase().includes(inputValue.toLowerCase()),
-//   )
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      if (!dropDownRef.current?.contains(document.activeElement)) {
+        setSearchDropDown(false)
+      }
+    }, 150)
+  }
 
-//   const handleSelect = useCallback(
-//     (value: string) => {
-//       // Prevent event bubbling
-//       const newSelected = selected.includes(value)
-//         ? selected.filter((item) => item !== value)
-//         : [...selected, value]
+  const handleUserSelect = (user: userProfile) => {
+    const newSelectedUsers = [...selectedUsers, user]
+    setSelectedUsers(newSelectedUsers)
+    onItemSelect?.(newSelectedUsers.map((p) => p.id ?? ''))
+    setSearchQuery('')
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 0)
+  }
 
-//       setSelected(newSelected)
-//       onItemSelect?.(newSelected)
-//       setInputValue('')
+  const handleRemoveUser = (userId: string) => {
+    const newSelectedUsers = selectedUsers.filter((p) => p.id !== userId)
+    setSelectedUsers(newSelectedUsers)
+    onItemSelect?.(newSelectedUsers.map((p) => p.id ?? ''))
+    setTimeout(() => {
+      inputRef.current?.focus()
+    }, 0)
+  }
 
-//       // Focus the input after selection
-//       setTimeout(() => {
-//         inputRef.current?.focus()
-//       }, 0)
-//     },
-//     [selected, onItemSelect],
-//   )
+  const displayedUsers = selectedUsers.slice(0, maxDisplayItems)
+  const hiddenCount = selectedUsers.length - maxDisplayItems
 
-//   const handleRemove = useCallback(
-//     (value: string, e?: React.MouseEvent) => {
-//       if (e) {
-//         e.preventDefault()
-//         e.stopPropagation()
-//       }
+  const handleContainerClick = () => {
+    inputRef.current?.focus()
+  }
 
-//       const newSelected = selected.filter((item) => item !== value)
-//       setSelected(newSelected)
-//       onItemSelect?.(newSelected)
-//     },
-//     [selected, onItemSelect],
-//   )
+  return (
+    <div className={className}>
+      <div className="relative">
+        <div
+          ref={containerRef}
+          className={cn(
+            'hover:bg-accent/90 border-input bg-background focus-within:ring-ring flex w-full flex-wrap items-center gap-1 rounded-md border px-3 py-2 text-sm transition-colors focus-within:ring-1',
+            searchDropDown && 'bg-accent rounded-b-none',
+            disabled && 'cursor-not-allowed opacity-50',
+          )}
+          onClick={disabled ? undefined : handleContainerClick}
+        >
+          {displayedUsers.map((user) => (
+            <div
+              key={user.id}
+              className="bg-accent/80 flex items-center gap-1 rounded px-2 py-0.5 text-xs"
+            >
+              <span>{user.username}</span>
+              {!disabled && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleRemoveUser(user.id ?? '')
+                  }}
+                  className="text-muted-foreground hover:text-foreground rounded-full p-0.5"
+                  aria-label={`Remove ${user.username}`}
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          ))}
 
-//   // Display selected items
-//   const displaySelectedItems = () => {
-//     if (selected.length === 0) {
-//       return <span className="text-muted-foreground">{placeholder}</span>
-//     }
+          {hiddenCount > 0 && (
+            <div className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs">
+              +{hiddenCount} more
+            </div>
+          )}
 
-//     const displayItems = [...selected]
-//     const hasMore = selected.length > maxDisplayItems
-
-//     if (hasMore) {
-//       displayItems.splice(maxDisplayItems)
-//     }
-
-//     return (
-//       <div className="flex flex-wrap gap-1">
-//         {displayItems.map((value) => {
-//           const option = users.find((opt) => opt?.id === value)
-//           return (
-//             <span
-//               key={value}
-//               className="bg-muted ring-border inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
-//             >
-//               {option?.username}
-//               <button
-//                 type="button"
-//                 className="text-muted-foreground hover:bg-muted-foreground/20 ml-1 inline-flex items-center rounded-full"
-//                 onClick={(e) => handleRemove(value, e)}
-//                 aria-label={`Remove ${option?.username}`}
-//               >
-//                 <X className="h-3 w-3" />
-//               </button>
-//             </span>
-//           )
-//         })}
-//         {hasMore && (
-//           <span className="bg-muted inline-flex items-center rounded-md px-2 py-1 text-xs font-medium">
-//             +{selected.length - maxDisplayItems} more
-//           </span>
-//         )}
-//       </div>
-//     )
-//   }
-
-//   return (
-//     <div className="flex flex-col">
-//       <div className="p-2">
-//         <Input
-//           ref={inputRef}
-//           placeholder="Search options..."
-//           value={inputValue}
-//           onChange={(e) => setInputValue(e.target.value)}
-//           className="w-full"
-//           autoComplete="off"
-//         />
-//       </div>
-
-//       <div
-//         className="max-h-60 overflow-auto py-1"
-//         role="listbox"
-//         aria-multiselectable="true"
-//       >
-//         {filteredUsers.length > 0 ? (
-//           filteredUsers.map((option, index) => {
-//             const isSelected = selected.includes(option.id ?? '')
-
-//             return (
-//               <div
-//                 key={option.id}
-//                 role="option"
-//                 aria-selected={isSelected}
-//                 className={cn(
-//                   'flex cursor-pointer items-center gap-2 px-2 py-1.5 text-sm',
-
-//                   isSelected ? 'bg-accent/50' : '',
-//                 )}
-//                 onClick={(e) => {
-//                   e.stopPropagation()
-//                   if (option.id) {
-//                     handleSelect(option.id)
-//                   }
-//                 }}
-//               >
-//                 <div
-//                   className={cn(
-//                     'border-primary-foreground flex h-4 w-4 items-center justify-center rounded-sm border',
-//                     isSelected
-//                       ? 'bg-primary text-primary-foreground'
-//                       : 'opacity-50',
-//                   )}
-//                 >
-//                   {isSelected && <Check className="h-3 w-3" />}
-//                 </div>
-//                 <span>{option.username}</span>
-//               </div>
-//             )
-//           })
-//         ) : (
-//           <div className="text-muted-foreground px-2 py-4 text-center text-sm">
-//             No users found.
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
+          <Input
+            ref={inputRef}
+            placeholder={selectedUsers.length > 0 ? '' : placeholder}
+            className="min-w-[120px] flex-1 border-none bg-transparent p-0 focus-visible:ring-0"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => !disabled && setSearchDropDown(true)}
+            onBlur={handleInputBlur}
+            autoComplete="off"
+            disabled={disabled}
+            aria-expanded={searchDropDown}
+            aria-haspopup={searchDropDown ? 'listbox' : undefined}
+            aria-controls={searchDropDown ? `users-listbox` : undefined}
+          />
+        </div>
+        <div
+          ref={dropDownRef}
+          id="users-listbox"
+          role="listbox"
+          className={cn(
+            'bg-primary absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
+            searchDropDown && !disabled
+              ? 'visible scale-100'
+              : 'pointer-events-none invisible opacity-0',
+          )}
+        >
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
+              <div
+                tabIndex={0}
+                key={user.id}
+                className="hover:bg-accent focus:bg-accent cursor-pointer px-3 py-2 text-sm"
+                onMouseDown={() => {
+                  handleUserSelect(user)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleUserSelect(user)
+                  }
+                }}
+                aria-label={`Select user ${user.username}`}
+              >
+                <div>{user.username}</div>
+              </div>
+            ))
+          ) : (
+            <div className="text-muted-foreground flex h-20 items-center justify-center text-sm">
+              <span>No users found</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
