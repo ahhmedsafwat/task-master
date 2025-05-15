@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -231,18 +231,42 @@ interface ThreeBackgroundProps {
   secondaryColor?: string
   particleCount?: number
   className?: string
+  transitionCompleted?: boolean
 }
 
-// Main component
+// Main component with fade-in
 const ThreeBackground = ({
   primaryColor = '#c70036',
   secondaryColor = '#4d0218',
-  particleCount = 100,
+  particleCount = 50, // Reduced from 100
   className = '',
 }: ThreeBackgroundProps) => {
+  const [opacity, setOpacity] = useState(0)
+
+  // Fade in the background after animations complete
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpacity(1)
+    }, 750)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <div className={`h-full w-full ${className} `}>
-      <Canvas camera={{ position: [0, 0, 20], fov: 75 }}>
+    <div
+      className={`h-full w-full ${className}`}
+      style={{
+        opacity,
+        transition: 'opacity 0.5s ease-in-out',
+      }}
+    >
+      <Canvas
+        camera={{ position: [0, 0, 20], fov: 75 }}
+        gl={{
+          antialias: false, // Disable antialiasing for performance
+          powerPreference: 'high-performance',
+        }}
+        dpr={[1, 1.5]} // Limit pixel ratio for performance
+      >
         <BackgroundPlane
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
@@ -252,4 +276,5 @@ const ThreeBackground = ({
     </div>
   )
 }
+
 export default ThreeBackground

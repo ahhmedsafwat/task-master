@@ -4,7 +4,7 @@ import { OverViewTasks } from '@/components/dashboard/overview/overview-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 import { OverViewProjects } from '@/components/dashboard/overview/overview-projects'
 import { Button } from '@/components/ui/button'
-import { assigneTask } from '@/lib/server/tasks-actions'
+import { assigneTask } from '@/lib/server/task-actions'
 
 export default function Page() {
   // Mock data - replace with real data from your backend

@@ -25,13 +25,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
-import { createTask } from '@/lib/server/tasks-actions'
+import { createTask } from '@/lib/server/task-actions'
 import { TaskResponse, userProfile } from '@/lib/types/types'
 import { Link, Plus } from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
-import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
+// import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
 import { Tables } from '@/lib/types/database.types'
 import { DatePickerField } from './overview-task-data-picker'
 
@@ -123,28 +123,29 @@ const TaskForm = ({
   createTaskAction,
   isPending,
   onSuccess,
-  resetFormData,
+
+  status,
 }: {
+  status: TaskResponse
   createTaskAction: any
   isPending: boolean
   onSuccess: () => void
-  resetFormData: () => void
 }) => {
-  const { formData, updateFormDataFields } = useCreateTaskForm()
+  const { formData, updateFormDataFields, resetFormData } = useCreateTaskForm()
 
   const [users, setUsers] = useState<userProfile[]>([])
   const [projects, setProjects] = useState<Partial<Tables<'projects'>>[]>([])
   // Handle server action responses
   useEffect(() => {
-    if (createTaskAction.status === 'error' && createTaskAction.message) {
-      toast.error(createTaskAction.message)
+    if (status.status === 'error' && status.message) {
+      toast.error(status.message)
     }
 
-    if (createTaskAction.status === 'created') {
-      toast.success(createTaskAction.message, {
+    if (status.status === 'created') {
+      toast.success(status.message, {
         description: (
           <Link
-            href={`/dashboard/${createTaskAction.data?.taskId}`}
+            href={`/dashboard/${status.data?.taskId}`}
             className="text-blue-500 underline"
           >
             View task
@@ -154,12 +155,13 @@ const TaskForm = ({
       onSuccess()
       resetFormData()
     }
+    console.log('status', status)
 
     // Mock projects and users for demonstration
 
     setProjects([
       {
-        id: 'bc5ff954-6f59-4b83-9742-e55fb0021f41',
+        id: '7fc6f9c9-1587-42e2-9636-76b5400a9203',
         name: 'Website Redesign',
         creator_id: '',
       },
@@ -177,13 +179,13 @@ const TaskForm = ({
 
     setUsers([
       {
-        id: 'a03c3921-b52f-49e2-add8-ccd24983834b',
+        id: '50f6952c-fa02-498a-9fdc-e5afa19cfed2',
         username: 'John Doe',
         email: 'john@example.com',
         avatar_url: '',
       },
       {
-        id: 'user2',
+        id: '8286cf30-0dd5-49ea-b736-8a01ac928a53',
         username: 'Jane Smith',
         email: 'jane@example.com',
         avatar_url: '',
@@ -197,7 +199,7 @@ const TaskForm = ({
     ])
 
     // Setup action state listener
-  }, [createTaskAction, onSuccess, resetFormData])
+  }, [])
 
   return (
     <form
@@ -250,18 +252,16 @@ const TaskForm = ({
         />
 
         {/* Assignees Selection - Replace single assignee with multiple assignees */}
-        <MultiSelectAssignees
+        {/* <MultiSelectAssignees
           users={users}
           placeholder="search user assign..."
           maxDisplayItems={3}
           onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
-        />
+        /> */}
         {/* Hidden input for form submission - array of assignee IDs */}
-        <input
-          type="hidden"
-          name="assignee_ids"
-          value={JSON.stringify(formData.assignee_ids || [])}
-        />
+        {formData.assignee_ids.map((id) => (
+          <input type="hidden" key={id} name="assignee_ids" value={id} />
+        ))}
 
         {/* Start Date */}
         <DatePickerField
@@ -311,15 +311,13 @@ const TaskForm = ({
 // Main component
 export const OverViewTasksHeader = () => {
   const [openDialog, setOpenDialog] = useState(false)
-  const [, createTaskAction, isPending] = useActionState<
+  const [status, createTaskAction, isPending] = useActionState<
     TaskResponse,
     FormData
   >(createTask, {
     status: 'idle',
     message: null,
   })
-
-  const { resetFormData } = useCreateTaskForm()
 
   const handleSuccess = () => {
     setOpenDialog(false)
@@ -347,10 +345,10 @@ export const OverViewTasksHeader = () => {
       </DialogTrigger>
       <DialogContent className="bg-secondary w-full origin-bottom gap-0 px-3 sm:max-w-3xl">
         <TaskForm
+          status={status}
           createTaskAction={createTaskAction}
           isPending={isPending}
           onSuccess={handleSuccess}
-          resetFormData={resetFormData}
         />
       </DialogContent>
     </Dialog>

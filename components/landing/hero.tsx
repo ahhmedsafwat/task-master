@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Github } from 'lucide-react'
 import { FlipingText } from '@/components/ui/fliping-text'
 import dynamic from 'next/dynamic'
-// Import ThreeBackground with dynamic import to prevent SSR issues
+
 const ThreeBackground = dynamic(() => import('./three-background'), {
   ssr: false,
   loading: () => <div className="bg-background absolute inset-0 -z-20" />,
@@ -30,8 +30,9 @@ export default function Hero() {
     <section className="relative min-h-screen py-24">
       <LazyMotion features={domAnimation}>
         <div className="absolute inset-0 -z-20">
-          <ThreeBackground></ThreeBackground>
+          <ThreeBackground particleCount={50} />
         </div>
+
         <div className="container relative mx-auto px-4 py-28">
           <div className="text-center">
             <m.h1
@@ -40,6 +41,7 @@ export default function Hero() {
               initial="initial"
               animate="animate"
               transition={{ duration: 0.4 }}
+              onAnimationComplete={() => {}}
             >
               Schedule. Organize.{' '}
               <span className="text-rose-700">Accomplish.</span>

@@ -28,7 +28,6 @@ export function AppSidebar({ projects }: { projects: Tables<'projects'>[] }) {
 
   // References
   const navRef = useRef<HTMLDivElement>(null)
-  console.log(projects)
 
   return (
     <>
