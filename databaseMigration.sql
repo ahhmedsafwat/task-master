@@ -35,7 +35,7 @@ create table public.profiles (
   id uuid references auth.users on delete cascade not null primary key, -- Unique profile identifier (matches auth.users id)
   email text unique not null, -- User email address; must be unique
   username text, -- Optional username; must be unique if provided
-  avatar_url text, -- URL to the user's profile picture
+  full_name text, -- Optional full name
   created_at timestamp with time zone default current_timestamp not null, -- Automatically records when the profile is created
   updated_at timestamp with time zone default current_timestamp not null -- Automatically records when the profile is last updated
 )
@@ -46,8 +46,7 @@ create table public.tasks (
   id uuid default gen_random_uuid () primary key, -- Unique task ID generated automatically
   title text not null, -- Title of the task (required)
   description text, -- Optional description of the task
-  markdown_content text, -- Optional markdown content for the task
-  is_private boolean default false, -- Whether the task is private (default is public)
+  is_private boolean default true, -- Whether the task is private (default is public)
   creator_id uuid references public.profiles (id) not null, -- References the profile that created the task
   project_id uuid references public.projects (id) on delete cascade, -- Optional association with a project; deletion cascades
   priority task_priority default 'LOW', -- Task priority using our custom enum
@@ -78,7 +77,6 @@ create table public.projects (
   id UUID primary key default gen_random_uuid (), -- Unique project ID generated automatically
   name TEXT not null, -- Name of the project (required)
   description TEXT, -- Optional project description
-  project_covers  TEXT, -- URL to the project cover 
   creator_id UUID references public.profiles (id) on delete CASCADE not null, -- References the profile that created the project
   created_at TIMESTAMPTZ default NOW() not null, -- Time of project creation
   updated_at TIMESTAMPTZ default NOW() not null -- Time of last update
@@ -158,7 +156,6 @@ create policy "users can delete their profiles" on "public"."profiles" as PERMIS
   ((select auth.uid () as uid) = id)
 );
 
-
 /* ----------------- TASKS POLICIES --------------------- */
 -- First, drop any existing policy for viewing tasks.
 
@@ -172,9 +169,23 @@ select to authenticated using (
 );
 
 -- Only allow task creation when the creator_id equals the current user's id.
-create policy "Users can create their own tasks" on public.tasks for INSERT to authenticated
-with check (
-  creator_id = (select auth.uid ())
+drop policy "Users can create their own tasks" on public.tasks;
+create policy "Users can create their own tasks" on public.tasks for INSERT to authenticated with check (
+  -- Allow private tasks (no project_id)
+  project_id IS NULL
+  OR
+  -- For project tasks, require creator to be admin or member of the project
+  (
+    creator_id = auth.uid()
+    AND
+    exists (
+      select 1
+      from public.project_members
+      where project_id = tasks.project_id
+        and user_id = auth.uid()
+        and role in ('ADMIN', 'MEMBER')
+    )
+  )
 );
 
 -- Drop any previous policy for task updates.
@@ -219,12 +230,13 @@ select to authenticated using (true);
 
 
 -- Allow assignment insertion if the current user is the task creator or already assigned.
+drop policy "task creators and assigned users can assign others" on public.task_assignees;
 create policy "task creators and assigned users can assign others" on public.task_assignees for INSERT to authenticated
 with check (
   is_task_creator (task_id)
   or exists (
     select 1
-    from task_assignees
+    from public.task_assignees
     where task_id = task_assignees.task_id
       and user_id = auth.uid ()
   )
@@ -331,267 +343,6 @@ create policy "Delete own notifications" on public.notifications for DELETE usin
 create policy "System creates notifications" on public.notifications for INSERT
 with check (false);
 
--- =============================================================
--- COPY AND PASTE IN THE SUPABASE SQL EDITOR TO CREATE STORAGE BUCKETS
--- =============================================================
-
--- 1. Create a bucket named avatars for profile images 
--- 2. Create a bucket named project_covers for project covers 
--- 3. Create a bucket named task_attachments for task files and images.
-insert into
-  storage.buckets (
-    id,
-    name,
-    public,
-    file_size_limit,
-    allowed_mime_types
-  )
-values
-  (
-    'avatars',
-    'avatars',
-    true,
-    5242880,
-    array['image/jpeg', 'image/png', 'image/jpg]
-  ),
-  (
-    'project-covers',
-    'project-covers',
-    true,
-    5242880,
-    array['image/jpeg', 'image/png', 'image/jpg']
-  ),
-  (
-    'task-attachments',
-    'task-attachments',
-    false,
-    10485760,
-    array[
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/webp',
-      'application/pdf',
-      'text/plain',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ]
-  );
-
--- All authenticated users can view any avatar, matching your profiles RLS where anyone can read profile data. Use the policy
-CREATE POLICY "Allow read all avatars" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'avatars');
--- Users can only upload their own avatars (filename must start with user's UUID)
-create policy "Users can upload their own avatars" on storage.objects for INSERT to authenticated
-with
-  check (
-    bucket_id = 'avatars'
-    and (storage.foldername (name)) [1] = auth.uid ()::text
-  );
-
--- Users can only update/replace their own avatars
-create policy "Users can update their own avatars" on storage.objects
-for update
-  to authenticated using (
-    bucket_id = 'avatars'
-    and (storage.foldername (name)) [1] = auth.uid ()::text
-  );
-
--- Users can only delete their own avatars
-create policy "Users can delete their own avatars" on storage.objects for DELETE to authenticated using (
-  bucket_id = 'avatars'
-  and (storage.foldername (name)) [1] = auth.uid ()::text
-);
-
--- Project member can view project cover
-create policy "Project member can view project cover" on storage.objects for
-select
-  to authenticated using (bucket_id = 'project-cover');
-
--- Project creator and admin can update and insert project covers
-create policy "Only project admins/creators can insert covers" on storage.objects for insert to authenticated
-with
-  check (
-    bucket_id = 'project_covers'
-    and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
-    or (
-      select
-        creator_id
-      from
-        public.projects
-      where
-        id = (storage.foldername (name)) [1]::uuid
-    ) = auth.uid ()
-  );
-
-create policy "Only project admins/creators can upload covers" on storage.objects
-for update
-  to authenticated
-with
-  check (
-    bucket_id = 'project_covers'
-    and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
-    or (
-      select
-        creator_id
-      from
-        public.projects
-      where
-        id = (storage.foldername (name)) [1]::uuid
-    ) = auth.uid ()
-  );
-
--- Project creator and admin can delete project covers
-create policy "Project creator and admin can delete project covers" on storage.objects for DELETE to authenticated using (
-  bucket_id = 'project-cover'
-  and public.is_project_admin ((storage.foldername (name)) [1]::uuid)
-  or (
-    select
-      creator_id
-    from
-      public.projects
-    where
-      id = (storage.foldername (name)) [1]::uuid
-  ) = auth.uid ()
-);
-
-
-
--- Policy for read access: Admins, members, and task creators can view attachments
-create policy "Task attachments read access" on storage.objects 
-for select using (
-  bucket_id = 'task-attachments' AND
-  exists (
-    select 1 from public.tasks
-    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
-    and (
-      -- Task is part of a project, and user is an admin, member, or task creator
-      (
-        project_id is not null AND
-        (
-          public.is_project_member(project_id) OR -- Admins and members
-          creator_id = auth.uid() -- Task creator
-        )
-      )
-      OR
-      -- Task is private, and user is the task creator
-      (
-        project_id is null AND
-        is_private = true AND
-        creator_id = auth.uid() -- Only the task creator
-      )
-    )
-  )
-);
-
--- Policy for insert/upload: Admins, members, and task creators can upload attachments
-create policy "Task attachments upload access" on storage.objects
-for insert with check (
-  bucket_id = 'task-attachments' AND
-  exists (
-    select 1 from public.tasks
-    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
-    and (
-      -- Task is part of a project, and user is an admin, member, or task creator
-      (
-        project_id is not null AND
-        (
-          public.is_project_member(project_id) OR -- Admins and members
-          creator_id = auth.uid() -- Task creator
-        )
-      )
-      OR
-      -- Task is private, and user is the task creator
-      (
-        project_id is null AND
-        is_private = true AND
-        creator_id = auth.uid() -- Only the task creator
-      )
-    )
-  )
-);
-
--- Policy for update: Admins, members, and task creators can update attachments
-create policy "Task attachments update access" on storage.objects
-for update using (
-  bucket_id = 'task-attachments' AND
-  exists (
-    select 1 from public.tasks
-    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
-    and (
-      -- Task is part of a project, and user is an admin, member, or task creator
-      (
-        project_id is not null AND
-        (
-          public.is_project_member(project_id) OR -- Admins and members
-          creator_id = auth.uid() -- Task creator
-        )
-      )
-      OR
-      -- Task is private, and user is the task creator
-      (
-        project_id is null AND
-        is_private = true AND
-        creator_id = auth.uid() -- Only the task creator
-      )
-    )
-  )
-) with check (
-  bucket_id = 'task-attachments' AND
-  exists (
-    select 1 from public.tasks
-    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
-    and (
-      -- Task is part of a project, and user is an admin, member, or task creator
-      (
-        project_id is not null AND
-        (
-          public.is_project_member(project_id) OR -- Admins and members
-          creator_id = auth.uid() -- Task creator
-        )
-      )
-      OR
-      -- Task is private, and user is the task creator
-      (
-        project_id is null AND
-        is_private = true AND
-        creator_id = auth.uid() -- Only the task creator
-      )
-    )
-  )
-);
-
--- Policy for delete: Admins, members, and task creators can delete attachments
-create policy "Task attachments delete access" on storage.objects
-for delete using (
-  bucket_id = 'task-attachments' AND
-  exists (
-    select 1 from public.tasks
-    where id = (storage.foldername(name))[1]::uuid -- Extract task_id from path
-    and (
-      -- Task is part of a project, and user is an admin, member, or task creator
-      (
-        project_id is not null AND
-        (
-          public.is_project_member(project_id) OR -- Admins and members
-          creator_id = auth.uid() -- Task creator
-        )
-      )
-      OR
-      -- Task is private, and user is the task creator
-      (
-        project_id is null AND
-        is_private = true AND
-        creator_id = auth.uid() -- Only the task creator
-      )
-    )
-  )
-);
-
-
-
-
-
-
 -- *************************************************************
 -- TRIGGER FUNCTIONS & TRIGGERS
 -- *************************************************************
@@ -608,6 +359,7 @@ end;
 $$ language plpgsql security definer;
 
 -- Trigger on auth.users to invoke the above function after a new user is inserted.
+
 create trigger on_auth_user_created
 after insert on auth.users for each row
 execute function handle_new_user ();
@@ -711,7 +463,6 @@ BEGIN
     AND status <> 'COMPLETED';
 END;
 $$;
-
 -- Function to check for overdue tasks and generate notifications.
 CREATE OR REPLACE FUNCTION check_overdue_tasks()
 RETURNS VOID
@@ -736,6 +487,7 @@ BEGIN
     AND status <> 'COMPLETED';
 END;
 $$;
+
 
 -- Schedule a cron job (using pg_cron) to run the due soon check daily at 8 AM.
 SELECT cron.schedule('due-soon-check', '0 8 * * *', 
@@ -779,6 +531,7 @@ begin
 end;
 $$ language plpgsql;
 
+
 -- Create triggers to update the timestamp automatically before updates on profiles.
 create trigger profiles_updated before
 update on public.profiles for each row
@@ -789,6 +542,8 @@ create trigger projects_updated before
 update on public.projects for each row
 execute procedure update_timestamp ();
 
+
+
 -- Create trigger for tasks.
 create trigger tasks_updated before
 update on public.tasks for each row
@@ -797,14 +552,13 @@ execute procedure update_timestamp ();
 -- *************************************************************
 -- HELPER FUNCTIONS
 -- *************************************************************
-
 -- Helper function to check if the current user (via auth.uid()) is the creator of a task.
 create or replace function is_task_creator (_task_id UUID) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER
 set search_path = ''
  as $$
 BEGIN
   RETURN EXISTS (
-    SELECT 1 FROM tasks
+    SELECT 1 FROM public.tasks
     WHERE id = _task_id
       AND creator_id = (select auth.uid() as uid)
   );
@@ -817,7 +571,6 @@ BEGIN
   RETURN EXISTS (
     SELECT 1 FROM public.project_members
     WHERE project_id = _project_id
-      AND role in ('ADMIN', 'MEMBER')
       AND user_id = auth.uid()
   );
 END;
@@ -835,7 +588,6 @@ begin
   );
 end;
 $$;
-
 -- =============================================================
 -- COPY AND PAST IN THE SUPABASE SQL EDITOR TO CREATE THE DATABASE
 -- =============================================================

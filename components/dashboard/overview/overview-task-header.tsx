@@ -27,13 +27,14 @@ import {
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
 import { createTask } from '@/lib/server/task-actions'
 import { TaskResponse, userProfile } from '@/lib/types/types'
-import { Link, Plus } from 'lucide-react'
+import { Link, Minus, Plus } from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
 import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
-import { Tables } from '@/lib/types/database.types'
+import { Enums, Tables } from '@/lib/types/database.types'
 import { DatePickerField } from './overview-task-data-picker'
+import { AttrbuiteLable } from './overview-task-attrubites-lable'
 
 // Priority and Status selection component
 const PriorityStatusSelections = ({
@@ -47,13 +48,13 @@ const PriorityStatusSelections = ({
 }) => (
   <>
     {/* Priority */}
-    <div className="space-y-2">
-      <Label htmlFor="priority">Priority</Label>
+    <div className="flex gap-2">
+      <AttrbuiteLable label="Priority" icon={<Minus size={18} />} />
       <Select
         name="priority"
         value={priority || 'LOW'}
         onValueChange={(value) => {
-          updateFormData('priority', value as 'LOW' | 'MEDIUM' | 'HIGH')
+          updateFormData('priority', value as Enums<'task_priority'>)
         }}
       >
         <SelectTrigger className="w-full" id="priority">
@@ -68,20 +69,17 @@ const PriorityStatusSelections = ({
     </div>
 
     {/* Status */}
-    <div className="space-y-2">
-      <Label htmlFor="status">Status</Label>
+    <div className="flex gap-2">
+      <AttrbuiteLable label="Status" icon={<Minus size={18} />} />
       <Select
         name="status"
         value={status || 'BACKLOG'}
         onValueChange={(value) => {
-          updateFormData(
-            'status',
-            value as 'BACKLOG' | 'IN_PROGRESS' | 'COMPLETED',
-          )
+          updateFormData('status', value as Enums<'task_status'>)
         }}
         aria-label="Select task status"
       >
-        <SelectTrigger className="w-full" id="status">
+        <SelectTrigger className="w-full" id="Status">
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
         <SelectContent>
@@ -105,11 +103,8 @@ const PrivateTaskCheckbox = ({
   <div className="mt-6 flex items-center space-x-2 md:col-span-2">
     <Checkbox
       id="is_private"
-      name="is_private"
-      checked={!!isPrivate}
-      onCheckedChange={(checked) => {
-        onCheckedChange(!!checked)
-      }}
+      checked={isPrivate}
+      onCheckedChange={onCheckedChange}
       aria-label="Mark task as private"
     />
     <Label htmlFor="is_private" className="cursor-pointer">
@@ -155,7 +150,6 @@ const TaskForm = ({
       onSuccess()
       resetFormData()
     }
-    console.log('status', status)
 
     // Mock projects and users for demonstration
 
@@ -182,19 +176,19 @@ const TaskForm = ({
         id: '50f6952c-fa02-498a-9fdc-e5afa19cfed2',
         username: 'John Doe',
         email: 'john@example.com',
-        avatar_url: '',
+        avatar_url: 'https://avatars.githubusercontent.com/u/81815473?v=4',
       },
       {
         id: '8286cf30-0dd5-49ea-b736-8a01ac928a53',
         username: 'Jane Smith',
         email: 'jane@example.com',
-        avatar_url: '',
+        avatar_url: 'https://avatars.githubusercontent.com/u/81815473?v=4',
       },
       {
         id: 'user3',
         username: 'Alex Johnson',
         email: 'alex@example.com',
-        avatar_url: '',
+        avatar_url: 'https://avatars.githubusercontent.com/u/81815473?v=4',
       },
     ])
 
@@ -224,7 +218,7 @@ const TaskForm = ({
       </DialogHeader>
 
       {/* Form Fields Grid */}
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col gap-3.5">
         {/* Project Selection */}
         <ProjectsSearchDropDown
           projects={projects as { id: string; name: string }[]}
@@ -241,7 +235,6 @@ const TaskForm = ({
           name={'project_id'}
           value={formData.project_id ?? ''}
         />
-
         {/* Priority and Status */}
         <PriorityStatusSelections
           priority={formData.priority ?? ''}
@@ -250,19 +243,19 @@ const TaskForm = ({
             updateFormDataFields(field as any, value)
           }
         />
-
         {/* Assignees Selection - Replace single assignee with multiple assignees */}
         <MultiSelectAssignees
+          label="Assignees"
           users={users}
           placeholder="search user assign..."
           maxDisplayItems={3}
+          disabled={!!formData.is_private || formData.project_id === ''}
           onItemSelect={(value) => updateFormDataFields('assignee_ids', value)}
         />
         {/* Hidden input for form submission - array of assignee IDs */}
         {formData.assignee_ids.map((id) => (
           <input type="hidden" key={id} name="assignee_ids" value={id} />
         ))}
-
         {/* Start Date */}
         <DatePickerField
           id="start_date"
@@ -270,14 +263,24 @@ const TaskForm = ({
           date={formData.start_date || null}
           onSelect={(date) => updateFormDataFields('start_date', date)}
         />
-
         {/* Private Task Checkbox */}
         <PrivateTaskCheckbox
-          isPrivate={formData.is_private || undefined}
-          onCheckedChange={(checked) =>
+          isPrivate={formData.is_private ?? true}
+          onCheckedChange={(checked) => {
             updateFormDataFields('is_private', checked)
-          }
+            // Reset project_id and assignee_ids when making task private
+            if (checked) {
+              updateFormDataFields('project_id', null)
+              updateFormDataFields('assignee_ids', [])
+            }
+          }}
+        />{' '}
+        <input
+          type="hidden"
+          name="is_private"
+          value={formData.is_private ? 'true' : 'false'}
         />
+        {/* Hidden input for form submission */}
       </div>
 
       {/* Markdown Description */}

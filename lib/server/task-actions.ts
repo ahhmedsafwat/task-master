@@ -51,6 +51,7 @@ export async function createTask(
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
 
+    console.log('raw data', rawData.is_private)
     // Check project access if a project_id is provided and user is not a member of the project
     if (validData.project_id) {
       try {

@@ -105,6 +105,19 @@ export const TaskSchema = z
       path: ['start_date'],
     },
   )
+  .refine(
+    (data) => {
+      // Custom validation: project_id is required when is_private is false
+      if (!data.is_private && !data.project_id) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'Project ID is required when task is not private',
+      path: ['project_id'],
+    },
+  )
 
 // Infer the type from the schema for TypeScript
 export type TaskInput = z.infer<typeof TaskSchema>

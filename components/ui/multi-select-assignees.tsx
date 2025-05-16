@@ -3,8 +3,10 @@
 import { useMemo, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
-import { X } from 'lucide-react'
+import { UserPlus, X } from 'lucide-react'
 import { userProfile } from '@/lib/types/types'
+import Image from 'next/image'
+import { AttrbuiteLable } from '../dashboard/overview/overview-task-attrubites-lable'
 
 type MultiSelectProps = {
   users: userProfile[]
@@ -12,7 +14,7 @@ type MultiSelectProps = {
   onItemSelect?: (value: string[]) => void
   maxDisplayItems?: number
   disabled?: boolean
-  className?: string
+  label: string
 }
 
 export function MultiSelectAssignees({
@@ -21,31 +23,40 @@ export function MultiSelectAssignees({
   maxDisplayItems = 3,
   disabled = false,
   onItemSelect,
-  className,
+  label,
 }: MultiSelectProps) {
   const [searchDropDown, setSearchDropDown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedUsers, setSelectedUsers] = useState<userProfile[]>([])
 
-  const dropDownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dropDownRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const filteredUsers = useMemo(
-    () =>
-      searchQuery.trim() === ''
-        ? users.filter((user) => !selectedUsers.some((p) => p.id === user.id))
-        : users
-            .filter((user) => !selectedUsers.some((p) => p.id === user.id))
-            .filter((user) =>
-              user.username?.toLowerCase().includes(searchQuery.toLowerCase()),
-            ),
-    [searchQuery, users, selectedUsers],
-  )
+  const filteredUsers = useMemo(() => {
+    return searchQuery.trim() === ''
+      ? users.filter(
+          (user) =>
+            !selectedUsers.some((selectedUser) => selectedUser.id === user.id),
+        )
+      : users
+          .filter(
+            (user) =>
+              !selectedUsers.some(
+                (selectedUser) => selectedUser.id === user.id,
+              ),
+          )
+          .filter((user) =>
+            user.username?.toLowerCase().includes(searchQuery.toLowerCase()),
+          )
+  }, [searchQuery, users, selectedUsers])
 
   const handleInputBlur = () => {
     setTimeout(() => {
-      if (!dropDownRef.current?.contains(document.activeElement)) {
+      if (
+        !containerRef.current?.contains(document.activeElement) &&
+        !dropDownRef.current?.contains(document.activeElement)
+      ) {
         setSearchDropDown(false)
       }
     }, 150)
@@ -70,6 +81,16 @@ export function MultiSelectAssignees({
     }, 0)
   }
 
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      e.key === 'Backspace' &&
+      searchQuery === '' &&
+      selectedUsers.length > 0
+    ) {
+      handleRemoveUser(selectedUsers[selectedUsers.length - 1].id ?? '')
+    }
+  }
+
   const displayedUsers = selectedUsers.slice(0, maxDisplayItems)
   const hiddenCount = selectedUsers.length - maxDisplayItems
 
@@ -78,77 +99,92 @@ export function MultiSelectAssignees({
   }
 
   return (
-    <div className={className}>
-      <div className="relative">
-        <div
-          ref={containerRef}
-          className={cn(
-            'hover:bg-accent/90 border-input bg-background focus-within:ring-ring flex w-full flex-wrap items-center gap-1 rounded-md border px-3 py-2 text-sm transition-colors focus-within:ring-1',
-            searchDropDown && 'bg-accent rounded-b-none',
-            disabled && 'cursor-not-allowed opacity-50',
-          )}
-          onClick={disabled ? undefined : handleContainerClick}
-        >
-          {displayedUsers.map((user) => (
-            <div
-              key={user.id}
-              className="bg-accent/80 flex items-center gap-1 rounded px-2 py-0.5 text-xs"
-            >
-              <span>{user.username}</span>
-              {!disabled && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleRemoveUser(user.id ?? '')
-                  }}
-                  className="text-muted-foreground hover:text-foreground rounded-full p-0.5"
-                  aria-label={`Remove ${user.username}`}
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-          ))}
-
-          {hiddenCount > 0 && (
-            <div className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs">
-              +{hiddenCount} more
-            </div>
-          )}
-
-          <Input
-            ref={inputRef}
-            placeholder={selectedUsers.length > 0 ? '' : placeholder}
-            className="min-w-[120px] flex-1 border-none bg-transparent p-0 focus-visible:ring-0"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => !disabled && setSearchDropDown(true)}
-            onBlur={handleInputBlur}
-            autoComplete="off"
-            disabled={disabled}
-            aria-expanded={searchDropDown}
-            aria-haspopup={searchDropDown ? 'listbox' : undefined}
-            aria-controls={searchDropDown ? `users-listbox` : undefined}
-          />
-        </div>
+    <div className="relative flex items-center">
+      <AttrbuiteLable label={label} icon={<UserPlus size={18} />} />
+      <div
+        ref={containerRef}
+        className={cn(
+          'hover:bg-accent/90 relative flex w-full flex-nowrap items-center gap-1 rounded-md px-2.5 text-sm transition-colors',
+          searchDropDown && 'bg-accent rounded-b-none',
+          disabled && 'cursor-not-allowed opacity-50',
+        )}
+        onClick={disabled ? undefined : handleContainerClick}
+      >
+        {displayedUsers.map((user) => (
+          <div
+            key={user.id}
+            className="bg-muted flex items-center gap-1 rounded px-2 py-1 text-xs"
+          >
+            <Image
+              src={user.avatar_url ?? ''}
+              alt={user.username ?? ''}
+              width={5}
+              height={5}
+              className="h-5 w-5 rounded-full"
+              unoptimized
+            />
+            <span>{user.username}</span>
+            {!disabled && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleRemoveUser(user.id ?? '')
+                }}
+                className="text-muted-foreground hover:text-foreground rounded-full p-0.5"
+                aria-label={`Remove ${user.username}`}
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+        ))}
+        {hiddenCount > 0 && (
+          <div className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs">
+            +{hiddenCount} more
+          </div>
+        )}
+        <Input
+          ref={inputRef}
+          placeholder={
+            disabled
+              ? 'choose a project to be able to assign users'
+              : selectedUsers.length > 0
+                ? ''
+                : placeholder
+          }
+          className="min-w-[120px] flex-1 border-none px-0 ring-0 transition-colors focus-visible:border-none focus-visible:outline-none focus-visible:ring-0"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => !disabled && setSearchDropDown(true)}
+          onBlur={() => handleInputBlur()}
+          autoComplete="off"
+          disabled={disabled}
+          onKeyDown={handleInputKeyDown}
+          aria-expanded={searchDropDown}
+          aria-haspopup={searchDropDown ? 'listbox' : undefined}
+          aria-controls={searchDropDown ? `users-listbox` : undefined}
+        />
         <div
           ref={dropDownRef}
           id="users-listbox"
           role="listbox"
           className={cn(
-            'bg-primary absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
+            'bg-card absolute right-0 top-full z-10 max-h-40 w-full overflow-auto rounded-md rounded-t-none shadow-lg transition-all duration-75',
             searchDropDown && !disabled
               ? 'visible scale-100'
               : 'pointer-events-none invisible opacity-0',
           )}
         >
+          <div className="text-muted-foreground border-b px-3 py-1.5 text-xs">
+            Select one or more people
+          </div>
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user) => (
               <div
                 tabIndex={0}
                 key={user.id}
-                className="hover:bg-accent focus:bg-accent cursor-pointer px-3 py-2 text-sm"
+                className="hover:bg-accent focus:bg-accent flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"
                 onMouseDown={() => {
                   handleUserSelect(user)
                 }}
@@ -159,6 +195,14 @@ export function MultiSelectAssignees({
                 }}
                 aria-label={`Select user ${user.username}`}
               >
+                <Image
+                  src={user.avatar_url ?? ''}
+                  alt={user.username ?? ''}
+                  width={20}
+                  height={20}
+                  className="h-5 w-5 rounded-full"
+                  unoptimized
+                />
                 <div>{user.username}</div>
               </div>
             ))

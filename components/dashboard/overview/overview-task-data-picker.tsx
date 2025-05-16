@@ -8,7 +8,8 @@ import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+
+import { AttrbuiteLable } from './overview-task-attrubites-lable'
 
 // Date picker field component
 export const DatePickerField = ({
@@ -22,8 +23,8 @@ export const DatePickerField = ({
   date: string | null
   onSelect: (date: string | null) => void
 }) => (
-  <div className="space-y-2">
-    <Label htmlFor={id}>{label}</Label>
+  <div className="flex">
+    <AttrbuiteLable label={label} icon={<CalendarIcon size={18} />} />
     <Popover>
       <PopoverTrigger asChild>
         <Button
@@ -39,7 +40,6 @@ export const DatePickerField = ({
               : `Pick a ${label.toLowerCase()}`
           }
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(new Date(date), 'PPP') : `Pick a date`}
         </Button>
       </PopoverTrigger>
