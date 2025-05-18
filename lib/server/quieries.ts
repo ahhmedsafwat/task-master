@@ -77,3 +77,25 @@ export const getProjects = async () => {
     }
   }
 }
+
+export const getTasks = async () => {
+  try {
+    const supabase = await createSupabaseClient()
+    const { data, error } = await supabase
+      .from('tasks')
+      .select()
+      .order('created_at', { ascending: false })
+    if (error) {
+      console.error('Supabase query error:', error)
+      return { data: null, error }
+    }
+
+    return { data, error: null }
+  } catch (error) {
+    console.error('Unexpected error in getTasks:', error)
+    return {
+      data: null,
+      error: { message: 'Failed to fetch tasks', details: error },
+    }
+  }
+}

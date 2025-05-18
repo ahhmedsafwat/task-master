@@ -3,6 +3,7 @@
 import { createSupabaseClient } from '@/utils/supabase/server'
 import { TaskResponse } from '../types/types'
 import { TaskSchema } from '../types/zod'
+import { revalidatePath } from 'next/cache'
 
 export async function createTask(
   prevStateOrParams: TaskResponse | null,
@@ -51,7 +52,7 @@ export async function createTask(
     // Validation passed, use the parsed data (automatically converts to proper types)
     const validData = result.data
 
-    console.log('raw data', rawData.is_private)
+    console.log('valid data', validData)
     // Check project access if a project_id is provided and user is not a member of the project
     if (validData.project_id) {
       try {
@@ -139,6 +140,7 @@ export async function createTask(
       }
     }
 
+    revalidatePath('/dashboard/overview')
     return {
       status: 'created',
       message: 'Task created successfully',

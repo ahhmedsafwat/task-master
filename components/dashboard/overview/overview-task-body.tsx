@@ -1,19 +1,12 @@
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
+import { Tables } from '@/lib/types/database.types'
 import { cn } from '@/lib/utils'
 import { Eye } from 'lucide-react'
 import Link from 'next/link'
-import { toast } from 'sonner'
-interface Task {
-  id: string
-  title: string
-  project: string
-  dueIn: string
-  dueType?: 'soon' | 'normal' | 'overdue'
-}
 
 interface ActiveTasksProps {
-  tasks?: Task[]
+  tasks?: Tables<'tasks'>[]
   className?: string
 }
 export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
@@ -37,23 +30,23 @@ export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
                   <div>
                     <h3 className="font-medium">{task.title}</h3>
                     <p className="text-muted-foreground text-sm">
-                      {task.project}
+                      {task.project_id}
                     </p>
                     <span>
-                      {task.dueIn && (
+                      {task.due_date && (
                         <div className="mt-2 flex items-center">
                           <div
                             className={cn(
                               'mr-2 h-2 w-2 rounded-full',
-                              task.dueType === 'soon'
+                              task.due_date === 'soon'
                                 ? 'bg-in-progress'
-                                : task.dueType === 'overdue'
+                                : task.due_date === 'overdue'
                                   ? 'bg-destructive'
                                   : 'bg-success',
                             )}
                           />
                           <span className="text-muted-foreground text-xs">
-                            Due {task.dueIn}
+                            Due {task.due_date}
                           </span>
                         </div>
                       )}
@@ -64,10 +57,6 @@ export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
                   aria-label="View details"
                   variant={'secondary'}
                   size={'smIcon'}
-                  onClick={() => {
-                    // Handle view details action
-                    toast('View task details')
-                  }}
                   tabIndex={0}
                   className="hover:text-foreground"
                 >

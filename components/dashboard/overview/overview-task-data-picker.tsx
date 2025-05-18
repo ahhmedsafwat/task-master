@@ -57,6 +57,7 @@ export const DatePickerField = ({
       </PopoverContent>
     </Popover>
     {/* Hidden input for form submission */}
-    <input type="hidden" name={id.toLowerCase()} value={date ?? ''} />
+    <input type="hidden" name={'start_date'} value={date ?? ''} />
+    <input type="hidden" name={'due_date'} value={date ?? ''} />
   </div>
 )

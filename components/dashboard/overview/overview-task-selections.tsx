@@ -14,8 +14,10 @@ export const Selections = ({
   icon: Icon,
   options,
   updateFormData,
+  defaultValue,
 }: {
   label: string
+  defaultValue?: string
   icon: React.ReactNode
   options: { option: string; icon: React.ReactNode }[]
   updateFormData: (field: string, value: any) => void
@@ -24,16 +26,19 @@ export const Selections = ({
 
   return (
     <div className="flex gap-2">
-      <AttrbuiteLable label={label} icon={Icon} />
+      <AttrbuiteLable label={label.toLowerCase()} icon={Icon} />
       <Select
-        name={label}
-        value={selectedValue || options[0].option}
+        name={label.toLowerCase()}
+        value={selectedValue || defaultValue}
         onValueChange={(value) => {
           setSelectedValue(value)
           updateFormData(label.toLowerCase(), value)
         }}
       >
-        <SelectTrigger className="bg-secondary w-full border-none" id={label}>
+        <SelectTrigger
+          className="bg-secondary w-full border-none"
+          id={label.toLowerCase()}
+        >
           <SelectValue placeholder={`Select ${label}`} />
         </SelectTrigger>
         <SelectContent>
