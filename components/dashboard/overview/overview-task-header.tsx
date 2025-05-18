@@ -9,13 +9,6 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -27,70 +20,24 @@ import {
 import { useCreateTaskForm } from '@/hooks/use-create-task-form'
 import { createTask } from '@/lib/server/task-actions'
 import { TaskResponse, userProfile } from '@/lib/types/types'
-import { Link, Minus, Plus } from 'lucide-react'
+import {
+  CircleCheck,
+  CircleDashed,
+  Link,
+  Loader,
+  Minus,
+  Plus,
+  Signal,
+  SignalHigh,
+  SignalMedium,
+} from 'lucide-react'
 import { useState, useActionState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { ProjectsSearchDropDown } from '@/components/ui/project-search-dropdown'
 import { MultiSelectAssignees } from '@/components/ui/multi-select-assignees'
-import { Enums, Tables } from '@/lib/types/database.types'
+import { Tables } from '@/lib/types/database.types'
 import { DatePickerField } from './overview-task-data-picker'
-import { AttrbuiteLable } from './overview-task-attrubites-lable'
-
-// Priority and Status selection component
-const PriorityStatusSelections = ({
-  priority,
-  status,
-  updateFormData,
-}: {
-  priority: string | null
-  status: string | null
-  updateFormData: (field: string, value: any) => void
-}) => (
-  <>
-    {/* Priority */}
-    <div className="flex gap-2">
-      <AttrbuiteLable label="Priority" icon={<Minus size={18} />} />
-      <Select
-        name="priority"
-        value={priority || 'LOW'}
-        onValueChange={(value) => {
-          updateFormData('priority', value as Enums<'task_priority'>)
-        }}
-      >
-        <SelectTrigger className="w-full" id="priority">
-          <SelectValue placeholder="Select priority" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="LOW">Low</SelectItem>
-          <SelectItem value="MEDIUM">Medium</SelectItem>
-          <SelectItem value="HIGH">High</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-
-    {/* Status */}
-    <div className="flex gap-2">
-      <AttrbuiteLable label="Status" icon={<Minus size={18} />} />
-      <Select
-        name="status"
-        value={status || 'BACKLOG'}
-        onValueChange={(value) => {
-          updateFormData('status', value as Enums<'task_status'>)
-        }}
-        aria-label="Select task status"
-      >
-        <SelectTrigger className="w-full" id="Status">
-          <SelectValue placeholder="Select status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="BACKLOG">Backlog</SelectItem>
-          <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-          <SelectItem value="COMPLETED">Completed</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-  </>
-)
+import { Selections } from './overview-task-selection'
 
 // Private checkbox component
 const PrivateTaskCheckbox = ({
@@ -100,15 +47,19 @@ const PrivateTaskCheckbox = ({
   isPrivate: boolean | undefined
   onCheckedChange: (checked: boolean) => void
 }) => (
-  <div className="mt-6 flex items-center space-x-2 md:col-span-2">
+  <div className="mr-2 flex items-center gap-2 md:col-span-2">
     <Checkbox
       id="is_private"
       checked={isPrivate}
       onCheckedChange={onCheckedChange}
       aria-label="Mark task as private"
+      className="data-[state=checked]:bg-main data-[state=checked]:text-white"
     />
-    <Label htmlFor="is_private" className="cursor-pointer">
-      Private task (only visible to you)
+    <Label
+      htmlFor="is_private"
+      className="text-muted-foreground cursor-pointer text-xs font-medium"
+    >
+      Private task
     </Label>
   </div>
 )
@@ -236,17 +187,44 @@ const TaskForm = ({
           value={formData.project_id ?? ''}
         />
         {/* Priority and Status */}
-        <PriorityStatusSelections
-          priority={formData.priority ?? ''}
-          status={formData.status ?? ''}
+        <Selections
+          label="Priority"
+          icon={<Minus size={18} />}
+          options={[
+            { option: 'LOW', icon: <SignalMedium size={18} /> },
+            { option: 'MEDIUM', icon: <SignalHigh size={18} /> },
+            {
+              option: 'HIGH',
+              icon: <Signal size={18} />,
+            },
+          ]}
           updateFormData={(field, value) =>
             updateFormDataFields(field as any, value)
           }
         />
+        <Selections
+          label="Status"
+          icon={<Minus size={18} />}
+          options={[
+            {
+              option: 'BACKLOG',
+              icon: <CircleDashed />,
+            },
+            {
+              option: 'IN_PROGRESS',
+              icon: <Loader className="text-in-progress" />,
+            },
+            { option: 'DONE', icon: <CircleCheck className="text-main" /> },
+          ]}
+          updateFormData={(field, value) =>
+            updateFormDataFields(field as any, value)
+          }
+        />
+
         {/* Assignees Selection - Replace single assignee with multiple assignees */}
         <MultiSelectAssignees
-          label="Assignees"
           users={users}
+          label="Assignees"
           placeholder="search user assign..."
           maxDisplayItems={3}
           disabled={!!formData.is_private || formData.project_id === ''}
@@ -263,24 +241,6 @@ const TaskForm = ({
           date={formData.start_date || null}
           onSelect={(date) => updateFormDataFields('start_date', date)}
         />
-        {/* Private Task Checkbox */}
-        <PrivateTaskCheckbox
-          isPrivate={formData.is_private ?? true}
-          onCheckedChange={(checked) => {
-            updateFormDataFields('is_private', checked)
-            // Reset project_id and assignee_ids when making task private
-            if (checked) {
-              updateFormDataFields('project_id', null)
-              updateFormDataFields('assignee_ids', [])
-            }
-          }}
-        />{' '}
-        <input
-          type="hidden"
-          name="is_private"
-          value={formData.is_private ? 'true' : 'false'}
-        />
-        {/* Hidden input for form submission */}
       </div>
 
       {/* Markdown Description */}
@@ -297,7 +257,25 @@ const TaskForm = ({
       <Separator className="my-4" />
 
       {/* Submit Button */}
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end">
+        {/* Private Task Checkbox */}
+        <PrivateTaskCheckbox
+          isPrivate={formData.is_private ?? true}
+          onCheckedChange={(checked) => {
+            updateFormDataFields('is_private', checked)
+            // Reset project_id and assignee_ids when making task private
+            if (checked) {
+              updateFormDataFields('project_id', null)
+              updateFormDataFields('assignee_ids', [])
+            }
+          }}
+        />
+        <input
+          type="hidden"
+          name="is_private"
+          value={formData.is_private ? 'true' : 'false'}
+        />
+        {/* Hidden input for form submission */}
         <Button
           variant={'main'}
           type="submit"
@@ -346,7 +324,7 @@ export const OverViewTasksHeader = () => {
           </Tooltip>
         </TooltipProvider>
       </DialogTrigger>
-      <DialogContent className="bg-secondary w-full origin-bottom gap-0 px-3 sm:max-w-3xl">
+      <DialogContent className="dark:bg-secondary bg-background w-full origin-bottom gap-0 px-3 sm:max-w-3xl">
         <TaskForm
           status={status}
           createTaskAction={createTaskAction}

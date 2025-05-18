@@ -181,11 +181,11 @@ textarea {
     --accent: 0 0% 95%;
     --accent-foreground: 0 0% 7%;
     /* general colors */
-    --main: 201 85% 31%;
     --destructive: 357.1 96.3% 57.8%;
     --destructive-foreground: 0 0% 96%;
-    --success: 143.9 100% 39.4%;
+    --main: 201 85% 31%;
     --in-progress: 37 100% 56%;
+    --success: 143.9 100% 39.4%;
     /*  */
     --border: 0 0% 77%;
     --input: 0 0% 77%;

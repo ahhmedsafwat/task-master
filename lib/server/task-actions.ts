@@ -117,12 +117,11 @@ export async function createTask(
           user_id: userId,
         }))
 
-        const { data, error: assignError } = await supabase
+        const { error: assignError } = await supabase
           .from('task_assignees')
           .insert(assignmentRecords)
           .select()
 
-        console.log('succcess', data)
         if (assignError) {
           console.error('Error assigning user to task:', assignError)
           return {
@@ -139,7 +138,7 @@ export async function createTask(
         }
       }
     }
-    console.log('succcess', data)
+
     return {
       status: 'created',
       message: 'Task created successfully',
