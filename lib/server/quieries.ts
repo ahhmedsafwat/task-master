@@ -78,7 +78,7 @@ export const getProjects = async () => {
   }
 }
 
-export const getTasks = async (limit = 5) => {
+export const getTasks = async (limit = 4) => {
   try {
     const supabase = await createSupabaseClient()
     const { data, error } = await supabase

@@ -1,8 +1,0 @@
-<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-    <g transform="rotate(15, 60, 60)">
-        <path d="M60 15 L95 35 L95 85 L60 105 L25 85 L25 35 Z" fill="none" stroke="#000000" stroke-width="4" />
-        <path d="M40 45 L80 45" fill="none" stroke="#000000" stroke-width="4" />
-        <path d="M35 60 L75 60" fill="none" stroke="#000000" stroke-width="4" />
-        <path d="M40 75 L80 75" fill="none" stroke="#000000" stroke-width="4" />
-    </g>
-</svg>

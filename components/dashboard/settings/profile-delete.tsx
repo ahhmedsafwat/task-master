@@ -12,7 +12,7 @@ import {
 import { DeleteProfile } from '@/lib/server/profile-actions'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
+import Image from 'next/image'
 import { toast } from 'sonner'
 
 export const ProfileDelete = ({ userId }: { userId: string }) => {
@@ -43,6 +43,20 @@ export const ProfileDelete = ({ userId }: { userId: string }) => {
             account and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="">
+          <Image
+            src="/images/delete.gif"
+            width={300}
+            height={300}
+            alt="Delete action animation"
+            className="h-full w-full object-cover"
+            aria-label="Delete action animation"
+            unoptimized
+            quality={60}
+          />
+        </div>
+
         <DialogFooter className="sm:justify-start">
           <Button variant={'outline'} onClick={() => setOpenDialog(false)}>
             Cancel
