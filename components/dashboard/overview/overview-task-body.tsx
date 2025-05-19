@@ -2,15 +2,16 @@ import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Tables } from '@/lib/types/database.types'
 import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
 import { Eye } from 'lucide-react'
 import Link from 'next/link'
 
 interface ActiveTasksProps {
-  tasks?: Tables<'tasks'>[]
+  tasks: Tables<'tasks'>[]
   className?: string
 }
 export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
-  const tasksToShow = tasks || []
+  const tasksToShow = tasks
   const isEmpty = tasksToShow.length === 0
   return (
     <>
@@ -32,25 +33,31 @@ export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
                     <p className="text-muted-foreground text-sm">
                       {task.project_id}
                     </p>
-                    <span>
-                      {task.due_date && (
-                        <div className="mt-2 flex items-center">
-                          <div
-                            className={cn(
-                              'mr-2 h-2 w-2 rounded-full',
-                              task.due_date === 'soon'
-                                ? 'bg-in-progress'
-                                : task.due_date === 'overdue'
-                                  ? 'bg-destructive'
-                                  : 'bg-success',
-                            )}
-                          />
-                          <span className="text-muted-foreground text-xs">
-                            Due {task.due_date}
-                          </span>
-                        </div>
+                    <div className="mt-2 flex items-center">
+                      {task.status && (
+                        <div
+                          className={cn(
+                            'mr-2 h-2 w-2 rounded-full',
+                            task.status === 'IN_PROGRESS'
+                              ? 'bg-in-progress'
+                              : task.status === 'BACKLOG'
+                                ? 'bg-zinc-500'
+                                : 'bg-success',
+                          )}
+                        />
                       )}
-                    </span>
+
+                      {task.due_date ? (
+                        <span className="text-muted-foreground text-xs">
+                          Due {format(task.due_date, 'dd MMM yyyy')}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">
+                          starts{' '}
+                          {format(task.start_date || new Date(), 'dd MMM yyyy')}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </Link>
                 <Button

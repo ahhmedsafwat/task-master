@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/popover'
 import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
-import { format } from 'date-fns'
+import { format, formatISO } from 'date-fns'
 import { Button } from '@/components/ui/button'
 
 import { AttrbuiteLable } from './overview-task-attrubites-lable'
@@ -49,7 +49,7 @@ export const DatePickerField = ({
           selected={date ? new Date(date) : undefined}
           onSelect={(selectedDate) => {
             onSelect(
-              selectedDate instanceof Date ? selectedDate.toISOString() : null,
+              selectedDate instanceof Date ? formatISO(selectedDate) : null,
             )
           }}
           initialFocus

@@ -157,7 +157,7 @@ export const TaskForm = ({
             },
             {
               option: 'COMPLETED',
-              icon: <CircleCheck className="text-main" />,
+              icon: <CircleCheck className="text-success" />,
             },
           ]}
           updateFormData={(field, value) =>

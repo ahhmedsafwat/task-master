@@ -78,13 +78,14 @@ export const getProjects = async () => {
   }
 }
 
-export const getTasks = async () => {
+export const getTasks = async (limit = 5) => {
   try {
     const supabase = await createSupabaseClient()
     const { data, error } = await supabase
       .from('tasks')
       .select()
       .order('created_at', { ascending: false })
+      .limit(limit)
     if (error) {
       console.error('Supabase query error:', error)
       return { data: null, error }

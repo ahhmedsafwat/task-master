@@ -1,6 +1,5 @@
-import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-
+import { Switch } from '@/components/ui/switch'
 // Private checkbox component
 export const PrivateTaskCheckbox = ({
   isPrivate,
@@ -10,7 +9,7 @@ export const PrivateTaskCheckbox = ({
   onCheckedChange: (checked: boolean) => void
 }) => (
   <div className="mr-2 flex items-center gap-2 md:col-span-2">
-    <Checkbox
+    <Switch
       id="is_private"
       checked={isPrivate}
       onCheckedChange={onCheckedChange}
