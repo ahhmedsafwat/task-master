@@ -20,7 +20,7 @@ interface StatsCardProps {
 
 export const StatsCard = ({ title, description, trend }: StatsCardProps) => {
   return (
-    <Card className={'w-[120px] grow gap-4 py-4 shadow-md sm:w-[180px]'}>
+    <Card className={'min-w-[180px] grow py-4 shadow-md'}>
       <CardHeader className="flex flex-col">
         <CardDescription className="font-geist-mono flex items-center gap-3 text-xs font-medium">
           <span>{description}</span>

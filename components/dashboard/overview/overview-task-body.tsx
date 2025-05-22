@@ -1,8 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { CardContent, CardFooter } from '@/components/ui/card'
 import { Tables } from '@/lib/types/database.types'
 import { cn } from '@/lib/utils'
-import { format } from 'date-fns'
+import { Duration, format, intervalToDuration, isAfter } from 'date-fns'
 import { Eye } from 'lucide-react'
 import Link from 'next/link'
 
@@ -10,19 +9,59 @@ interface ActiveTasksProps {
   tasks: Tables<'tasks'>[]
   className?: string
 }
+
 export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
   const tasksToShow = tasks
   const isEmpty = tasksToShow.length === 0
+
+  function getRemainingTime(targetDate: Date) {
+    const now = new Date()
+
+    if (isAfter(now, targetDate)) {
+      return null
+    }
+
+    return intervalToDuration({
+      start: now,
+      end: targetDate,
+    })
+  }
+
+  // Format duration in a user-friendly way based on the time remaining
+  function formatDuration(duration: Duration | null) {
+    if (!duration) return 'overdue'
+
+    const { months, days, hours, minutes } = duration
+
+    if (months && months > 0) {
+      return `${months} ${months === 1 ? 'month' : 'months'}`
+    }
+
+    if (days && days > 0) {
+      return `${days} ${days === 1 ? 'day' : 'days'}`
+    }
+
+    if (hours && hours > 0) {
+      return `${hours} ${hours === 1 ? 'hour' : 'hours'}`
+    }
+
+    return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`
+  }
+
   return (
     <>
-      <CardContent>
-        {isEmpty ? (
-          <div className="flex h-48 items-center justify-center">
-            <p className="text-muted-foreground text-sm">No items to display</p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {tasksToShow.map((task) => (
+      {isEmpty ? (
+        <div className="flex h-48 items-center justify-center">
+          <p className="text-muted-foreground text-sm">No items to display</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {tasksToShow.map((task) => {
+            // Calculate remaining time for each task
+            const remaining = task.due_date
+              ? formatDuration(getRemainingTime(new Date(task.due_date)))
+              : null
+            return (
               <div
                 key={task.id}
                 className="dark:bg-primary bg-secondary dark:hover:bg-accent/50 hover:bg-muted relative flex cursor-pointer items-center justify-between rounded-lg border border-dashed p-3 shadow-md transition-colors"
@@ -46,15 +85,14 @@ export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
                           )}
                         />
                       )}
-
-                      {task.due_date ? (
+                      {task.start_date && (
                         <span className="text-muted-foreground text-xs">
-                          Due {format(task.due_date, 'dd MMM yyyy')}
+                          Starts {format(task.start_date, 'dd MMM')}
                         </span>
-                      ) : (
+                      )}
+                      {task.due_date && (
                         <span className="text-muted-foreground text-xs">
-                          starts{' '}
-                          {format(task.start_date || new Date(), 'dd MMM yyyy')}
+                          &nbsp; | Due {remaining}
                         </span>
                       )}
                     </div>
@@ -70,15 +108,13 @@ export const OverViewTasksBody = ({ tasks }: ActiveTasksProps) => {
                   <Eye size={18} />
                 </Button>
               </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-      <CardFooter className="w-full">
-        <Button asChild variant={'inverted'} className="w-full text-center">
-          <Link href={'/dashboard/my-tasks'}>View all tasks</Link>
-        </Button>
-      </CardFooter>
+            )
+          })}
+        </div>
+      )}
+      <Button asChild variant={'inverted'} className="mt-5 w-full text-center">
+        <Link href={'/dashboard/my-tasks'}>View all tasks</Link>
+      </Button>
     </>
   )
 }

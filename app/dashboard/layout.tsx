@@ -21,7 +21,7 @@ export default async function Layout({
       <AppSidebar projects={projects.data} />
       <div className="bg-background dashboard relative m-1.5 h-screen flex-1 overflow-y-auto rounded-md border">
         <DashboardHeader />
-        <div className="p-4">{children}</div>
+        <div>{children}</div>
       </div>
     </section>
   )

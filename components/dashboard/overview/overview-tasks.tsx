@@ -1,20 +1,30 @@
 import { getTasks } from '@/lib/server/quieries'
 import { OverViewCard } from './overview-card'
 import { OverViewTasksBody } from './overview-task-body'
-import { OverViewTasksDialog } from './overview-task-header'
+import { OverViewTasksDialog } from './overview-task-dialog'
+import { Suspense } from 'react'
+import { CardsSkeleton } from './overview-skeletons'
 
-export async function OverViewTasks() {
+async function TasksContent() {
   const tasksToShow = await getTasks()
 
   if (!tasksToShow.data) {
     return null
   }
 
+  return <OverViewTasksBody tasks={tasksToShow.data} />
+}
+
+export async function OverViewTasks() {
   return (
     <OverViewCard
       title="Tasks"
       className="dark:bg-secondary bg-accent"
-      bodyChildren={<OverViewTasksBody tasks={tasksToShow.data} />}
+      bodyChildren={
+        <Suspense fallback={<CardsSkeleton />}>
+          <TasksContent />
+        </Suspense>
+      }
       headerChildren={<OverViewTasksDialog />}
     />
   )

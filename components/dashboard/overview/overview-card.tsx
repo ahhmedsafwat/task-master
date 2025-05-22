@@ -1,5 +1,6 @@
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -25,7 +26,7 @@ export const OverViewCard = ({
         <CardTitle className="text-lg font-medium">{title}</CardTitle>
         <CardDescription>{headerChildren}</CardDescription>
       </CardHeader>
-      {bodyChildren}
+      <CardContent>{bodyChildren}</CardContent>
     </Card>
   )
 }

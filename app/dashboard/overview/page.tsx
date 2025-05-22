@@ -1,7 +1,8 @@
-import { StatsCard } from '@/components/dashboard/overview/stats-card'
+import { StatsCard } from '@/components/dashboard/overview/overview-stats-card'
 import { OverViewTasks } from '@/components/dashboard/overview/overview-tasks'
 import { BarChart3, CheckCircle2, AlertCircle, CarIcon } from 'lucide-react'
 import { OverViewProjects } from '@/components/dashboard/overview/overview-projects'
+import HorizontalSlider from '@/components/ui/horizontal-slider'
 
 export default function Page() {
   // Mock data - replace with real data from your backend
@@ -111,9 +112,9 @@ export default function Page() {
   // ]
 
   return (
-    <div className="mx-auto space-y-6">
+    <div className="mt-3 flex flex-col gap-6">
       {/* Quick Stats */}
-      <div className="flex flex-wrap gap-4">
+      <HorizontalSlider className="px-4 py-2">
         {statsCards.map((card, index) => (
           <StatsCard
             key={card.title + index}
@@ -122,12 +123,10 @@ export default function Page() {
             trend={card.trend}
           />
         ))}
-      </div>
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-2 gap-6">
-        <OverViewTasks />
-        <OverViewProjects />
-      </div>
+      </HorizontalSlider>
+
+      <OverViewTasks />
+      <OverViewProjects />
     </div>
   )
 }
